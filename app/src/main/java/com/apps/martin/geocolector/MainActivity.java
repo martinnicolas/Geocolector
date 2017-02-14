@@ -23,7 +23,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, DescargarRuta.OnFragmentInteractionListener, VerMapa.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DescargarRuta.OnFragmentInteractionListener, VerMapa.OnFragmentInteractionListener, MedirZona.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,19 +121,17 @@ public class MainActivity extends AppCompatActivity
 
         Fragment fragment = null;
         if (id == R.id.nav_camera) {
-            fragment = new DescargarRuta();
-            setTitle("Descargar Ruta");
+            fragment = new MedirZona();
+            setTitle("Medir zona");
         } else if (id == R.id.nav_gallery) {
-            fragment = new VerMapa();
-            setTitle("Ver Mapa");
+            setTitle("Cargar zona");
         } else if (id == R.id.nav_slideshow) {
-            setTitle("Diapositivas");
+            setTitle("Zona de medición");
         } else if (id == R.id.nav_manage) {
-            setTitle("Administrar");
+            fragment = new VerMapa();
+            setTitle("Mapa de medidores");
         } else if (id == R.id.nav_share) {
-            setTitle("Compartir");
-        } else if (id == R.id.nav_send) {
-            setTitle("Enviar");
+            setTitle("Administrar cuenta");
         } else if (id == R.id.nav_exit) {
             //setTitle("Salir");
             salir();
