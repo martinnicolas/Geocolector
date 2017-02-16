@@ -37,9 +37,10 @@
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
-                    android:inputType="text"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:inputType="text"
+                    android:digits="1234567890.:" />
 
             </android.support.design.widget.TextInputLayout>
 

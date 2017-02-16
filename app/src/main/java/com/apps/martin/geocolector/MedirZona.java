@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TabHost;
 
 
 /**
@@ -26,6 +27,7 @@ public class MedirZona extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private TabHost TbH;
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,7 +66,33 @@ public class MedirZona extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_medir_zona, container, false);
+       View rootView = inflater.inflate(R.layout.fragment_medir_zona, container, false);
+
+        //codigo introducido para manipular el tabHost
+        TbH = (TabHost) rootView.findViewById(R.id.tabHost);
+        TbH.setup();                                                         //lo activamos
+
+        TabHost.TabSpec tabMedir = TbH.newTabSpec("tabMedir");  //aspectos de cada Tab (pestaña)
+        TabHost.TabSpec tabComentario = TbH.newTabSpec("tabComentario");
+        TabHost.TabSpec tabFoto = TbH.newTabSpec("tabFoto");
+
+        tabMedir.setIndicator("Medir");    //qué queremos que aparezca en las pestañas
+        tabMedir.setContent(R.id.tabMedir); //definimos el id de cada Tab (pestaña)
+        tabMedir.setIndicator("Medir",getResources().getDrawable(R.drawable.ic_menu_exit));
+
+        tabComentario.setIndicator("Comentario");
+        tabComentario.setContent(R.id.tabMedir);
+
+        tabFoto.setIndicator("Fotografiar");
+        tabFoto.setContent(R.id.tabFoto);
+
+        TbH.addTab(tabMedir); //añadimos los tabs ya programados
+        TbH.addTab(tabComentario);
+        TbH.addTab(tabFoto);
+
+        //fin codigo para tabHost
+        return rootView;
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -7,7 +7,8 @@
 
     <TabHost
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/tabHost">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,29 +26,77 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
-                    android:id="@+id/tab1"
+                    android:id="@+id/tabMedir"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <SearchView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                    <RelativeLayout
+                        android:layout_width="399dp"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:text="Nov."
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txtCodNov"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:text="Tipo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txtTipoMed"
+                            android:layout_weight="1"
+                            android:layout_alignEnd="@+id/txtCodNov"
+                            android:layout_toEndOf="@+id/txtCodNov" />
+
+                        <TextView
+                            android:text="N° Med."
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txtNroMed"
+                            android:layout_weight="1"
+                            android:layout_below="@+id/editText" />
+
+                        <TextView
+                            android:text="Datos Medidor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txtTitMed"
+                            android:layout_weight="1"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginEnd="27dp" />
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:ems="10"
+                            android:id="@+id/editText"
+                            android:layout_weight="1"
+                            android:layout_toStartOf="@+id/txtTitMed" />
+
+                    </RelativeLayout>
+
+
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/tab2"
+                    android:id="@+id/tabComentario"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <SearchView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                    <Button
+                        android:text="Button"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/button" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/tab3"
+                    android:id="@+id/tabFoto"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -56,4 +105,5 @@
             </FrameLayout>
         </LinearLayout>
     </TabHost>
+
 </FrameLayout>
