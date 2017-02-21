@@ -8,6 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.osmdroid.api.IMapController;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,7 +69,23 @@ public class VerMapa extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ver_mapa, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_ver_mapa, container, false);
+
+        //Context ctx = getActivity().getApplicationContext();
+        //important! set your user agent to prevent getting banned from the osm servers
+        //Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        //getActivity().setContentView(R.layout.fragment_ver_mapa);
+
+        MapView map = (MapView) rootView.findViewById(R.id.map);
+        map.setTileSource(TileSourceFactory.MAPNIK);
+        IMapController mapController = map.getController();
+        mapController.setZoom(15);
+        GeoPoint startPoint = new GeoPoint(-43.296344, -65.091966);
+        mapController.setCenter(startPoint);
+        map.setBuiltInZoomControls(true);
+        map.setMultiTouchControls(true);
+
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
