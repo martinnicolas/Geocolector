@@ -23,7 +23,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, DescargarRuta.OnFragmentInteractionListener, VerMapa.OnFragmentInteractionListener, MedirZona.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DescargarRuta.OnFragmentInteractionListener, VerMapa.OnFragmentInteractionListener, MedirZona.OnFragmentInteractionListener,
+        TabMedir.OnFragmentInteractionListener, TabComentario.OnFragmentInteractionListener, TabFoto.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

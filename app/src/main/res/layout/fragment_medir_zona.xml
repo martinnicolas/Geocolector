@@ -1,109 +1,25 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.app.FragmentTabHost
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/tabhost"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.apps.martin.geocolector.MedirZona">
+    android:layout_height="match_parent" >
 
-
-    <TabHost
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/tabHost">
+        android:orientation="vertical" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"/>
 
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:id="@+id/tabMedir"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="399dp"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:text="Nov."
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/txtCodNov"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:text="Tipo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/txtTipoMed"
-                            android:layout_weight="1"
-                            android:layout_alignEnd="@+id/txtCodNov"
-                            android:layout_toEndOf="@+id/txtCodNov" />
-
-                        <TextView
-                            android:text="N° Med."
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/txtNroMed"
-                            android:layout_weight="1"
-                            android:layout_below="@+id/editText" />
-
-                        <TextView
-                            android:text="Datos Medidor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/txtTitMed"
-                            android:layout_weight="1"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginEnd="27dp" />
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:inputType="number"
-                            android:ems="10"
-                            android:id="@+id/editText"
-                            android:layout_weight="1"
-                            android:layout_toStartOf="@+id/txtTitMed" />
-
-                    </RelativeLayout>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/tabComentario"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:text="Button"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/button" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/tabFoto"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-            </FrameLayout>
-        </LinearLayout>
-    </TabHost>
-
-</FrameLayout>
+</android.support.v4.app.FragmentTabHost>

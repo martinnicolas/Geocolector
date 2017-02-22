@@ -4,22 +4,20 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TabHost;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MedirZona.OnFragmentInteractionListener} interface
+ * {@link TabComentario.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MedirZona#newInstance} factory method to
+ * Use the {@link TabComentario#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MedirZona extends Fragment {
+public class TabComentario extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -31,7 +29,7 @@ public class MedirZona extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public MedirZona() {
+    public TabComentario() {
         // Required empty public constructor
     }
 
@@ -41,11 +39,11 @@ public class MedirZona extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MedirZona.
+     * @return A new instance of fragment TabComentario.
      */
     // TODO: Rename and change types and number of parameters
-    public static MedirZona newInstance(String param1, String param2) {
-        MedirZona fragment = new MedirZona();
+    public static TabComentario newInstance(String param1, String param2) {
+        TabComentario fragment = new TabComentario();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -66,16 +64,7 @@ public class MedirZona extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_medir_zona, container, false);
-
-        FragmentTabHost mTabHost = (FragmentTabHost) rootView.findViewById(android.R.id.tabhost);
-        mTabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
-
-        mTabHost.addTab(mTabHost.newTabSpec("tab1").setIndicator("Tab 1", null),TabMedir.class, null);
-        mTabHost.addTab(mTabHost.newTabSpec("tab2").setIndicator("Tab 2", null),TabComentario.class, null);
-        mTabHost.addTab(mTabHost.newTabSpec("tab3").setIndicator("Tab 3", null),TabFoto.class, null);
-
-        return rootView;
+        return inflater.inflate(R.layout.fragment_tab_comentario, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
