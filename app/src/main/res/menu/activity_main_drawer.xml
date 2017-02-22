@@ -8,6 +8,10 @@
             android:title="Medir zona" />
         <item
             android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_menu_download"
+            android:title="Descargar ruta" />
+        <item
+            android:id="@+id/nav_share"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Cargar zona" />
         <item
@@ -15,7 +19,7 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Zona de medición" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_map"
             android:icon="@drawable/ic_menu_map"
             android:title="Mapa de medidores" />
     </group>
@@ -23,7 +27,7 @@
     <item android:title="Communicate">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_manage"
                 android:icon="@drawable/ic_menu_manage"
                 android:title="Administrar cuenta" />
             <item

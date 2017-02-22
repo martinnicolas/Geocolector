@@ -71,9 +71,9 @@ public class MedirZona extends Fragment {
         FragmentTabHost mTabHost = (FragmentTabHost) rootView.findViewById(android.R.id.tabhost);
         mTabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
-        mTabHost.addTab(mTabHost.newTabSpec("tab1").setIndicator("Tab 1", null),TabMedir.class, null);
-        mTabHost.addTab(mTabHost.newTabSpec("tab2").setIndicator("Tab 2", null),TabComentario.class, null);
-        mTabHost.addTab(mTabHost.newTabSpec("tab3").setIndicator("Tab 3", null),TabFoto.class, null);
+        mTabHost.addTab(mTabHost.newTabSpec("tab1").setIndicator("Medir", null),TabMedir.class, null);
+        mTabHost.addTab(mTabHost.newTabSpec("tab2").setIndicator("Comentario", null),TabComentario.class, null);
+        mTabHost.addTab(mTabHost.newTabSpec("tab3").setIndicator("Foto", null),TabFoto.class, null);
 
         return rootView;
     }

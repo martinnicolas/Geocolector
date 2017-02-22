@@ -280,7 +280,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         public void onErrorResponse(VolleyError error) {
                             // error
                             showProgress(false);
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class).putExtra("usuario",email));
                             Toast.makeText(getApplicationContext(), "No se pudo establecer la conexion \n Verifique la configuracion.", Toast.LENGTH_SHORT).show();
                         }
                     }

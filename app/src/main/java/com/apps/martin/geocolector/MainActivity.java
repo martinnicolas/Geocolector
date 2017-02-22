@@ -125,13 +125,16 @@ public class MainActivity extends AppCompatActivity
             fragment = new MedirZona();
             setTitle("Medir zona");
         } else if (id == R.id.nav_gallery) {
+            fragment = new DescargarRuta();
+            setTitle("Descargar ruta");
+        } else if (id == R.id.nav_share) {
             setTitle("Cargar zona");
         } else if (id == R.id.nav_slideshow) {
             setTitle("Zona de medición");
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_map) {
             fragment = new VerMapa();
             setTitle("Mapa de medidores");
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_manage) {
             setTitle("Administrar cuenta");
         } else if (id == R.id.nav_exit) {
             //setTitle("Salir");
