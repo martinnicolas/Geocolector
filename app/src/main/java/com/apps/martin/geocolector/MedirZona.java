@@ -1,6 +1,7 @@
 package com.apps.martin.geocolector;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
