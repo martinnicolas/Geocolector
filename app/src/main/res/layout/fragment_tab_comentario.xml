@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     tools:context="com.apps.martin.geocolector.TabComentario">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -13,17 +11,33 @@
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:ems="10"
             android:id="@+id/comentario"
-            android:text="Escribe un comentario" />
+            android:text="Escribe un comentario"
+            android:layout_height="150dp" />
 
-        <Button
-            android:text="Comentario"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/button" />
+            android:layout_height="match_parent"
+            android:weightSum="1.0">
+
+            <Button
+                android:text="Borrar"
+                android:layout_height="wrap_content"
+                android:id="@+id/button4"
+                android:layout_weight="0.5"
+                android:layout_width="match_parent" />
+
+            <Button
+                android:text="Guardar"
+                android:layout_height="wrap_content"
+                android:id="@+id/button"
+                android:layout_weight="0.5"
+                android:layout_width="match_parent" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </FrameLayout>
