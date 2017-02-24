@@ -14,7 +14,7 @@
             android:inputType="textMultiLine"
             android:ems="10"
             android:id="@+id/comentario"
-            android:text="Escribe un comentario"
+            android:text="@string/prompt_comentario"
             android:layout_height="150dp" />
 
         <LinearLayout
@@ -24,14 +24,14 @@
             android:weightSum="1.0">
 
             <Button
-                android:text="Borrar"
+                android:text="@string/action_delete"
                 android:layout_height="wrap_content"
                 android:id="@+id/button4"
                 android:layout_weight="0.5"
                 android:layout_width="match_parent" />
 
             <Button
-                android:text="Guardar"
+                android:text="@string/action_save"
                 android:layout_height="wrap_content"
                 android:id="@+id/button"
                 android:layout_weight="0.5"
