@@ -8,21 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.osmdroid.api.IMapController;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link VerMapa.OnFragmentInteractionListener} interface
+ * {@link CargarZona.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link VerMapa#newInstance} factory method to
+ * Use the {@link CargarZona#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class VerMapa extends Fragment {
+public class CargarZona extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,7 +29,7 @@ public class VerMapa extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public VerMapa() {
+    public CargarZona() {
         // Required empty public constructor
     }
 
@@ -44,11 +39,11 @@ public class VerMapa extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment VerMapa.
+     * @return A new instance of fragment CargarZona.
      */
     // TODO: Rename and change types and number of parameters
-    public static VerMapa newInstance(String param1, String param2) {
-        VerMapa fragment = new VerMapa();
+    public static CargarZona newInstance(String param1, String param2) {
+        CargarZona fragment = new CargarZona();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -69,24 +64,7 @@ public class VerMapa extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_ver_mapa, container, false);
-
-        //Context ctx = getActivity().getApplicationContext();
-        //important! set your user agent to prevent getting banned from the osm servers
-        //Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
-        //getActivity().setContentView(R.layout.fragment_ver_mapa);
-
-        MapView map = (MapView) rootView.findViewById(R.id.map);
-        map.setTileSource(TileSourceFactory.MAPNIK);
-        IMapController mapController = map.getController();
-        mapController.setZoom(15);
-        GeoPoint startPoint = new GeoPoint(-43.296344, -65.091966);
-        mapController.setCenter(startPoint);
-        map.setBuiltInZoomControls(true);
-        map.setMultiTouchControls(true);
-        map.setTilesScaledToDpi(true);
-
-        return rootView;
+        return inflater.inflate(R.layout.fragment_cargar_zona, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -28,6 +28,7 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.volley:volley:1.0.0'
     compile 'org.osmdroid:osmdroid-android:5.6.3'
+    compile 'com.github.MKergall:osmbonuspack:6.2'
     compile 'com.android.support:support-v4:23.4.0'
     testCompile 'junit:junit:4.12'
 }

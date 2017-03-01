@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public void salir(){
         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
         builder.setTitle("Salir de la aplicación");
-        builder.setMessage("Está seguro que desea salir de la aplicación?");
+        builder.setMessage("Está seguro que desea continuar?");
         builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -280,7 +280,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         public void onErrorResponse(VolleyError error) {
                             // error
                             showProgress(false);
-                            Toast.makeText(getApplicationContext(), "No se pudo establecer la conexion \n Verifique la configuracion.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "No se pudo establecer la conexion \nVerifique la configuracion.", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(LoginActivity.this, MainActivity.class).putExtra("usuario",email));
                         }
                     }

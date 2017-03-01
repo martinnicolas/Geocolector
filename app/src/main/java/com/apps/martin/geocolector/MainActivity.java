@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DescargarRuta.OnFragmentInteractionListener, VerMapa.OnFragmentInteractionListener, MedirZona.OnFragmentInteractionListener,
-        TabMedir.OnFragmentInteractionListener, TabComentario.OnFragmentInteractionListener, TabFoto.OnFragmentInteractionListener {
+        ZonaMedicion.OnFragmentInteractionListener, TabMedir.OnFragmentInteractionListener, TabComentario.OnFragmentInteractionListener, TabFoto.OnFragmentInteractionListener, CargarZona.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
     public void salir(){
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Salir de la aplicación");
-        builder.setMessage("Está seguro que desea salir de la aplicación?");
+        builder.setMessage("Está seguro que desea continuar?");
         builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -129,8 +129,10 @@ public class MainActivity extends AppCompatActivity
             fragment = new DescargarRuta();
             setTitle("Descargar ruta");
         } else if (id == R.id.nav_share) {
+            fragment = new CargarZona();
             setTitle("Cargar zona");
         } else if (id == R.id.nav_slideshow) {
+            fragment = new ZonaMedicion();
             setTitle("Zona de medición");
         } else if (id == R.id.nav_map) {
             fragment = new VerMapa();
@@ -138,7 +140,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
             setTitle("Administrar cuenta");
         } else if (id == R.id.nav_exit) {
-            //setTitle("Salir");
             salir();
         }
 

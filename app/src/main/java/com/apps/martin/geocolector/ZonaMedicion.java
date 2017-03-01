@@ -1,28 +1,42 @@
 package com.apps.martin.geocolector;
 
+import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+import org.osmdroid.bonuspack.routing.Road;
+import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Polyline;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link VerMapa.OnFragmentInteractionListener} interface
+ * {@link ZonaMedicion.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link VerMapa#newInstance} factory method to
+ * Use the {@link ZonaMedicion#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class VerMapa extends Fragment {
+public class ZonaMedicion extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,7 +48,7 @@ public class VerMapa extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public VerMapa() {
+    public ZonaMedicion() {
         // Required empty public constructor
     }
 
@@ -44,11 +58,11 @@ public class VerMapa extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment VerMapa.
+     * @return A new instance of fragment ZonaMedicion.
      */
     // TODO: Rename and change types and number of parameters
-    public static VerMapa newInstance(String param1, String param2) {
-        VerMapa fragment = new VerMapa();
+    public static ZonaMedicion newInstance(String param1, String param2) {
+        ZonaMedicion fragment = new ZonaMedicion();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -74,7 +88,6 @@ public class VerMapa extends Fragment {
         //Context ctx = getActivity().getApplicationContext();
         //important! set your user agent to prevent getting banned from the osm servers
         //Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
-        //getActivity().setContentView(R.layout.fragment_ver_mapa);
 
         MapView map = (MapView) rootView.findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -85,6 +98,8 @@ public class VerMapa extends Fragment {
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         map.setTilesScaledToDpi(true);
+
+        new EnBackground().execute(map);
 
         return rootView;
     }
@@ -127,4 +142,42 @@ public class VerMapa extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
+    class EnBackground extends AsyncTask<MapView, Void, Road> {
+        @Override
+        protected Road doInBackground(MapView... params) {
+            final MapView map = params[0];
+            RoadManager roadManager = new OSRMRoadManager(getActivity());
+            GeoPoint startPoint = new GeoPoint(-43.291362, -65.094455);
+            ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
+            waypoints.add(startPoint);
+            GeoPoint endPoint = new GeoPoint(-43.289527, -65.092009);
+            waypoints.add(endPoint);
+            Road road = roadManager.getRoad(waypoints);
+            final Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+            roadOverlay.setWidth(10);
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {map.getOverlays().add(roadOverlay);
+                }
+            });
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    map.invalidate();
+                }
+            });
+
+            return road;
+        }
+
+        @Override
+        protected void onPostExecute(Road road) {
+
+        }
+    }
+
 }
