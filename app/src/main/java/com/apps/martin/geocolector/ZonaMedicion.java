@@ -21,6 +21,7 @@ import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
@@ -93,8 +94,8 @@ public class ZonaMedicion extends Fragment {
         map.setTileSource(TileSourceFactory.MAPNIK);
         IMapController mapController = map.getController();
         mapController.setZoom(15);
-        GeoPoint startPoint = new GeoPoint(-43.296344, -65.091966);
-        mapController.setCenter(startPoint);
+        GeoPoint centerPoint = new GeoPoint(-43.296344, -65.091966);
+        mapController.setCenter(centerPoint);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         map.setTilesScaledToDpi(true);
@@ -150,10 +151,41 @@ public class ZonaMedicion extends Fragment {
             final MapView map = params[0];
             RoadManager roadManager = new OSRMRoadManager(getActivity());
             GeoPoint startPoint = new GeoPoint(-43.291362, -65.094455);
+            final Marker startMarker = new Marker(map);
+            startMarker.setPosition(startPoint);
+            startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {map.getOverlays().add(startMarker);
+                }
+            });
+
             ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
             waypoints.add(startPoint);
-            GeoPoint endPoint = new GeoPoint(-43.289527, -65.092009);
+            GeoPoint endPoint = new GeoPoint(-43.294682, -65.082539);
+            final Marker endMarker = new Marker(map);
+            endMarker.setPosition(endPoint);
+            endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {map.getOverlays().add(endMarker);
+                }
+            });
+
             waypoints.add(endPoint);
+
+            GeoPoint endPoint2 = new GeoPoint(-43.291572, -65.086545);
+            final Marker endMarker2 = new Marker(map);
+            endMarker2.setPosition(endPoint2);
+            endMarker2.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {map.getOverlays().add(endMarker2);
+                }
+            });
+
+            waypoints.add(endPoint2);
+
             Road road = roadManager.getRoad(waypoints);
             final Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
             roadOverlay.setWidth(10);

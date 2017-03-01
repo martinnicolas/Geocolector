@@ -4,9 +4,15 @@
     android:layout_height="match_parent"
     tools:context="com.apps.martin.geocolector.TabFoto">
 
-    <Button
-        android:text="@string/action_camara"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/button3"/>
+        android:layout_height="match_parent">
+
+        <Button
+            android:text="@string/action_camara"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button3"/>
+    </LinearLayout>
 </FrameLayout>
