@@ -161,6 +161,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         builder.create().show();
     }
 
+
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;
