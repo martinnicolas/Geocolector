@@ -29,7 +29,7 @@
             <item
                 android:id="@+id/nav_manage"
                 android:icon="@drawable/ic_menu_manage"
-                android:title="Administrar cuenta" />
+                android:title="Administrar" />
             <item
                 android:id="@+id/nav_exit"
                 android:icon="@drawable/ic_menu_exit"
