@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity
 
         View v = navigationView.getHeaderView(0);
         TextView credenciales = (TextView ) v.findViewById(R.id.textView);
-        Bundle bundle = getIntent().getExtras();
-        String usuario = bundle.getString("usuario");
+        SharedPreferences prefs = getSharedPreferences("Configuracion", Context.MODE_PRIVATE);
+        String usuario = prefs.getString("usuario", "");
         credenciales.setText(usuario);
     }
 
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity
             fragment = new VerMapa();
             setTitle("Mapa de medidores");
         } else if (id == R.id.nav_manage) {
-            setTitle("Administrar cuenta");
+            startActivity(new Intent(MainActivity.this, AdministrarCuentaActivity.class));
         } else if (id == R.id.nav_exit) {
             salir();
         }

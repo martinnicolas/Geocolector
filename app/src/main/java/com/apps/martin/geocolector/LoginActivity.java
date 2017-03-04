@@ -264,7 +264,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         public void onResponse(String response) {
                             if (response.equals("1")){
                                 finish();
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class).putExtra("usuario",email));
+                                //Guardo Datos del usuario en archivo de Configuración
+                                SharedPreferences prefs = getSharedPreferences("Configuracion", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = prefs.edit();
+                                editor.putString("usuario", email);
+                                editor.commit();
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             }
                             else
                             {
@@ -282,7 +287,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             // error
                             showProgress(false);
                             Toast.makeText(getApplicationContext(), "No se pudo establecer la conexion \nVerifique la configuracion.", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class).putExtra("usuario",email));
+                            //Guardo Datos del usuario en archivo de Configuración
+                            SharedPreferences prefs = getSharedPreferences("Configuracion", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString("usuario", email);
+                            editor.commit();
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         }
                     }
             ) {

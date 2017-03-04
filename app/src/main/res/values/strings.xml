@@ -39,10 +39,13 @@
     <!-- Strings related to Fragment TabFoto-->
     <string name="action_camara">Cámara</string>
 
+    <!-- Strings related to Fragment CargarZona-->
+    <string name="action_cargar_zona">Cargar zona</string>
+
+    <!-- Strings related to Activity AdministrarActivity-->
+    <string name="title_activity_administrar_cuenta">Administrar cuenta</string>
+
     <!-- Strings de uso general -->
     <string name="action_save">Guardar</string>
     <string name="action_delete">Borrar</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

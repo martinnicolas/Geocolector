@@ -23,6 +23,8 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,6 +98,9 @@ public class ZonaMedicion extends Fragment {
         mapController.setZoom(15);
         GeoPoint centerPoint = new GeoPoint(-43.296344, -65.091966);
         mapController.setCenter(centerPoint);
+        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getActivity().getApplicationContext()),map);
+        mLocationOverlay.enableMyLocation();
+        map.getOverlays().add(mLocationOverlay);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         map.setTilesScaledToDpi(true);
@@ -145,9 +150,21 @@ public class ZonaMedicion extends Fragment {
     }
 
 
-    class EnBackground extends AsyncTask<MapView, Void, Road> {
+    class EnBackground extends AsyncTask<MapView, Void, String> {
+
+        private ProgressDialog pDialog;
+
         @Override
-        protected Road doInBackground(MapView... params) {
+        protected void onPreExecute() {
+            pDialog = new ProgressDialog(getActivity());
+            pDialog.setMessage("Calculando la ruta.\nPor favor espere un momento.");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(MapView... params) {
             final MapView map = params[0];
             RoadManager roadManager = new OSRMRoadManager(getActivity());
             GeoPoint startPoint = new GeoPoint(-43.291362, -65.094455);
@@ -203,12 +220,13 @@ public class ZonaMedicion extends Fragment {
                 }
             });
 
-            return road;
+            return "Listo!";
         }
 
         @Override
-        protected void onPostExecute(Road road) {
-
+        protected void onPostExecute(String mensajes) {
+            pDialog.setMessage(mensajes);
+            pDialog.hide();
         }
     }
 
