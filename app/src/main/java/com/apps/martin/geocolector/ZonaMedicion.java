@@ -1,10 +1,7 @@
 package com.apps.martin.geocolector;
 
-import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,8 +24,6 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -105,6 +100,7 @@ public class ZonaMedicion extends Fragment {
         map.setMultiTouchControls(true);
         map.setTilesScaledToDpi(true);
 
+        //Las tareas que hacen peticiones http deben ejecutarse en un hilo diferente
         new EnBackground().execute(map);
 
         return rootView;
@@ -150,7 +146,7 @@ public class ZonaMedicion extends Fragment {
     }
 
 
-    class EnBackground extends AsyncTask<MapView, Void, String> {
+    class EnBackground extends AsyncTask<MapView, Void, Road> {
 
         private ProgressDialog pDialog;
 
@@ -164,69 +160,83 @@ public class ZonaMedicion extends Fragment {
         }
 
         @Override
-        protected String doInBackground(MapView... params) {
+        protected Road doInBackground(MapView... params) {
+            //Mapa y administrador de Rutas
             final MapView map = params[0];
             RoadManager roadManager = new OSRMRoadManager(getActivity());
+
+            //Primer punto
             GeoPoint startPoint = new GeoPoint(-43.291362, -65.094455);
             final Marker startMarker = new Marker(map);
             startMarker.setPosition(startPoint);
             startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             getActivity().runOnUiThread(new Runnable() {
                 @Override
-                public void run() {map.getOverlays().add(startMarker);
-                }
+                public void run() { map.getOverlays().add(startMarker);}
             });
 
+            //Agrego el punto a la lista de puntos
             ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
             waypoints.add(startPoint);
+
+            //Segundo punto
             GeoPoint endPoint = new GeoPoint(-43.294682, -65.082539);
             final Marker endMarker = new Marker(map);
             endMarker.setPosition(endPoint);
             endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             getActivity().runOnUiThread(new Runnable() {
                 @Override
-                public void run() {map.getOverlays().add(endMarker);
+                public void run() {
+                    map.getOverlays().add(endMarker);
                 }
             });
 
+            //Agrego el punto a la lista de puntos
             waypoints.add(endPoint);
 
+            //Tercer punto
             GeoPoint endPoint2 = new GeoPoint(-43.291572, -65.086545);
             final Marker endMarker2 = new Marker(map);
             endMarker2.setPosition(endPoint2);
             endMarker2.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             getActivity().runOnUiThread(new Runnable() {
                 @Override
-                public void run() {map.getOverlays().add(endMarker2);
-                }
-            });
-
-            waypoints.add(endPoint2);
-
-            Road road = roadManager.getRoad(waypoints);
-            final Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
-            roadOverlay.setWidth(10);
-
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {map.getOverlays().add(roadOverlay);
-                }
-            });
-
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
                 public void run() {
-                    map.invalidate();
+                    map.getOverlays().add(endMarker2);
                 }
             });
 
-            return "Listo!";
+            //Agrego el punto a la lista de puntos
+            waypoints.add(endPoint2);
+            //Obtengo la ruta en base a la lista de puntos
+            Road road = roadManager.getRoad(waypoints);
+            //Dibujo la ruta sólo si pude conectarme y obtenerla
+            if (road.mStatus == Road.STATUS_OK)
+            {
+                //Seteo el tipo de linea para dibujar la ruta
+                final Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+                roadOverlay.setWidth(10);
+
+                //Dibujo la ruta y actualizo el mapa
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() { map.getOverlays().add(roadOverlay); }
+                });
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() { map.invalidate(); }
+                });
+            }
+            return road;
         }
 
         @Override
-        protected void onPostExecute(String mensajes) {
-            pDialog.setMessage(mensajes);
+        protected void onPostExecute(Road road) {
             pDialog.hide();
+            //Si no pude conectarme y obtener la ruta
+            if (road.mStatus != Road.STATUS_OK)
+                Toast.makeText(getActivity().getApplicationContext(), "Error en la conexión.\nVerifique su conexión a internet", Toast.LENGTH_SHORT).show();
         }
     }
 
