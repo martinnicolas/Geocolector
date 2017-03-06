@@ -16,94 +16,185 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="161dp"
-            android:id="@+id/medidor"
-            android:layout_weight="0.38">
+            android:layout_height="167dp"
+            android:background="#FFEBEE"
+            android:id="@+id/medicion">
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="41dp"
-                android:id="@+id/linearInfoMed">
-
-                <TextView
-                    android:text="Información medidor"
-                    android:paddingTop="10dp"
-                    android:paddingRight="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/txtTitMed"
-                    android:gravity="right"
-                    android:textColor="@android:color/background_dark"
-                    android:textSize="18sp"
-                    android:textStyle="normal|bold|italic"
-                    android:textAllCaps="true" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
+            <TextView
+                android:text="Información medidor"
+                android:paddingTop="2dp"
+                android:paddingRight="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/linearNovMed">
+                android:id="@+id/txtTitMed"
+                android:gravity="right"
+                android:textColor="@android:color/background_dark"
+                android:textSize="15sp"
+                android:textStyle="normal|bold|italic"
+                android:textAllCaps="true" />
 
-                <TextView
-                    android:text="Cod. Nov.:"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtNov" />
-
-                <EditText
-                    android:layout_width="39dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:ems="10"
-                    android:id="@+id/edtCodNov" />
-
-                <Spinner
-                    android:layout_width="144dp"
-                    android:layout_height="match_parent"
-                    android:id="@+id/spCodNov"
-                    android:layout_weight="0.78" />
-
-                <TextView
-                    android:text="Descrip. Novedad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtDesNov"
-                    android:layout_weight="1.04" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
+            <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="1"
-                android:id="@+id/linearEstMed">
+                android:layout_height="156dp"
+                android:id="@+id/tablaMedidor">
 
-                <LinearLayout
-                    android:orientation="horizontal"
+                <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.08">
+                    android:id="@+id/filaNov">
+
+                    <TextView
+                        android:text="Cod. Nov.:"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView2"
+                        android:layout_width="50dp"
+                        android:layout_margin="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="1dp" />
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/editText"
+                        android:maxLength="2"
+                        android:layout_width="20dp"
+                        android:background="@android:color/background_light"
+                        android:textColor="?android:attr/textColorPrimaryDisableOnly"
+                        android:layout_margin="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="1dp" />
+
+                    <Spinner
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/spinner" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/filaNov"
+                    android:layout_margin="1dp"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginTop="1dp">
+
+                    <TextView
+                        android:text="Desc. Nov.:"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="Descripcion novedad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView3"
+                        android:layout_marginBottom="1dp"
+                        android:layout_margin="1dp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="1dp" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/filaEtiquetas" >
+
+                    <TextView
+                        android:text="Est. Actual"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView6"
+                        android:textStyle="normal|bold"
+                        android:textSize="12sp"
+                        android:layout_margin="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginTop="1dp"
+                        android:gravity="center_horizontal" />
+
+                    <TextView
+                        android:text="Est. Ant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView7"
+                        android:textStyle="normal|bold"
+                        android:textSize="12sp"
+                        android:elevation="0dp"
+                        android:gravity="center_horizontal" />
+
+                    <TextView
+                        android:text="Consumo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView4"
+                        android:textStyle="normal|bold"
+                        android:textSize="12sp"
+                        android:gravity="center_horizontal" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/filaEst"
+                    android:layout_marginLeft="5dp">
 
                     <EditText
                         android:layout_width="109dp"
                         android:layout_height="match_parent"
                         android:inputType="number"
-                        android:text="Estado actual"
                         android:ems="10"
-                        android:id="@+id/edtEstAct" />
+                        android:id="@+id/edtEstAct"
+                        android:background="@android:color/background_light"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="right|center_vertical"
+                        android:maxLength="8" />
 
                     <TextView
                         android:text="Est. Ant."
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:id="@+id/txtEstAnt" />
+                        android:id="@+id/txtEstAnt"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@android:color/black"
+                        android:background="@android:color/background_light"
+                        android:gravity="bottom|right"
+                        android:maxLength="8" />
 
                     <TextView
                         android:text="Consumo"
-                        android:layout_width="177dp"
                         android:layout_height="match_parent"
                         android:id="@+id/txtConsumo"
                         android:gravity="right"
@@ -113,449 +204,479 @@
                         android:layout_marginRight="5dp"
                         android:layout_marginTop="5dp"
                         android:paddingTop="10dp"
-                        android:textSize="24sp"
+                        android:textSize="13sp"
+                        android:textStyle="normal|bold"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
+                        android:maxLength="8" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/filaGurdar">
+
+                    <Button
+                        android:text="Guardar"
+                        android:layout_width="194dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnGuardar"
+                        android:layout_gravity="left"
+                        android:layout_span="2"
+                        android:layout_margin="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginLeft="1dp"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginRight="1dp"
+                        android:layout_marginTop="1dp"
                         android:textStyle="normal|bold" />
+                </TableRow>
 
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <Button
-                android:text="Guardar"
-                android:layout_width="194dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnGuardar"
-                android:layout_gravity="right"/>
-
+            </TableLayout>
         </LinearLayout>
 
-        <TableLayout
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/tablaInfoUsuario"
-            android:background="@android:color/holo_blue_bright"
-            android:gravity="right">
+            android:weightSum="1"
+            android:id="@+id/usuario">
 
-            <TableRow
+            <TextView
+                android:text="Información del usuario"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/filaTitulos">
-
-                <TextView
-                    android:text="Información del usuario"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView13"
-                    android:textStyle="normal|bold|italic"
-                    android:textAllCaps="true"
-                    android:gravity="right"
-                    android:textColor="@android:color/background_dark"
-                    android:layout_marginBottom="12dp"
-                    android:layout_margin="12dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="12dp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/filaNroUsr">
-
-                <TextView
-                    android:text="TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView14"
-                    tools:text="N° usuario:"
-                    android:gravity="right"
-                    android:layout_marginRight="5dp"
-                    android:layout_margin="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp" />
-
-                <TextView
-                    android:text="TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView15"
-                    tools:text="XX-XXX-XX"
-                    android:background="@android:color/background_light"
-                    android:layout_margin="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/filaCatUsr">
-
-                <TextView
-                    android:text="TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView17"
-                    tools:text="Categoria:"
-                    android:gravity="right"
-                    android:layout_marginRight="5dp"
-                    android:layout_margin="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp" />
-
-                <TextView
-                    android:text="TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView16"
-                    tools:text="Residencial"
-                    android:background="@android:color/background_light"
-                    android:layout_margin="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/filaDomUsr">
-
-                <TextView
-                    android:text="Dirección:"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView19"
-                    android:gravity="right"
-                    android:layout_marginRight="5dp"
-                    android:layout_margin="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp" />
-
-                <TextView
-                    android:text="Av. Siempre Viva 741"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView18"
-                    android:background="@android:color/background_light"
-                    android:layout_margin="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp" />
-            </TableRow>
-        </TableLayout>
-
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:id="@+id/tablaResuMed"
-            android:gravity="right"
-            android:background="@android:color/holo_orange_light"
-            android:layout_marginTop="10dp">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/filaTitle" >
-
-                <TextView
-                            android:text="Resumen ruta Meidición"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/txtResuMed"
-                            android:layout_weight="1"
-                            android:gravity="right"
-                            android:textColor="@android:color/background_dark"
-                    android:textStyle="normal|bold|italic"
-                    android:textAllCaps="true"
-                    android:layout_margin="12dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="5dp"
-                    android:textSize="15sp" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/filaCabecera" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView5"
-                    android:layout_weight="0.3"/>
-
-                <TextView
-                    android:text="MA"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtMA"
-                    android:layout_weight="1"
-                    android:textStyle="normal|bold"
-                    android:layout_margin="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_vertical|center_horizontal" />
-
-                <TextView
-                    android:text="MER"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtMER"
-                    android:layout_weight="1"
-                    android:textStyle="normal|bold"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:layout_margin="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp" />
-
-                <TextView
-                    android:text="MEA"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtMEA"
-                    android:layout_weight="1"
-                    android:textColor="@android:color/background_dark"
-                    android:textAllCaps="false"
-                    android:layout_margin="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_vertical|center_horizontal" />
-
-                <TextView
-                    android:text="Total"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtTotal"
-                    android:layout_weight="1"
-                    android:textAllCaps="false"
-                    android:layout_margin="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_vertical|center_horizontal" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/filaMedidos"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView13"
+                android:textStyle="normal|bold|italic"
+                android:textAllCaps="true"
                 android:gravity="right"
-                android:layout_margin="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp">
+                android:textColor="@android:color/background_dark"
+                android:layout_marginBottom="12dp"
+                android:layout_margin="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp" />
 
-                <TextView
-                    android:text="Cant. NO medidos"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtNoMedidos"
-                    android:layout_margin="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="right" />
-
-                <TextView
-                    android:text="0"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtMANL"
-                    android:layout_weight="1"
-                    android:background="@android:color/background_light"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="right"
-                    android:layout_margin="5dp" />
-
-                <TextView
-                    android:text="0"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtMERNL"
-                    android:layout_weight="1"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/background_light"
-                    android:gravity="right"
-                    android:layout_margin="5dp" />
-
-                <TextView
-                    android:text="0"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtMEANL"
-                    android:layout_weight="1"
-                    tools:text="0"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/background_light"
-                    android:gravity="right"
-                    android:layout_margin="5dp" />
-
-                <TextView
-                    android:text="total"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtTotalNL"
-                    android:layout_weight="1"
-                    tools:text="0"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/background_dark"
-                    tools:textColor="@android:color/background_light"
-                    android:layout_margin="5dp"
-                    android:gravity="right" />
-            </TableRow>
-
-            <TableRow
+            <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/filaNoMedidos" >
+                android:layout_height="90dp"
+                android:id="@+id/tablaInfoUsuario"
+                android:background="#BBDEFB"
+                android:gravity="right"
+                android:layout_weight="1.71">
 
-                <TextView
-                    android:text="TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtMedidos"
-                    tools:text="Cant. Medidos"
-                    android:layout_marginBottom="5dp"
-                    android:layout_margin="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="right" />
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/filaNroUsr">
 
-                <TextView
-                    android:text="32"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtMAL"
-                    android:layout_weight="0.27"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/background_light"
+                    <TextView
+                        android:text="N° usuario:"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView14"
+                        android:gravity="right"
+                        android:layout_marginRight="5dp"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:text="XX-XXX-XX"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtNusr"
+                        android:background="@android:color/background_light"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="3"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/filaCatUsr">
+
+                    <TextView
+                        android:text="Categoria:"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView17"
+                        tools:text="Categoria:"
+                        android:gravity="right"
+                        android:layout_marginRight="5dp"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp" />
+
+                    <TextView
+                        android:text="Residencial"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtCat"
+                        tools:text="Residencial"
+                        android:background="@android:color/background_light"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/filaDomUsr">
+
+                    <TextView
+                        android:text="Dirección:"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView19"
+                        android:gravity="right"
+                        android:layout_marginRight="5dp"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp" />
+
+                    <TextView
+                        android:text="Av. Siempre Viva 741"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtDir"
+                        android:background="@android:color/background_light"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="129dp"
+            android:id="@+id/resumen">
+
+            <TextView
+                        android:text="Resumen ruta Meidición"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtResuMed"
+                android:gravity="right"
+                        android:textColor="@android:color/background_dark"
+                android:textStyle="normal|bold|italic"
+                android:textAllCaps="true"
+                android:layout_margin="1dp"
+                android:layout_marginBottom="0dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="3dp"
+                android:textSize="15sp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="175dp"
+                android:id="@+id/tablaResuMed"
+                android:gravity="right"
+                android:background="#FFE082"
+                android:layout_marginTop="0dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/filaCabecera" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView5"
+                        android:layout_weight="0.3"/>
+
+                    <TextView
+                        android:text="MA"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtMA"
+                        android:layout_weight="1"
+                        android:textStyle="normal|bold"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:textColor="@android:color/background_dark" />
+
+                    <TextView
+                        android:text="MER"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtMER"
+                        android:layout_weight="1"
+                        android:textStyle="normal|bold"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@android:color/background_dark" />
+
+                    <TextView
+                        android:text="MEA"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtMEA"
+                        android:layout_weight="1"
+                        android:textColor="@android:color/background_dark"
+                        android:textAllCaps="false"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:textStyle="normal|bold" />
+
+                    <TextView
+                        android:text="Total"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtTotal"
+                        android:layout_weight="1"
+                        android:textAllCaps="false"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:textStyle="normal|bold"
+                        android:textColor="@android:color/background_dark" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/filaMedidos"
                     android:gravity="right"
-                    android:layout_margin="5dp" />
-
-                <TextView
-                    android:text="3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtMERL"
-                    android:layout_weight="0.27"
-                    android:layout_marginBottom="5dp"
-                    android:layout_margin="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/background_light"
-                    android:gravity="right" />
-
-                <TextView
-                    android:text="32"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtMEAL"
-                    android:layout_weight="0.27"
                     android:layout_margin="5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:gravity="right"
-                    android:background="@android:color/background_light" />
+                    android:layout_marginTop="5dp">
 
-                <TextView
-                    android:text="67"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtTotalL"
-                    android:layout_weight="0.27"
-                    android:layout_margin="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@android:color/background_light"
-                    android:gravity="right" />
-            </TableRow>
+                    <TextView
+                        android:text="Cant. NO medidos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtNoMedidos"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="right"
+                        android:textStyle="normal|bold" />
 
-        </TableLayout>
+                    <TextView
+                        android:text="0"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtMANL"
+                        android:layout_weight="1"
+                        android:background="@android:color/background_light"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="right"
+                        android:layout_margin="5dp" />
+
+                    <TextView
+                        android:text="0"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtMERNL"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@android:color/background_light"
+                        android:gravity="right"
+                        android:layout_margin="5dp" />
+
+                    <TextView
+                        android:text="0"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtMEANL"
+                        android:layout_weight="1"
+                        tools:text="0"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@android:color/background_light"
+                        android:gravity="right"
+                        android:layout_margin="5dp" />
+
+                    <TextView
+                        android:text="total"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtTotalNL"
+                        android:layout_weight="1"
+                        tools:text="0"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@android:color/background_dark"
+                        tools:textColor="@android:color/background_light"
+                        android:layout_margin="5dp"
+                        android:gravity="right" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/filaNoMedidos" >
+
+                    <TextView
+                        android:text="Cant. Medidos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtMedidos"
+                        tools:text="Cant. Medidos"
+                        android:layout_marginBottom="5dp"
+                        android:layout_margin="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="right"
+                        android:textStyle="normal|bold" />
+
+                    <TextView
+                        android:text="32"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtMAL"
+                        android:layout_weight="0.27"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@android:color/background_light"
+                        android:gravity="right"
+                        android:layout_margin="5dp" />
+
+                    <TextView
+                        android:text="3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtMERL"
+                        android:layout_weight="0.27"
+                        android:layout_marginBottom="5dp"
+                        android:layout_margin="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@android:color/background_light"
+                        android:gravity="right" />
+
+                    <TextView
+                        android:text="32"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtMEAL"
+                        android:layout_weight="0.27"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="right"
+                        android:background="@android:color/background_light" />
+
+                    <TextView
+                        android:text="67"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtTotalL"
+                        android:layout_weight="0.27"
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@android:color/black"
+                        android:gravity="right"
+                        android:textColor="@android:color/background_light" />
+                </TableRow>
+
+            </TableLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
