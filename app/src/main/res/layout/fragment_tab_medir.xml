@@ -25,7 +25,8 @@
             android:layout_width="match_parent"
             android:layout_height="167dp"
             android:background="#FFEBEE"
-            android:id="@+id/medicion">
+            android:id="@+id/medicion"
+            android:layout_weight="0.37">
 
             <TextView
                 android:text="Información medidor"
@@ -250,9 +251,10 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="101dp"
             android:weightSum="1"
-            android:id="@+id/usuario">
+            android:id="@+id/usuario"
+            android:layout_weight="0.34">
 
             <TextView
                 android:text="Información del usuario"
@@ -273,11 +275,11 @@
 
             <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="90dp"
+                android:layout_height="match_parent"
                 android:id="@+id/tablaInfoUsuario"
                 android:background="#BBDEFB"
                 android:gravity="right"
-                android:layout_weight="1.71">
+                android:layout_weight="0.67">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -389,11 +391,13 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="129dp"
-            android:id="@+id/resumen">
+            android:layout_height="wrap_content"
+            android:id="@+id/resumen"
+            android:layout_weight="0.38"
+            android:weightSum="1">
 
             <TextView
-                        android:text="Resumen ruta Meidición"
+                        android:text="Resumen ruta Medición"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtResuMed"
@@ -412,11 +416,12 @@
 
             <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="175dp"
+                android:layout_height="104dp"
                 android:id="@+id/tablaResuMed"
                 android:gravity="right"
                 android:background="#FFE082"
-                android:layout_marginTop="0dp">
+                android:layout_marginTop="0dp"
+                android:layout_weight="0.81">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -593,7 +598,8 @@
                         android:background="@android:color/background_dark"
                         tools:textColor="@android:color/background_light"
                         android:layout_margin="5dp"
-                        android:gravity="right" />
+                        android:gravity="right"
+                        android:textStyle="normal|bold" />
                 </TableRow>
 
                 <TableRow
@@ -680,7 +686,8 @@
                         android:layout_marginTop="5dp"
                         android:background="@android:color/black"
                         android:gravity="right"
-                        android:textColor="@android:color/background_light" />
+                        android:textColor="@android:color/background_light"
+                        android:textStyle="normal|bold" />
                 </TableRow>
 
             </TableLayout>
