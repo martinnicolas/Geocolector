@@ -39,6 +39,26 @@
     <!-- Strings related to Fragment TabFoto-->
     <string name="action_camara">Cámara</string>
 
+    <!-- Strings related to Fragment tab_medir-->
+    <string name="txt_nov">Cod. Nov.:</string>
+    <string name="titInfoMed">INFORMACIÓN MEDIDOR</string>
+    <string name="txtDescNov">Desc. Nov.:</string>
+    <string name="txtEstAct">Est. Act.</string>
+    <string name="txtEstAnt">Est. Ant.</string>
+    <string name="txtConsumo">Consumo</string>
+    <string name="txtTitUsr">INFORMACIÓN DEL USUARIO</string>
+    <string name="txtNroUsr">N° usuario:</string>
+    <string name="txtCategoria">Categoria:</string>
+    <string name="txtDireccion">Dirección:</string>
+    <string name="txtTitResumen">RESUMEN RUTA DE MEDICIÓN</string>
+    <string name="txtNoL">Cant. NO medidos</string>
+    <string name="txtLeidos">Cant. Medidos</string>
+    <string name="txtMA">MA</string>
+    <string name="txtMER">MER</string>
+    <string name="txtMEA">MEA</string>
+    <string name="txtTotal">Total</string>
+
+
     <!-- Strings related to Fragment CargarZona-->
     <string name="action_cargar_zona">Cargar zona</string>
 

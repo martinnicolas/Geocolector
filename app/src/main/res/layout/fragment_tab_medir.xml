@@ -29,7 +29,7 @@
             android:layout_weight="0.37">
 
             <TextView
-                android:text="Información medidor"
+                android:text="@string/titInfoMed"
                 android:paddingTop="6dp"
                 android:paddingRight="2dp"
                 android:layout_width="match_parent"
@@ -53,9 +53,9 @@
                     android:id="@+id/filaNov">
 
                     <TextView
-                        android:text="Cod. Nov.:"
+                        android:text="@string/txt_nov"
                         android:layout_height="wrap_content"
-                        android:id="@+id/textView2"
+                        android:id="@+id/txtCodNov"
                         android:layout_width="50dp"
                         android:layout_margin="1dp"
                         android:layout_marginBottom="1dp"
@@ -69,7 +69,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="number"
                         android:ems="10"
-                        android:id="@+id/editText"
+                        android:id="@+id/edtCodNov"
                         android:maxLength="2"
                         android:layout_width="20dp"
                         android:background="@android:color/background_light"
@@ -85,14 +85,14 @@
                     <Spinner
                         android:layout_width="20dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/spinner" />
+                        android:id="@+id/spNov" />
 
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/filaNov"
+                    android:id="@+id/filaEtq"
                     android:layout_margin="1dp"
                     android:layout_marginBottom="1dp"
                     android:layout_marginEnd="1dp"
@@ -102,15 +102,16 @@
                     android:layout_marginTop="1dp">
 
                     <TextView
-                        android:text="Desc. Nov.:"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtDescNov"
+                        android:text="@string/txtDescNov" />
 
                     <TextView
                         android:text="Descripcion novedad"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/textView3"
+                        android:id="@+id/txtDetNov"
                         android:layout_marginBottom="1dp"
                         android:layout_margin="1dp"
                         android:layout_marginEnd="1dp"
@@ -127,10 +128,10 @@
                     android:id="@+id/filaEtiquetas" >
 
                     <TextView
-                        android:text="Est. Actual"
+                        android:text="@string/txtEstAct"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/textView6"
+                        android:id="@+id/txtEstAct"
                         android:textStyle="normal|bold"
                         android:textSize="12sp"
                         android:layout_margin="1dp"
@@ -143,20 +144,20 @@
                         android:gravity="center_horizontal" />
 
                     <TextView
-                        android:text="Est. Ant"
+                        android:text="@string/txtEstAnt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/textView7"
+                        android:id="@+id/txtEstAnt"
                         android:textStyle="normal|bold"
                         android:textSize="12sp"
                         android:elevation="0dp"
                         android:gravity="center_horizontal" />
 
                     <TextView
-                        android:text="Consumo"
+                        android:text="@string/txtConsumo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/textView4"
+                        android:id="@+id/txtCons"
                         android:textStyle="normal|bold"
                         android:textSize="12sp"
                         android:gravity="center_horizontal" />
@@ -189,7 +190,7 @@
                         android:text="Est. Ant."
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:id="@+id/txtEstAnt"
+                        android:id="@+id/txtDescEA"
                         android:layout_margin="5dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginEnd="5dp"
@@ -229,10 +230,9 @@
                     android:id="@+id/filaGurdar">
 
                     <Button
-                        android:text="Guardar"
+                        android:text="@string/action_save"
                         android:layout_width="194dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/btnGuardar"
                         android:layout_gravity="left"
                         android:layout_span="2"
                         android:layout_margin="1dp"
@@ -242,7 +242,8 @@
                         android:layout_marginStart="1dp"
                         android:layout_marginRight="1dp"
                         android:layout_marginTop="1dp"
-                        android:textStyle="normal|bold" />
+                        android:textStyle="normal|bold"
+                        android:id="@+id/btnGuardar" />
                 </TableRow>
 
             </TableLayout>
@@ -257,10 +258,10 @@
             android:layout_weight="0.34">
 
             <TextView
-                android:text="Información del usuario"
+                android:text="@string/txtTitUsr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView13"
+                android:id="@+id/txtTitInf"
                 android:textStyle="normal|bold|italic"
                 android:textAllCaps="true"
                 android:gravity="right"
@@ -287,10 +288,10 @@
                     android:id="@+id/filaNroUsr">
 
                     <TextView
-                        android:text="N° usuario:"
+                        android:text="@string/txtNroUsr"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/textView14"
+                        android:id="@+id/txtNroUsr"
                         android:gravity="right"
                         android:layout_marginRight="5dp"
                         android:layout_margin="5dp"
@@ -323,10 +324,10 @@
                     android:id="@+id/filaCatUsr">
 
                     <TextView
-                        android:text="Categoria:"
+                        android:text="@string/txtCategoria"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/textView17"
+                        android:id="@+id/txtCat"
                         tools:text="Categoria:"
                         android:gravity="right"
                         android:layout_marginRight="5dp"
@@ -341,7 +342,7 @@
                         android:text="Residencial"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/txtCat"
+                        android:id="@+id/txtDescCat"
                         tools:text="Residencial"
                         android:background="@android:color/background_light"
                         android:layout_margin="5dp"
@@ -358,10 +359,10 @@
                     android:id="@+id/filaDomUsr">
 
                     <TextView
-                        android:text="Dirección:"
+                        android:text="@string/txtDireccion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/textView19"
+                        android:id="@+id/txtDir"
                         android:gravity="right"
                         android:layout_marginRight="5dp"
                         android:layout_margin="5dp"
@@ -375,7 +376,7 @@
                         android:text="Av. Siempre Viva 741"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/txtDir"
+                        android:id="@+id/txtDetDir"
                         android:background="@android:color/background_light"
                         android:layout_margin="5dp"
                         android:layout_marginBottom="5dp"
@@ -397,7 +398,7 @@
             android:weightSum="1">
 
             <TextView
-                        android:text="Resumen ruta Medición"
+                        android:text="@string/txtTitResumen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtResuMed"
@@ -435,7 +436,7 @@
                         android:layout_weight="0.3"/>
 
                     <TextView
-                        android:text="MA"
+                        android:text="@string/txtMA"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMA"
@@ -452,7 +453,7 @@
                         android:textColor="@android:color/background_dark" />
 
                     <TextView
-                        android:text="MER"
+                        android:text="@string/txtMER"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMER"
@@ -469,7 +470,7 @@
                         android:textColor="@android:color/background_dark" />
 
                     <TextView
-                        android:text="MEA"
+                        android:text="@string/txtMEA"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMEA"
@@ -487,7 +488,7 @@
                         android:textStyle="normal|bold" />
 
                     <TextView
-                        android:text="Total"
+                        android:text="@string/txtTotal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtTotal"
@@ -519,7 +520,7 @@
                     android:layout_marginTop="5dp">
 
                     <TextView
-                        android:text="Cant. NO medidos"
+                        android:text="@string/txtNoL"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtNoMedidos"
@@ -608,7 +609,7 @@
                     android:id="@+id/filaNoMedidos" >
 
                     <TextView
-                        android:text="Cant. Medidos"
+                        android:text="@string/txtLeidos"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMedidos"
