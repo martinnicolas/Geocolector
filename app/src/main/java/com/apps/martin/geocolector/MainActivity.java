@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity
         builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences prefs = getSharedPreferences("Configuracion", Context.MODE_PRIVATE);
+                SharedPreferences prefs = getSharedPreferences("Configuración", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.remove("usuario");
                 editor.commit();
