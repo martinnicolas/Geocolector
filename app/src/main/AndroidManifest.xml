@@ -34,6 +34,7 @@
         <activity
             android:name=".ConfiguracionActivity"
             android:label="@string/title_activity_configuracion"
+            android:screenOrientation="portrait"
             android:parentActivityName=".LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -43,6 +44,7 @@
         <activity
             android:name=".RegistrarseActivity"
             android:label="@string/title_activity_registrarse"
+            android:screenOrientation="portrait"
             android:parentActivityName=".LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -52,6 +54,7 @@
         <activity
             android:name=".AdministrarCuentaActivity"
             android:label="@string/title_activity_administrar_cuenta"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
