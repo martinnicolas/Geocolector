@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +21,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import org.greenrobot.greendao.Property;
+import org.greenrobot.greendao.database.Database;
+
+import modelo.DaoMaster;
+import modelo.DaoSession;
+import modelo.Novedad;
+import modelo.NovedadDao;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DescargarRuta.OnFragmentInteractionListener, VerMapa.OnFragmentInteractionListener, MedirZona.OnFragmentInteractionListener,
         ZonaMedicion.OnFragmentInteractionListener, TabMedir.OnFragmentInteractionListener, TabComentario.OnFragmentInteractionListener, TabFoto.OnFragmentInteractionListener, CargarZona.OnFragmentInteractionListener {
@@ -28,6 +37,16 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //para GreenDao
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "geocolectorDB");
+        Database db = helper.getWritableDb();
+        DaoSession daoSession = new DaoMaster(db).newSession();
+
+        daoSession.queryBuilder(Novedad.class).orderAsc(NovedadDao.Properties.CodServicio);
+
+        //fin para greenDao
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
