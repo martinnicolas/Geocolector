@@ -5,7 +5,6 @@
     tools:context="com.apps.martin.geocolector.TabMedir"
     >
 
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
