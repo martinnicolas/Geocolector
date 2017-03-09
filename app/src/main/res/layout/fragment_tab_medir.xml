@@ -50,7 +50,8 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/filaNov">
+                    android:id="@+id/filaNov"
+                    android:layout_marginBottom="2dp">
 
                     <TextView
                         android:text="@string/txt_nov"
@@ -99,7 +100,7 @@
                     android:layout_marginLeft="1dp"
                     android:layout_marginRight="1dp"
                     android:layout_marginStart="1dp"
-                    android:layout_marginTop="1dp">
+                    android:layout_marginTop="2dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -125,7 +126,14 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/filaEtiquetas" >
+                    android:id="@+id/filaEtiquetas"
+                    android:layout_margin="1dp"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginEnd="1dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginStart="1dp"
+                    android:layout_marginTop="5dp">
 
                     <TextView
                         android:text="@string/txtEstAct"
@@ -134,13 +142,6 @@
                         android:id="@+id/txtEstAct"
                         android:textStyle="normal|bold"
                         android:textSize="12sp"
-                        android:layout_margin="1dp"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginEnd="1dp"
-                        android:layout_marginLeft="1dp"
-                        android:layout_marginRight="1dp"
-                        android:layout_marginStart="1dp"
-                        android:layout_marginTop="1dp"
                         android:gravity="center_horizontal" />
 
                     <TextView
@@ -272,7 +273,8 @@
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
                 android:layout_marginStart="6dp"
-                android:layout_marginTop="6dp" />
+                android:layout_marginTop="6dp"
+                android:textSize="15sp" />
 
             <TableLayout
                 android:layout_width="match_parent"
