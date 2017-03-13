@@ -4,6 +4,7 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.ToOne;
 
 /**
  * Created by fede on 09/03/2017.
@@ -19,6 +20,7 @@ public class Novedad {
     private String descripcion;
     private Boolean repiteEstado;
     private String codServicio;
+
 
     @Generated(hash = 1278650675)
     public Novedad(Long id, @NotNull String descripcion, Boolean repiteEstado,
