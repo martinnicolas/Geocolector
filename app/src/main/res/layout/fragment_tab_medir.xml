@@ -22,14 +22,14 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="167dp"
-            android:background="#FFEBEE"
+            android:layout_height="wrap_content"
             android:id="@+id/medicion"
-            android:layout_weight="0.37">
+            android:background="#FFEBEE"
+            android:layout_weight="0.20">
 
             <TextView
                 android:text="@string/titInfoMed"
-                android:paddingTop="6dp"
+                android:paddingTop="5dp"
                 android:paddingRight="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,12 +39,15 @@
                 android:textSize="15sp"
                 android:textStyle="normal|bold|italic"
                 android:textAllCaps="true"
-                android:paddingBottom="6dp" />
+                android:paddingBottom="5dp"
+                android:paddingLeft="2dp" />
 
             <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="156dp"
-                android:id="@+id/tablaMedidor">
+                android:layout_height="wrap_content"
+                android:id="@+id/tablaMedidor"
+                android:background="#FFEBEE"
+                android:layout_marginBottom="5dp">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -57,13 +60,11 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/txtCodNov"
                         android:layout_width="50dp"
-                        android:layout_margin="1dp"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginEnd="1dp"
-                        android:layout_marginLeft="1dp"
-                        android:layout_marginRight="1dp"
-                        android:layout_marginStart="1dp"
-                        android:layout_marginTop="1dp" />
+                        android:layout_margin="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp" />
 
                     <EditText
                         android:layout_height="wrap_content"
@@ -71,20 +72,23 @@
                         android:ems="10"
                         android:id="@+id/edtCodNov"
                         android:maxLength="2"
-                        android:layout_width="20dp"
                         android:background="@android:color/background_light"
                         android:textColor="?android:attr/textColorPrimaryDisableOnly"
-                        android:layout_margin="1dp"
-                        android:layout_marginBottom="1dp"
-                        android:layout_marginEnd="1dp"
-                        android:layout_marginLeft="1dp"
-                        android:layout_marginRight="1dp"
-                        android:layout_marginStart="1dp"
-                        android:layout_marginTop="1dp" />
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="60dp" />
 
                     <Spinner
                         android:layout_height="wrap_content"
-                        android:id="@+id/spNov" />
+                        android:id="@+id/spNov"
+                        android:textColor="@android:color/background_dark"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_width="wrap_content" />
 
                 </TableRow>
 
@@ -92,55 +96,64 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/filaEtq"
-                    android:layout_margin="1dp"
-                    android:layout_marginBottom="1dp"
-                    android:layout_marginEnd="1dp"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginRight="1dp"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="2dp">
+                    android:layout_marginBottom="2dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/txtDescNov"
+                        android:text="@string/txtDescNov"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/txtDescNov"
-                        android:text="@string/txtDescNov" />
+                        android:id="@+id/textView2"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp" />
 
                     <TextView
                         android:text="Descripcion novedad"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtDetNov"
-                        android:layout_marginBottom="1dp"
-                        android:layout_margin="1dp"
-                        android:layout_marginEnd="1dp"
-                        android:layout_marginLeft="1dp"
-                        android:layout_marginRight="1dp"
-                        android:layout_marginStart="1dp"
-                        android:layout_marginTop="1dp" />
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp" />
 
                 </TableRow>
+
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/filaEtiquetas"
-                    android:layout_margin="1dp"
-                    android:layout_marginBottom="1dp"
-                    android:layout_marginEnd="1dp"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginRight="1dp"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginTop="5dp">
+                    android:weightSum="1">
 
                     <TextView
                         android:text="@string/txtEstAct"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:id="@+id/txtEstAct"
                         android:textStyle="normal|bold"
-                        android:textSize="12sp"
-                        android:gravity="center_horizontal" />
+                        android:textSize="12dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal"
+                        android:layout_weight="0.33" />
 
                     <TextView
                         android:text="@string/txtEstAnt"
@@ -148,9 +161,14 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/txtEstAnt"
                         android:textStyle="normal|bold"
-                        android:textSize="12sp"
+                        android:textSize="12dp"
                         android:elevation="0dp"
-                        android:gravity="center_horizontal" />
+                        android:gravity="center_horizontal"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="0.33" />
 
                     <TextView
                         android:text="@string/txtConsumo"
@@ -158,103 +176,90 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/txtCons"
                         android:textStyle="normal|bold"
-                        android:textSize="12sp"
-                        android:gravity="center_horizontal" />
+                        android:textSize="12dp"
+                        android:gravity="center_horizontal"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="0.33" />
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/filaEst"
-                    android:layout_marginLeft="5dp">
+                    android:weightSum="1">
 
                     <EditText
-                        android:layout_width="109dp"
                         android:layout_height="match_parent"
                         android:inputType="number"
-                        android:ems="10"
                         android:id="@+id/edtEstAct"
                         android:background="@android:color/background_light"
-                        android:layout_margin="5dp"
                         android:layout_marginBottom="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginStart="5dp"
                         android:layout_marginTop="5dp"
-                        android:gravity="right|center_vertical"
-                        android:maxLength="8" />
+                        android:maxLength="8"
+                        android:layout_width="match_parent"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="0.33" />
 
                     <TextView
                         android:text="Est. Ant."
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/txtDescEA"
-                        android:layout_margin="5dp"
                         android:layout_marginBottom="5dp"
-                        android:layout_marginEnd="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:layout_marginStart="5dp"
                         android:layout_marginTop="5dp"
                         android:textColor="@android:color/black"
                         android:background="@android:color/background_light"
                         android:gravity="bottom|right"
-                        android:maxLength="8" />
+                        android:maxLength="8"
+                        android:layout_weight="0.33" />
 
                     <TextView
                         android:text="Consumo"
                         android:layout_height="match_parent"
                         android:id="@+id/txtConsumo"
-                        android:gravity="right"
+                        android:gravity="bottom|right"
                         android:background="@android:color/black"
                         android:textColor="@android:color/background_light"
-                        android:paddingRight="5dp"
                         android:layout_marginRight="5dp"
                         android:layout_marginTop="5dp"
-                        android:paddingTop="10dp"
                         android:textSize="13sp"
                         android:textStyle="normal|bold"
-                        android:layout_margin="5dp"
                         android:layout_marginBottom="5dp"
-                        android:layout_marginEnd="5dp"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginStart="5dp"
-                        android:maxLength="8" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/filaGurdar">
-
-                    <Button
-                        android:text="@string/action_save"
-                        android:layout_width="194dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_span="2"
-                        android:layout_margin="1dp"
-                        android:layout_marginBottom="2dp"
-                        android:layout_marginEnd="1dp"
-                        android:layout_marginLeft="1dp"
-                        android:layout_marginStart="1dp"
-                        android:layout_marginRight="1dp"
-                        android:layout_marginTop="1dp"
-                        android:textStyle="normal|bold"
-                        android:id="@+id/btnGuardar" />
+                        android:maxLength="8"
+                        android:layout_width="match_parent"
+                        android:layout_weight="0.33" />
                 </TableRow>
 
             </TableLayout>
+
+            <Button
+                android:text="@string/action_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_span="2"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:textStyle="normal|bold"
+                android:id="@+id/btnGuardar" />
         </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="101dp"
-            android:weightSum="1"
+            android:layout_height="wrap_content"
             android:id="@+id/usuario"
-            android:layout_weight="0.34">
+            android:layout_weight="0.40"
+            android:background="#BBDEFB">
 
             <TextView
                 android:text="@string/txtTitUsr"
@@ -265,20 +270,16 @@
                 android:textAllCaps="true"
                 android:gravity="right"
                 android:textColor="@android:color/background_dark"
-                android:layout_marginBottom="6dp"
-                android:layout_margin="6dp"
-                android:layout_marginEnd="6dp"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="6dp"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:paddingBottom="5dp"
+                android:paddingRight="2dp"
+                android:paddingLeft="2dp"
+                android:paddingTop="5dp" />
 
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/tablaInfoUsuario"
-                android:background="#BBDEFB"
                 android:gravity="right"
                 android:layout_weight="0.67">
 
@@ -299,8 +300,7 @@
                         android:layout_marginEnd="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginStart="5dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"/>
+                        android:layout_marginTop="5dp" />
 
                     <TextView
                         android:text="XX-XXX-XX"
@@ -314,8 +314,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:layout_marginStart="5dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="3"/>
+                        android:layout_marginTop="5dp" />
                 </TableRow>
 
                 <TableRow
@@ -394,8 +393,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/resumen"
-            android:layout_weight="0.38"
-            android:weightSum="1">
+            android:layout_weight="0.40"
+            android:background="#FFE082">
 
             <TextView
                         android:text="@string/txtTitResumen"
@@ -406,41 +405,37 @@
                         android:textColor="@android:color/background_dark"
                 android:textStyle="normal|bold|italic"
                 android:textAllCaps="true"
-                android:layout_margin="1dp"
-                android:layout_marginBottom="0dp"
-                android:layout_marginEnd="1dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginStart="1dp"
-                android:layout_marginTop="3dp"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:paddingTop="5dp" />
 
             <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="104dp"
-                android:id="@+id/tablaResuMed"
-                android:gravity="right"
-                android:background="#FFE082"
-                android:layout_marginTop="0dp"
-                android:layout_weight="0.81">
+                android:layout_height="match_parent"
+                android:id="@+id/tablaResuMed">
 
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/filaCabecera" >
+                    android:id="@+id/filaCabecera"
+                    android:gravity="right">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textView5"
-                        android:layout_weight="0.3"/>
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp" />
 
                     <TextView
                         android:text="@string/txtMA"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMA"
-                        android:layout_weight="1"
                         android:textStyle="normal|bold"
                         android:layout_margin="5dp"
                         android:layout_marginBottom="5dp"
@@ -457,7 +452,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMER"
-                        android:layout_weight="1"
                         android:textStyle="normal|bold"
                         android:gravity="center_vertical|center_horizontal"
                         android:layout_margin="5dp"
@@ -474,7 +468,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMEA"
-                        android:layout_weight="1"
                         android:textColor="@android:color/background_dark"
                         android:textAllCaps="false"
                         android:layout_margin="5dp"
@@ -492,7 +485,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtTotal"
-                        android:layout_weight="1"
                         android:textAllCaps="false"
                         android:layout_margin="5dp"
                         android:layout_marginBottom="5dp"
@@ -510,36 +502,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/filaMedidos"
-                    android:gravity="right"
-                    android:layout_margin="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp">
+                    android:gravity="right">
 
                     <TextView
                         android:text="@string/txtNoL"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtNoMedidos"
+                        android:gravity="right"
+                        android:textStyle="normal|bold"
                         android:layout_margin="5dp"
                         android:layout_marginBottom="5dp"
-                        android:layout_marginEnd="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="5dp"
-                        android:gravity="right"
-                        android:textStyle="normal|bold" />
+                        android:layout_marginTop="5dp" />
 
                     <TextView
                         android:text="0"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMANL"
-                        android:layout_weight="1"
                         android:background="@android:color/background_light"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
@@ -555,7 +537,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMERNL"
-                        android:layout_weight="1"
                         android:layout_marginBottom="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginLeft="5dp"
@@ -571,7 +552,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMEANL"
-                        android:layout_weight="1"
                         tools:text="0"
                         android:layout_marginBottom="5dp"
                         android:layout_marginEnd="5dp"
@@ -588,7 +568,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtTotalNL"
-                        android:layout_weight="1"
                         tools:text="0"
                         android:layout_marginBottom="5dp"
                         android:layout_marginEnd="5dp"
@@ -606,7 +585,8 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/filaNoMedidos" >
+                    android:id="@+id/filaNoMedidos"
+                    android:gravity="right">
 
                     <TextView
                         android:text="@string/txtLeidos"
@@ -629,7 +609,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMAL"
-                        android:layout_weight="0.27"
                         android:layout_marginBottom="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginLeft="5dp"
@@ -645,7 +624,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMERL"
-                        android:layout_weight="0.27"
                         android:layout_marginBottom="5dp"
                         android:layout_margin="5dp"
                         android:layout_marginEnd="5dp"
@@ -661,7 +639,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMEAL"
-                        android:layout_weight="0.27"
                         android:layout_margin="5dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginEnd="5dp"
@@ -677,7 +654,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtTotalL"
-                        android:layout_weight="0.27"
                         android:layout_margin="5dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginEnd="5dp"
