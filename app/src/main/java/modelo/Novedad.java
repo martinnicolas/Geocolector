@@ -35,6 +35,11 @@ public class Novedad {
     public Novedad() {
     }
 
+    @Override
+    public String toString(){
+        return this.getCodServicio()+" - "+this.getDescripcion();
+    }
+
     public Long getId() {
         return this.id;
     }
