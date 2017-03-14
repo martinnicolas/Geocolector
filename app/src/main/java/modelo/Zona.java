@@ -18,7 +18,7 @@ public class Zona {
 
     @NotNull
     private String nombre;
-    private String grupoId;
+    private Long grupoId;
 
     //definimos la clave foranea a Grupo
     @ToOne(joinProperty = "grupoId")
@@ -32,8 +32,8 @@ public class Zona {
     @Generated(hash = 1893743705)
     private transient ZonaDao myDao;
 
-    @Generated(hash = 778736738)
-    public Zona(int id, @NotNull String nombre, String grupoId) {
+    @Generated(hash = 1396422269)
+    public Zona(int id, @NotNull String nombre, Long grupoId) {
         this.id = id;
         this.nombre = nombre;
         this.grupoId = grupoId;
@@ -59,22 +59,22 @@ public class Zona {
         this.nombre = nombre;
     }
 
-    public String getGrupoId() {
+    public Long getGrupoId() {
         return this.grupoId;
     }
 
-    public void setGrupoId(String grupoId) {
+    public void setGrupoId(Long grupoId) {
         this.grupoId = grupoId;
     }
 
-    @Generated(hash = 1952796897)
-    private transient String grupo__resolvedKey;
+    @Generated(hash = 1086411371)
+    private transient Long grupo__resolvedKey;
 
     /** To-one relationship, resolved on first access. */
-    @Generated(hash = 360655879)
+    @Generated(hash = 708857573)
     public Grupo getGrupo() {
-        String __key = this.grupoId;
-        if (grupo__resolvedKey == null || grupo__resolvedKey != __key) {
+        Long __key = this.grupoId;
+        if (grupo__resolvedKey == null || !grupo__resolvedKey.equals(__key)) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
@@ -90,11 +90,11 @@ public class Zona {
     }
 
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 1577487749)
+    @Generated(hash = 1850925137)
     public void setGrupo(Grupo grupo) {
         synchronized (this) {
             this.grupo = grupo;
-            grupoId = grupo == null ? null : grupo.getLetra();
+            grupoId = grupo == null ? null : grupo.getId();
             grupo__resolvedKey = grupoId;
         }
     }
@@ -141,6 +141,5 @@ public class Zona {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getZonaDao() : null;
     }
-
 
 }

@@ -4,6 +4,10 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.ToMany;
+
+import java.util.List;
+import org.greenrobot.greendao.DaoException;
 
 /**
  * Created by fede on 10/03/2017.
@@ -12,36 +16,136 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class Grupo {
     @Id
-    private String letra;
+    private Long id;
 
     @NotNull
-    private int codigo;
     private String nombre;
-    @Generated(hash = 1587847872)
-    public Grupo(String letra, int codigo, String nombre) {
-        this.letra = letra;
-        this.codigo = codigo;
+    private String descripcion;
+    private int codigo;
+
+    @ToMany(referencedJoinProperty = "grupoId")
+    private List<Zona> zonas;
+
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
+
+    /** Used for active entity operations. */
+    @Generated(hash = 111729619)
+    private transient GrupoDao myDao;
+
+    @Generated(hash = 1292707597)
+    public Grupo(Long id, @NotNull String nombre, String descripcion, int codigo) {
+        this.id = id;
         this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.codigo = codigo;
     }
+
     @Generated(hash = 668265261)
     public Grupo() {
     }
-    public String getLetra() {
-        return this.letra;
+
+    public Long getId() {
+        return this.id;
     }
-    public void setLetra(String letra) {
-        this.letra = letra;
+
+    public void setId(Long id) {
+        this.id = id;
     }
-    public int getCodigo() {
-        return this.codigo;
-    }
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
-    }
+
     public String getNombre() {
         return this.nombre;
     }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return this.descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public int getCodigo() {
+        return this.codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 917607377)
+    public List<Zona> getZonas() {
+        if (zonas == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            ZonaDao targetDao = daoSession.getZonaDao();
+            List<Zona> zonasNew = targetDao._queryGrupo_Zonas(id);
+            synchronized (this) {
+                if (zonas == null) {
+                    zonas = zonasNew;
+                }
+            }
+        }
+        return zonas;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 1467738827)
+    public synchronized void resetZonas() {
+        zonas = null;
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 128553479)
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 1942392019)
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 713229351)
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update(this);
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 1304166435)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getGrupoDao() : null;
     }
 }
