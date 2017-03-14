@@ -3,6 +3,7 @@ package com.apps.martin.geocolector;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.SpinnerAdapter;
 
 import org.greenrobot.greendao.database.Database;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,12 +82,16 @@ public class TabMedir extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_tab_medir, container, false);
 
         //para GreenDao
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getActivity().getApplicationContext(), "geocolectorDB");
+        //Almaceno base de datos en /storage/emulated/0/geocolector
+        File path = new File(Environment.getExternalStorageDirectory(), "geocolector/geocolectorDB");
+        path.getParentFile().mkdirs();
+
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getActivity().getApplicationContext(), path.getAbsolutePath());
         Database db = helper.getWritableDb();
         DaoSession daoSession = new DaoMaster(db).newSession();
 
-        Novedad novedad = new Novedad(null,"Medidor ERROR",false,"02");
-        daoSession.getNovedadDao().insert(novedad);
+        /*Novedad novedad = new Novedad(null,"Medidor ERROR",false,"02");
+        daoSession.getNovedadDao().insert(novedad);*/
 
         List<Novedad> novedades = daoSession.getNovedadDao().loadAll();
 
