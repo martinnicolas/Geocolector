@@ -90,7 +90,7 @@ public class TabMedir extends Fragment {
         List<Novedad> novedades = daoSession.getNovedadDao().loadAll();
 
         Spinner spinner = (Spinner) rootView.findViewById(R.id.spNov);
-        ArrayAdapter<Novedad> adapter = new ArrayAdapter<Novedad>(getActivity().getApplicationContext(),android.R.layout.simple_spinner_item, novedades);
+        ArrayAdapter<Novedad> adapter = new ArrayAdapter<Novedad>(getActivity(),android.R.layout.simple_spinner_item, novedades);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
