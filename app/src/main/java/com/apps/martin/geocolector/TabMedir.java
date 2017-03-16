@@ -95,6 +95,8 @@ public class TabMedir extends Fragment {
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
+
+        //Manejo el evento del boton guardar, en la medición
         Button btnGuardar = (Button) rootView.findViewById(R.id.btnGuardar);
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {

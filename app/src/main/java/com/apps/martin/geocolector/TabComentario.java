@@ -7,6 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import modelo.DaoSession;
+import modelo.RutaMedicion;
 
 
 /**
@@ -64,7 +69,26 @@ public class TabComentario extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab_comentario, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_tab_comentario, container, false);
+
+        //Manejo accion del boton guardar
+        Button btnGuardar = (Button) rootView.findViewById(R.id.button);
+        btnGuardar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
+
+            }
+        });
+
+        //Manejo accion del boton borrar
+        Button btnBorrar = (Button) rootView.findViewById(R.id.button4);
+        btnBorrar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                EditText comentario = (EditText) view.findViewById(R.id.comentario);
+                comentario.setText("");
+            }
+        });
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
