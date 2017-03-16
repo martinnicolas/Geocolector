@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.database.Database;
 
+import java.io.File;
 import java.util.List;
 
 import modelo.DaoMaster;
@@ -35,13 +37,22 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DescargarRuta.OnFragmentInteractionListener, VerMapa.OnFragmentInteractionListener, MedirZona.OnFragmentInteractionListener,
         ZonaMedicion.OnFragmentInteractionListener, TabMedir.OnFragmentInteractionListener, TabComentario.OnFragmentInteractionListener, TabFoto.OnFragmentInteractionListener, CargarZona.OnFragmentInteractionListener {
 
+    //Variable que representa una sesion en la base de datos;
+    private DaoSession daoSession;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Almaceno base de datos en /storage/emulated/0/geocolector
+        File path = new File(Environment.getExternalStorageDirectory(), "geocolector/geocolectorDB");
+        path.getParentFile().mkdirs();
 
-
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getApplicationContext(), path.getAbsolutePath());
+        Database db = helper.getWritableDb();
+        daoSession = new DaoMaster(db).newSession();
+        //Almaceno base de datos en /storage/emulated/0/geocolector
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -164,8 +175,18 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Obtiene una instancia que hace referencia a la conexión creada con la base de datos
+     *
+     * @return daoSession
+     */
+    public DaoSession getDaoSession() {
+        return daoSession;
+    }
+
     @Override
     public void onFragmentInteraction(Uri uri) {
 
     }
+
 }
