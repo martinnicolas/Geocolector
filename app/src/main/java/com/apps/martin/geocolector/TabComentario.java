@@ -82,9 +82,9 @@ public class TabComentario extends Fragment {
 
         //Manejo accion del boton borrar
         Button btnBorrar = (Button) rootView.findViewById(R.id.button4);
+        final EditText comentario = (EditText) rootView.findViewById(R.id.comentario);
         btnBorrar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                EditText comentario = (EditText) view.findViewById(R.id.comentario);
                 comentario.setText("");
             }
         });
