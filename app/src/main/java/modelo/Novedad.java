@@ -17,22 +17,52 @@ public class Novedad {
     private Long id;
 
     @NotNull
+    private int codigo;
     private String descripcion;
     private Boolean repiteEstado;
     private String codServicio;
 
-
-    @Generated(hash = 1278650675)
-    public Novedad(Long id, @NotNull String descripcion, Boolean repiteEstado,
+    @Generated(hash = 1000526213)
+    public Novedad(Long id, int codigo, String descripcion, Boolean repiteEstado,
             String codServicio) {
         this.id = id;
+        this.codigo = codigo;
         this.descripcion = descripcion;
         this.repiteEstado = repiteEstado;
         this.codServicio = codServicio;
     }
-
     @Generated(hash = 1909275415)
     public Novedad() {
+    }
+    public Long getId() {
+        return this.id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public int getCodigo() {
+        return this.codigo;
+    }
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+    public String getDescripcion() {
+        return this.descripcion;
+    }
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    public Boolean getRepiteEstado() {
+        return this.repiteEstado;
+    }
+    public void setRepiteEstado(Boolean repiteEstado) {
+        this.repiteEstado = repiteEstado;
+    }
+    public String getCodServicio() {
+        return this.codServicio;
+    }
+    public void setCodServicio(String codServicio) {
+        this.codServicio = codServicio;
     }
 
     @Override
@@ -40,35 +70,4 @@ public class Novedad {
         return this.getCodServicio()+" - "+this.getDescripcion();
     }
 
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getDescripcion() {
-        return this.descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Boolean getRepiteEstado() {
-        return this.repiteEstado;
-    }
-
-    public void setRepiteEstado(Boolean repiteEstado) {
-        this.repiteEstado = repiteEstado;
-    }
-
-    public String getCodServicio() {
-        return this.codServicio;
-    }
-
-    public void setCodServicio(String codServicio) {
-        this.codServicio = codServicio;
-    }
 }
