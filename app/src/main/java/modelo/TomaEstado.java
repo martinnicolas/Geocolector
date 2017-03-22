@@ -61,4 +61,9 @@ public class TomaEstado {
     public void setAdministrador(Boolean administrador) {
         this.administrador = administrador;
     }
+
+    @Override
+    public String toString(){
+        return this.getNro_legajo()+" - "+this.getNombre();
+    }
 }

@@ -67,6 +67,11 @@ public class Zona {
         this.grupoId = grupoId;
     }
 
+    @Override
+    public String toString(){
+        return this.getNombre();
+    }
+
     @Generated(hash = 1086411371)
     private transient Long grupo__resolvedKey;
 

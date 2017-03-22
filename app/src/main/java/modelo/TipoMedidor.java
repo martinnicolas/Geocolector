@@ -45,4 +45,9 @@ public class TipoMedidor {
         this.descripcion = descripcion;
     }
 
+    @Override
+    public String toString(){
+        return this.getCodigo()+" - "+this.getDescripcion();
+    }
+
 }
