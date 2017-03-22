@@ -67,7 +67,7 @@ public class Novedad {
 
     @Override
     public String toString(){
-        return this.getCodServicio()+" - "+this.getDescripcion();
+        return this.getCodigo()+" - "+this.getDescripcion();
     }
 
 }
