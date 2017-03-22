@@ -37,9 +37,9 @@ public class RutaMedicion {
     //foto
 
     //declaracion de claves foraneas
-    private int toma_estadoId;
-    private long tipo_medidorId;
-    private int zonaId;
+    private Long toma_estadoId;
+    private Long tipo_medidorId;
+    private Long zonaId;
     private long cod_novedadId;
 
     //definimos la clave foranea para el toma estado
@@ -66,13 +66,13 @@ public class RutaMedicion {
     @Generated(hash = 253730192)
     private transient RutaMedicionDao myDao;
 
-    @Generated(hash = 1114190239)
+    @Generated(hash = 1103576339)
     public RutaMedicion(Long id, @NotNull String domicilio, String categoria,
             int nro_medidor, int usuario, String latitud, String longitud,
             int estado_anterior, int promedio, double multipliacdor,
             int getEstado_actual, Boolean medido, Date fecha, double demanda,
-            String observacion, int toma_estadoId, long tipo_medidorId, int zonaId,
-            long cod_novedadId) {
+            String observacion, Long toma_estadoId, Long tipo_medidorId,
+            Long zonaId, long cod_novedadId) {
         this.id = id;
         this.domicilio = domicilio;
         this.categoria = categoria;
@@ -218,27 +218,27 @@ public class RutaMedicion {
         this.observacion = observacion;
     }
 
-    public int getToma_estadoId() {
+    public Long getToma_estadoId() {
         return this.toma_estadoId;
     }
 
-    public void setToma_estadoId(int toma_estadoId) {
+    public void setToma_estadoId(Long toma_estadoId) {
         this.toma_estadoId = toma_estadoId;
     }
 
-    public long getTipo_medidorId() {
+    public Long getTipo_medidorId() {
         return this.tipo_medidorId;
     }
 
-    public void setTipo_medidorId(long tipo_medidorId) {
+    public void setTipo_medidorId(Long tipo_medidorId) {
         this.tipo_medidorId = tipo_medidorId;
     }
 
-    public int getZonaId() {
+    public Long getZonaId() {
         return this.zonaId;
     }
 
-    public void setZonaId(int zonaId) {
+    public void setZonaId(Long zonaId) {
         this.zonaId = zonaId;
     }
 
@@ -250,13 +250,13 @@ public class RutaMedicion {
         this.cod_novedadId = cod_novedadId;
     }
 
-    @Generated(hash = 539382271)
-    private transient Integer tomaEstado__resolvedKey;
+    @Generated(hash = 1361011882)
+    private transient Long tomaEstado__resolvedKey;
 
     /** To-one relationship, resolved on first access. */
-    @Generated(hash = 1732189740)
+    @Generated(hash = 101716511)
     public TomaEstado getTomaEstado() {
-        int __key = this.toma_estadoId;
+        Long __key = this.toma_estadoId;
         if (tomaEstado__resolvedKey == null
                 || !tomaEstado__resolvedKey.equals(__key)) {
             final DaoSession daoSession = this.daoSession;
@@ -274,15 +274,11 @@ public class RutaMedicion {
     }
 
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 770230147)
-    public void setTomaEstado(@NotNull TomaEstado tomaEstado) {
-        if (tomaEstado == null) {
-            throw new DaoException(
-                    "To-one property 'toma_estadoId' has not-null constraint; cannot set to-one to null");
-        }
+    @Generated(hash = 1101756409)
+    public void setTomaEstado(TomaEstado tomaEstado) {
         synchronized (this) {
             this.tomaEstado = tomaEstado;
-            toma_estadoId = tomaEstado.getNro_legajo();
+            toma_estadoId = tomaEstado == null ? null : tomaEstado.getId();
             tomaEstado__resolvedKey = toma_estadoId;
         }
     }
@@ -291,9 +287,9 @@ public class RutaMedicion {
     private transient Long tipoMedidor__resolvedKey;
 
     /** To-one relationship, resolved on first access. */
-    @Generated(hash = 1597969995)
+    @Generated(hash = 976109909)
     public TipoMedidor getTipoMedidor() {
-        long __key = this.tipo_medidorId;
+        Long __key = this.tipo_medidorId;
         if (tipoMedidor__resolvedKey == null
                 || !tipoMedidor__resolvedKey.equals(__key)) {
             final DaoSession daoSession = this.daoSession;
@@ -311,26 +307,22 @@ public class RutaMedicion {
     }
 
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 1875770335)
-    public void setTipoMedidor(@NotNull TipoMedidor tipoMedidor) {
-        if (tipoMedidor == null) {
-            throw new DaoException(
-                    "To-one property 'tipo_medidorId' has not-null constraint; cannot set to-one to null");
-        }
+    @Generated(hash = 1195830103)
+    public void setTipoMedidor(TipoMedidor tipoMedidor) {
         synchronized (this) {
             this.tipoMedidor = tipoMedidor;
-            tipo_medidorId = tipoMedidor.getId();
+            tipo_medidorId = tipoMedidor == null ? null : tipoMedidor.getId();
             tipoMedidor__resolvedKey = tipo_medidorId;
         }
     }
 
-    @Generated(hash = 1331846967)
-    private transient Integer zona__resolvedKey;
+    @Generated(hash = 808118032)
+    private transient Long zona__resolvedKey;
 
     /** To-one relationship, resolved on first access. */
-    @Generated(hash = 695449504)
+    @Generated(hash = 66837197)
     public Zona getZona() {
-        int __key = this.zonaId;
+        Long __key = this.zonaId;
         if (zona__resolvedKey == null || !zona__resolvedKey.equals(__key)) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
@@ -347,15 +339,11 @@ public class RutaMedicion {
     }
 
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 1576749903)
-    public void setZona(@NotNull Zona zona) {
-        if (zona == null) {
-            throw new DaoException(
-                    "To-one property 'zonaId' has not-null constraint; cannot set to-one to null");
-        }
+    @Generated(hash = 458062340)
+    public void setZona(Zona zona) {
         synchronized (this) {
             this.zona = zona;
-            zonaId = zona.getId();
+            zonaId = zona == null ? null : zona.getId();
             zona__resolvedKey = zonaId;
         }
     }
@@ -438,7 +426,6 @@ public class RutaMedicion {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getRutaMedicionDao() : null;
     }
-
 
 
 }

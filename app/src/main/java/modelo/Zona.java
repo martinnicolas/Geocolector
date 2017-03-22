@@ -14,7 +14,7 @@ import org.greenrobot.greendao.DaoException;
 @Entity
 public class Zona {
     @Id
-    private int id;
+    private Long id;
 
     @NotNull
     private String nombre;
@@ -32,8 +32,8 @@ public class Zona {
     @Generated(hash = 1893743705)
     private transient ZonaDao myDao;
 
-    @Generated(hash = 1396422269)
-    public Zona(int id, @NotNull String nombre, Long grupoId) {
+    @Generated(hash = 1392763569)
+    public Zona(Long id, @NotNull String nombre, Long grupoId) {
         this.id = id;
         this.nombre = nombre;
         this.grupoId = grupoId;
@@ -43,11 +43,11 @@ public class Zona {
     public Zona() {
     }
 
-    public int getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

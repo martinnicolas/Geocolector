@@ -12,15 +12,17 @@ import org.greenrobot.greendao.annotation.Generated;
 public class TomaEstado {
 
     @Id
-    private int nro_legajo;
+    private Long id;
 
     @NotNull
+    private int nro_legajo;
     private String nombre;
     private String password;
     private Boolean administrador;
-    @Generated(hash = 364512082)
-    public TomaEstado(int nro_legajo, @NotNull String nombre, String password,
+    @Generated(hash = 186624813)
+    public TomaEstado(Long id, int nro_legajo, String nombre, String password,
             Boolean administrador) {
+        this.id = id;
         this.nro_legajo = nro_legajo;
         this.nombre = nombre;
         this.password = password;
@@ -28,6 +30,12 @@ public class TomaEstado {
     }
     @Generated(hash = 268110501)
     public TomaEstado() {
+    }
+    public Long getId() {
+        return this.id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
     public int getNro_legajo() {
         return this.nro_legajo;
@@ -53,5 +61,4 @@ public class TomaEstado {
     public void setAdministrador(Boolean administrador) {
         this.administrador = administrador;
     }
-
 }
