@@ -99,6 +99,7 @@ public class TabMedir extends Fragment {
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
+        final EditText estado_actual = (EditText) rootView.findViewById(R.id.edtEstAct);
 
         //Manejo el evento del boton guardar, en la medición
         Button btnGuardar = (Button) rootView.findViewById(R.id.btnGuardar);
@@ -106,19 +107,11 @@ public class TabMedir extends Fragment {
             public void onClick(View view) {
                 RutaMedicion rutaMedicion = new RutaMedicion();
                 rutaMedicion.setDomicilio("");
-                rutaMedicion.setCategoria("");
-                rutaMedicion.setNro_medidor(1);
-                rutaMedicion.setUsuario(1);
                 rutaMedicion.setLatitud("-43.291362");
                 rutaMedicion.setLongitud("-65.094455");
-                rutaMedicion.setEstado_anterior(1);
-                rutaMedicion.setPromedio(1);
-                rutaMedicion.setMultiplicador(0.3);
-                rutaMedicion.setEstado_actual(2);
+                rutaMedicion.setEstado_actual(Integer.parseInt(estado_actual.getText().toString()));
                 rutaMedicion.setMedido(true);
                 rutaMedicion.setFecha(new Date());
-                rutaMedicion.setDemanda(0.5);
-                rutaMedicion.setObservacion("");
                 rutaMedicion.setNovedad((Novedad)spinner.getSelectedItem());
                 DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
                 daoSession.getRutaMedicionDao().insert(rutaMedicion);
