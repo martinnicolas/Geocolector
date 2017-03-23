@@ -19,7 +19,6 @@ public class RutaMedicion {
     @Id
     private Long id;
 
-    @NotNull
     private String domicilio;
     private String categoria;
     private int nro_medidor;
@@ -29,7 +28,7 @@ public class RutaMedicion {
     private int estado_anterior;
     private int promedio;
     private double multipliacdor;
-    private int getEstado_actual;
+    private int estado_actual;
     private Boolean medido;
     private Date fecha;
     private double demanda;
@@ -66,13 +65,11 @@ public class RutaMedicion {
     @Generated(hash = 253730192)
     private transient RutaMedicionDao myDao;
 
-    @Generated(hash = 1103576339)
-    public RutaMedicion(Long id, @NotNull String domicilio, String categoria,
-            int nro_medidor, int usuario, String latitud, String longitud,
-            int estado_anterior, int promedio, double multipliacdor,
-            int getEstado_actual, Boolean medido, Date fecha, double demanda,
-            String observacion, Long toma_estadoId, Long tipo_medidorId,
-            Long zonaId, long cod_novedadId) {
+    @Generated(hash = 1213860611)
+    public RutaMedicion(Long id, String domicilio, String categoria, int nro_medidor, int usuario, String latitud,
+            String longitud, int estado_anterior, int promedio, double multipliacdor, int estado_actual,
+            Boolean medido, Date fecha, double demanda, String observacion, Long toma_estadoId,
+            Long tipo_medidorId, Long zonaId, long cod_novedadId) {
         this.id = id;
         this.domicilio = domicilio;
         this.categoria = categoria;
@@ -83,7 +80,7 @@ public class RutaMedicion {
         this.estado_anterior = estado_anterior;
         this.promedio = promedio;
         this.multipliacdor = multipliacdor;
-        this.getEstado_actual = getEstado_actual;
+        this.estado_actual = estado_actual;
         this.medido = medido;
         this.fecha = fecha;
         this.demanda = demanda;
@@ -178,12 +175,12 @@ public class RutaMedicion {
         this.multipliacdor = multipliacdor;
     }
 
-    public int getGetEstado_actual() {
-        return this.getEstado_actual;
+    public int getEstado_actual() {
+        return this.estado_actual;
     }
 
-    public void setGetEstado_actual(int getEstado_actual) {
-        this.getEstado_actual = getEstado_actual;
+    public void setEstado_actual(int estado_actual) {
+        this.estado_actual = estado_actual;
     }
 
     public Boolean getMedido() {
@@ -426,6 +423,5 @@ public class RutaMedicion {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getRutaMedicionDao() : null;
     }
-
 
 }
