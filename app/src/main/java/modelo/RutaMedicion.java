@@ -27,7 +27,7 @@ public class RutaMedicion {
     private String longitud;
     private int estado_anterior;
     private int promedio;
-    private double multipliacdor;
+    private double multiplicador;
     private int estado_actual;
     private Boolean medido;
     private Date fecha;
@@ -39,7 +39,7 @@ public class RutaMedicion {
     private Long toma_estadoId;
     private Long tipo_medidorId;
     private Long zonaId;
-    private long cod_novedadId;
+    private long novedadId;
 
     //definimos la clave foranea para el toma estado
     @ToOne(joinProperty = "toma_estadoId")
@@ -54,7 +54,7 @@ public class RutaMedicion {
     private Zona zona;
 
     //definimos la clave foranea a la novedad
-    @ToOne(joinProperty = "cod_novedadId")
+    @ToOne(joinProperty = "novedadId")
     private Novedad novedad;
 
     /** Used to resolve relations */
@@ -65,11 +65,13 @@ public class RutaMedicion {
     @Generated(hash = 253730192)
     private transient RutaMedicionDao myDao;
 
-    @Generated(hash = 1213860611)
-    public RutaMedicion(Long id, String domicilio, String categoria, int nro_medidor, int usuario, String latitud,
-            String longitud, int estado_anterior, int promedio, double multipliacdor, int estado_actual,
-            Boolean medido, Date fecha, double demanda, String observacion, Long toma_estadoId,
-            Long tipo_medidorId, Long zonaId, long cod_novedadId) {
+    @Generated(hash = 1652426482)
+    public RutaMedicion(Long id, String domicilio, String categoria,
+            int nro_medidor, int usuario, String latitud, String longitud,
+            int estado_anterior, int promedio, double multiplicador,
+            int estado_actual, Boolean medido, Date fecha, double demanda,
+            String observacion, Long toma_estadoId, Long tipo_medidorId,
+            Long zonaId, long novedadId) {
         this.id = id;
         this.domicilio = domicilio;
         this.categoria = categoria;
@@ -79,7 +81,7 @@ public class RutaMedicion {
         this.longitud = longitud;
         this.estado_anterior = estado_anterior;
         this.promedio = promedio;
-        this.multipliacdor = multipliacdor;
+        this.multiplicador = multiplicador;
         this.estado_actual = estado_actual;
         this.medido = medido;
         this.fecha = fecha;
@@ -88,7 +90,7 @@ public class RutaMedicion {
         this.toma_estadoId = toma_estadoId;
         this.tipo_medidorId = tipo_medidorId;
         this.zonaId = zonaId;
-        this.cod_novedadId = cod_novedadId;
+        this.novedadId = novedadId;
     }
 
     @Generated(hash = 1731830566)
@@ -167,12 +169,12 @@ public class RutaMedicion {
         this.promedio = promedio;
     }
 
-    public double getMultipliacdor() {
-        return this.multipliacdor;
+    public double getMultiplicador() {
+        return this.multiplicador;
     }
 
-    public void setMultipliacdor(double multipliacdor) {
-        this.multipliacdor = multipliacdor;
+    public void setMultiplicador(double multiplicador) {
+        this.multiplicador = multiplicador;
     }
 
     public int getEstado_actual() {
@@ -239,12 +241,12 @@ public class RutaMedicion {
         this.zonaId = zonaId;
     }
 
-    public long getCod_novedadId() {
-        return this.cod_novedadId;
+    public long getNovedadId() {
+        return this.novedadId;
     }
 
-    public void setCod_novedadId(long cod_novedadId) {
-        this.cod_novedadId = cod_novedadId;
+    public void setNovedadId(long novedadId) {
+        this.novedadId = novedadId;
     }
 
     @Generated(hash = 1361011882)
@@ -349,9 +351,9 @@ public class RutaMedicion {
     private transient Long novedad__resolvedKey;
 
     /** To-one relationship, resolved on first access. */
-    @Generated(hash = 1811429371)
+    @Generated(hash = 1778317653)
     public Novedad getNovedad() {
-        long __key = this.cod_novedadId;
+        long __key = this.novedadId;
         if (novedad__resolvedKey == null || !novedad__resolvedKey.equals(__key)) {
             final DaoSession daoSession = this.daoSession;
             if (daoSession == null) {
@@ -368,16 +370,16 @@ public class RutaMedicion {
     }
 
     /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 1150905274)
+    @Generated(hash = 1055139031)
     public void setNovedad(@NotNull Novedad novedad) {
         if (novedad == null) {
             throw new DaoException(
-                    "To-one property 'cod_novedadId' has not-null constraint; cannot set to-one to null");
+                    "To-one property 'novedadId' has not-null constraint; cannot set to-one to null");
         }
         synchronized (this) {
             this.novedad = novedad;
-            cod_novedadId = novedad.getId();
-            novedad__resolvedKey = cod_novedadId;
+            novedadId = novedad.getId();
+            novedad__resolvedKey = novedadId;
         }
     }
 
