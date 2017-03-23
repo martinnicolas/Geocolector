@@ -14,18 +14,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 import org.greenrobot.greendao.database.Database;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import modelo.DaoMaster;
 import modelo.DaoSession;
 import modelo.Novedad;
 import modelo.NovedadDao;
 import modelo.RutaMedicion;
+import utilidades.MapsUtilities;
 
 
 /**
@@ -88,7 +92,7 @@ public class TabMedir extends Fragment {
         DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
         List<Novedad> novedades = daoSession.getNovedadDao().loadAll();
 
-        Spinner spinner = (Spinner) rootView.findViewById(R.id.spNov);
+        final Spinner spinner = (Spinner) rootView.findViewById(R.id.spNov);
         ArrayAdapter<Novedad> adapter = new ArrayAdapter<Novedad>(getActivity(),android.R.layout.simple_spinner_item, novedades);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -101,8 +105,24 @@ public class TabMedir extends Fragment {
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 RutaMedicion rutaMedicion = new RutaMedicion();
+                rutaMedicion.setDomicilio("");
+                rutaMedicion.setCategoria("");
+                rutaMedicion.setNro_medidor(1);
+                rutaMedicion.setUsuario(1);
+                rutaMedicion.setLatitud("-43.291362");
+                rutaMedicion.setLongitud("-65.094455");
+                rutaMedicion.setEstado_anterior(1);
+                rutaMedicion.setPromedio(1);
+                rutaMedicion.setMultipliacdor(0.3);
+                rutaMedicion.setGetEstado_actual(2);
+                rutaMedicion.setMedido(true);
+                rutaMedicion.setFecha(new Date());
+                rutaMedicion.setDemanda(0.5);
+                rutaMedicion.setObservacion("");
+                rutaMedicion.setNovedad((Novedad)spinner.getSelectedItem());
                 DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
                 daoSession.getRutaMedicionDao().insert(rutaMedicion);
+                Toast.makeText(getActivity().getApplicationContext(), "Se ha guardado la medición!", Toast.LENGTH_SHORT).show();
             }
         });
 
