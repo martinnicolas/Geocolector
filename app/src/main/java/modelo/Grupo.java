@@ -78,6 +78,11 @@ public class Grupo {
         this.codigo = codigo;
     }
 
+    @Override
+    public String toString(){
+        return this.getCodigo()+" - "+this.getDescripcion();
+    }
+
     /**
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
