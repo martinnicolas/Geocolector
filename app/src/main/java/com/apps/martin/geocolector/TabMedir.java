@@ -113,8 +113,8 @@ public class TabMedir extends Fragment {
                 rutaMedicion.setLongitud("-65.094455");
                 rutaMedicion.setEstado_anterior(1);
                 rutaMedicion.setPromedio(1);
-                rutaMedicion.setMultipliacdor(0.3);
-                rutaMedicion.setGetEstado_actual(2);
+                rutaMedicion.setMultiplicador(0.3);
+                rutaMedicion.setEstado_actual(2);
                 rutaMedicion.setMedido(true);
                 rutaMedicion.setFecha(new Date());
                 rutaMedicion.setDemanda(0.5);
