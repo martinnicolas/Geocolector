@@ -16,6 +16,9 @@ import org.greenrobot.greendao.DaoException;
 @Entity
 public class RutaMedicion {
 
+    //Porcentaje del consumo promedio en que el consumo se considera excedido (75%)
+    private static final int PORCENTAJE_EXCESO = 75;
+
     @Id
     private Long id;
 
@@ -424,6 +427,18 @@ public class RutaMedicion {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getRutaMedicionDao() : null;
+    }
+
+    @Override
+    public String toString(){
+        return "Ruta: - "+this.getId();
+    }
+
+    public boolean consumoPromedioExcedido() {
+        int consumo = this.getEstado_anterior() - this.getEstado_actual();
+        int promedio = this.getPromedio();
+        int porcentaje = promedio * PORCENTAJE_EXCESO / 100;
+        return (consumo > porcentaje);
     }
 
 }
