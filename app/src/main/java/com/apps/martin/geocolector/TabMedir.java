@@ -101,7 +101,7 @@ public class TabMedir extends Fragment {
 
         final EditText estado_actual = (EditText) rootView.findViewById(R.id.edtEstAct);
 
-        //Manejo el evento del boton guardar, en la medición
+        //Manejo el evento del boton guardar en la medición
         Button btnGuardar = (Button) rootView.findViewById(R.id.btnGuardar);
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
