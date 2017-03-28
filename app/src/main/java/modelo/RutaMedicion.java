@@ -422,13 +422,6 @@ public class RutaMedicion {
         myDao.update(this);
     }
 
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 102263451)
-    public void __setDaoSession(DaoSession daoSession) {
-        this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getRutaMedicionDao() : null;
-    }
-
     @Override
     public String toString(){
         return "Ruta: - "+this.getId();
@@ -439,6 +432,13 @@ public class RutaMedicion {
         int promedio = this.getPromedio();
         int porcentaje = promedio * PORCENTAJE_EXCESO / 100;
         return (consumo > porcentaje);
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 102263451)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getRutaMedicionDao() : null;
     }
 
 }
