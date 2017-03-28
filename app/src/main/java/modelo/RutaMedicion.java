@@ -7,6 +7,8 @@ import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.ToOne;
 
 import java.util.Date;
+import java.util.List;
+
 import org.greenrobot.greendao.DaoException;
 
 /**
@@ -17,7 +19,9 @@ import org.greenrobot.greendao.DaoException;
 public class RutaMedicion {
 
     //Porcentaje del consumo promedio en que el consumo se considera excedido (75%)
-    private static final int PORCENTAJE_EXCESO = 75;
+    //Se controla por la Ley de Defensa del Consumidor  que el usuario no gaste un 70% mas que el promedio
+    private static final int PORCENTAJE_EXCESO = 70;
+    private static  final  int m3Base = 25;   //indica los metros cúbicos base de agua
 
     @Id
     private Long id;
@@ -427,12 +431,74 @@ public class RutaMedicion {
         return "Ruta: - "+this.getId();
     }
 
+
+    /**
+     * Valida si el consumo supero más del 70% del promedio, hay que validarlo por una Ley de Defensa al Consumidor
+     * @return
+     */
     public boolean consumoPromedioExcedido() {
-        int consumo = this.getEstado_anterior() - this.getEstado_actual();
+      //  int consumo = this.getEstado_anterior() - this.getEstado_actual();// no siempre es asi
+        int consumo = this.calcularConsumo();
         int promedio = this.getPromedio();
         int porcentaje = promedio * PORCENTAJE_EXCESO / 100;
         return (consumo > porcentaje);
     }
+
+    /**
+     * Calcula y devuelve el consumo de un medidor, tiene en cuenta si el medidor se dio vuelta
+     * @return
+     */
+    public int calcularConsumo(){
+        int consumo;
+
+        //verificamos si el medidor volvio a 0 (se dio vuelta el contador)
+        if ( this.getEstado_anterior() <= this.getEstado_actual() )
+            consumo = this.calConsMedidorAgotado();
+        else
+            consumo = this.getEstado_anterior() - this.getEstado_actual();
+
+        return  consumo;
+    }
+
+    /**
+     * Devuelve el consumo de un medidor cuando este se da vuelta
+     * @return consumo del medidor
+     */
+    public int calConsMedidorAgotado()
+    {
+        if (this.getEstado_actual() == this.getEstado_anterior())//no hubo consumo
+            return 0;
+
+        //int cantDigMed = 1;     //indica la cantidad de dígitos que posee el medidor
+        int aux = Integer.toString(getEstado_anterior()).length();
+
+        int cantDigMed = 10 ^ aux;
+
+       /* for (int i = 1; i <= aux; i++)
+            cantDigMed = cantDigMed * 10;*/
+
+
+        setEstado_actual( cantDigMed + getEstado_actual());
+        int consumo = getEstado_actual() - getEstado_anterior();
+
+        return consumo;
+    }
+
+    /**
+     * Devuelve una arreglo con todos los medidores compartidos
+     * @return
+     */
+    public List<RutaMedicion> obtMedCompartidos(){
+        RutaMedicionDao rutaMedicionDao = daoSession.getRutaMedicionDao();
+        List<RutaMedicion> medCom = rutaMedicionDao.queryBuilder()
+                .where(RutaMedicionDao.Properties.Nro_medidor.eq(getNro_medidor()), RutaMedicionDao.Properties.Tipo_medidorId.eq(getTipo_medidorId()))
+                .orderAsc()
+                .list();
+
+        return medCom;
+    }
+
+
 
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 102263451)
