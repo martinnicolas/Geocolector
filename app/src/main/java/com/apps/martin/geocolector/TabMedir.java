@@ -102,11 +102,11 @@ public class TabMedir extends Fragment {
 
         final EditText estado_actual = (EditText) rootView.findViewById(R.id.edtEstAct);
 
-        final RutaMedicion rutaMedicion = RutaMedicion.obtMedActual(daoSession);
+        final RutaMedicion rutaMedicion = MedirZona.medidor_actual();
         TextView numero_usuario = (TextView) rootView.findViewById(R.id.txtNusr);
         TextView categoria_usuario = (TextView) rootView.findViewById(R.id.txtDescCat);
         TextView domicilio_usuario = (TextView) rootView.findViewById(R.id.txtDetDir);
-        numero_usuario.setText(rutaMedicion.getUsuario());
+        numero_usuario.setText("1");
         categoria_usuario.setText(rutaMedicion.getCategoria());
         domicilio_usuario.setText(rutaMedicion.getDomicilio());
 
@@ -120,6 +120,7 @@ public class TabMedir extends Fragment {
                 rutaMedicion.setNovedad((Novedad)spinner.getSelectedItem());
                 daoSession.getRutaMedicionDao().update(rutaMedicion);
                 Toast.makeText(getActivity().getApplicationContext(), "Se ha guardado la medición!", Toast.LENGTH_SHORT).show();
+                MedirZona.set_medidor_actual(RutaMedicion.obtMedActual(daoSession));
             }
         });
 

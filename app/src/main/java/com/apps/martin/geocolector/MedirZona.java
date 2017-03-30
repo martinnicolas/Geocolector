@@ -29,6 +29,8 @@ public class MedirZona extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private static RutaMedicion medidor = null;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -64,6 +66,8 @@ public class MedirZona extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        final DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
+        medidor = RutaMedicion.obtMedActual(daoSession);
     }
 
     @Override
@@ -104,6 +108,14 @@ public class MedirZona extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public static RutaMedicion medidor_actual(){
+        return medidor;
+    }
+
+    public static void set_medidor_actual(RutaMedicion m){
+        medidor = m;
     }
 
     /**
