@@ -473,15 +473,8 @@ public class RutaMedicion {
         if (this.getEstado_actual() == this.getEstado_anterior())//no hubo consumo
             return 0;
 
-        //int cantDigMed = 1;     //indica la cantidad de dígitos que posee el medidor
         int aux = Integer.toString(getEstado_anterior()).length();
-
-        int cantDigMed = 10 ^ aux;
-
-       /* for (int i = 1; i <= aux; i++)
-            cantDigMed = cantDigMed * 10;*/
-
-
+        int cantDigMed = (int) Math.pow(10, aux);
         setEstado_actual( cantDigMed + getEstado_actual());
         int consumo = getEstado_actual() - getEstado_anterior();
 
