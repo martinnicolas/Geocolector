@@ -102,7 +102,7 @@ public class TabMedir extends Fragment {
 
         final EditText estado_actual = (EditText) rootView.findViewById(R.id.edtEstAct);
 
-        final RutaMedicion rutaMedicion = RutaMedicion.obtMedActual();
+        final RutaMedicion rutaMedicion = RutaMedicion.obtMedActual(daoSession);
         TextView numero_usuario = (TextView) rootView.findViewById(R.id.txtNusr);
         TextView categoria_usuario = (TextView) rootView.findViewById(R.id.txtDescCat);
         TextView domicilio_usuario = (TextView) rootView.findViewById(R.id.txtDetDir);

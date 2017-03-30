@@ -83,7 +83,7 @@ public class TabComentario extends Fragment {
         Button btnGuardar = (Button) rootView.findViewById(R.id.button);
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                RutaMedicion rutaMedicion = RutaMedicion.obtMedActual();
+                RutaMedicion rutaMedicion = RutaMedicion.obtMedActual(daoSession);
                 rutaMedicion.setObservacion(comentario.getText().toString());
                 daoSession.getRutaMedicionDao().update(rutaMedicion);
                 Toast.makeText(getActivity().getApplicationContext(), "Se ha añadido el comentario!", Toast.LENGTH_SHORT).show();
