@@ -102,7 +102,7 @@ public class TabMedir extends Fragment {
 
         final EditText estado_actual = (EditText) rootView.findViewById(R.id.edtEstAct);
 
-        final RutaMedicion rutaMedicion = MedirZona.medidor_actual();
+        RutaMedicion rutaMedicion = MedirZona.medidor_actual();
         TextView numero_usuario = (TextView) rootView.findViewById(R.id.txtNusr);
         TextView categoria_usuario = (TextView) rootView.findViewById(R.id.txtDescCat);
         TextView domicilio_usuario = (TextView) rootView.findViewById(R.id.txtDetDir);
@@ -114,6 +114,7 @@ public class TabMedir extends Fragment {
         Button btnGuardar = (Button) rootView.findViewById(R.id.btnGuardar);
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
+                RutaMedicion rutaMedicion = MedirZona.medidor_actual();
                 rutaMedicion.setEstado_actual(Integer.parseInt(estado_actual.getText().toString()));
                 rutaMedicion.setMedido(true);
                 rutaMedicion.setFecha(new Date());
