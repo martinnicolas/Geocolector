@@ -1,5 +1,7 @@
 package modelo;
 
+import android.database.Cursor;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
@@ -10,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.greenrobot.greendao.DaoException;
+import org.greenrobot.greendao.query.Query;
+import org.greenrobot.greendao.query.WhereCondition;
 
 /**
  * Created by fede on 14/03/2017.
@@ -498,7 +502,23 @@ public class RutaMedicion {
         return medCom;
     }
 
+    public static List <RutaMedicion> obtMedActual(DaoSession daoSession ){
+        RutaMedicionDao rutaMedicionDao = daoSession.getRutaMedicionDao();
+            List <RutaMedicion> medActual = rutaMedicionDao.queryBuilder()
+                .where(RutaMedicionDao.Properties.Medido.eq(0))
+                .orderAsc()
+                .limit(1)
+                .list();
 
+        return medActual;
+
+    }
+
+    public static Query query(RutaMedicionDao dao, String queryString) {
+        //"_id in (select min(_id) from ruta_medicion where medido = 0)";
+        Query query = dao.queryBuilder().where(new WhereCondition.StringCondition(queryString)).build();
+        return query;
+    }
 
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 102263451)
