@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.greenrobot.greendao.database.Database;
@@ -89,9 +90,9 @@ public class TabMedir extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_tab_medir, container, false);
 
-        DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
-        List<Novedad> novedades = daoSession.getNovedadDao().loadAll();
+        final DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
 
+        List<Novedad> novedades = daoSession.getNovedadDao().loadAll();
         final Spinner spinner = (Spinner) rootView.findViewById(R.id.spNov);
         ArrayAdapter<Novedad> adapter = new ArrayAdapter<Novedad>(getActivity(),android.R.layout.simple_spinner_item, novedades);
         // Specify the layout to use when the list of choices appears
@@ -101,20 +102,23 @@ public class TabMedir extends Fragment {
 
         final EditText estado_actual = (EditText) rootView.findViewById(R.id.edtEstAct);
 
+        final RutaMedicion rutaMedicion = RutaMedicion.obtMedActual();
+        TextView numero_usuario = (TextView) rootView.findViewById(R.id.txtNusr);
+        TextView categoria_usuario = (TextView) rootView.findViewById(R.id.txtDescCat);
+        TextView domicilio_usuario = (TextView) rootView.findViewById(R.id.txtDetDir);
+        numero_usuario.setText(rutaMedicion.getUsuario());
+        categoria_usuario.setText(rutaMedicion.getCategoria());
+        domicilio_usuario.setText(rutaMedicion.getDomicilio());
+
         //Manejo el evento del boton guardar en la medición
         Button btnGuardar = (Button) rootView.findViewById(R.id.btnGuardar);
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                RutaMedicion rutaMedicion = new RutaMedicion();
-                rutaMedicion.setDomicilio("");
-                rutaMedicion.setLatitud("-43.291362");
-                rutaMedicion.setLongitud("-65.094455");
                 rutaMedicion.setEstado_actual(Integer.parseInt(estado_actual.getText().toString()));
                 rutaMedicion.setMedido(true);
                 rutaMedicion.setFecha(new Date());
                 rutaMedicion.setNovedad((Novedad)spinner.getSelectedItem());
-                DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
-                daoSession.getRutaMedicionDao().insert(rutaMedicion);
+                daoSession.getRutaMedicionDao().update(rutaMedicion);
                 Toast.makeText(getActivity().getApplicationContext(), "Se ha guardado la medición!", Toast.LENGTH_SHORT).show();
             }
         });

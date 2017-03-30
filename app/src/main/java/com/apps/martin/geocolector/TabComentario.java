@@ -9,8 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.Date;
 
 import modelo.DaoSession;
+import modelo.Novedad;
 import modelo.RutaMedicion;
 
 
@@ -71,18 +75,23 @@ public class TabComentario extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_tab_comentario, container, false);
 
+        final DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
+
+        final EditText comentario = (EditText) rootView.findViewById(R.id.comentario);
+
         //Manejo accion del boton guardar
         Button btnGuardar = (Button) rootView.findViewById(R.id.button);
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
-
+                RutaMedicion rutaMedicion = RutaMedicion.obtMedActual();
+                rutaMedicion.setObservacion(comentario.getText().toString());
+                daoSession.getRutaMedicionDao().update(rutaMedicion);
+                Toast.makeText(getActivity().getApplicationContext(), "Se ha añadido el comentario!", Toast.LENGTH_SHORT).show();
             }
         });
 
         //Manejo accion del boton borrar
         Button btnBorrar = (Button) rootView.findViewById(R.id.button4);
-        final EditText comentario = (EditText) rootView.findViewById(R.id.comentario);
         btnBorrar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 comentario.setText("");

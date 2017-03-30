@@ -26,6 +26,11 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import modelo.DaoSession;
+import modelo.Novedad;
+import modelo.RutaMedicion;
 
 
 /**
@@ -167,49 +172,23 @@ public class ZonaMedicion extends Fragment {
             final MapView map = params[0];
             RoadManager roadManager = new OSRMRoadManager(getActivity());
 
-            //Primer punto
-            GeoPoint startPoint = new GeoPoint(-43.291362, -65.094455);
-            final Marker startMarker = new Marker(map);
-            startMarker.setPosition(startPoint);
-            startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() { map.getOverlays().add(startMarker);}
-            });
-
-            //Agrego el punto a la lista de puntos
+            //Obtengo todos los medidores
+            final DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
+            List<RutaMedicion> medidores = daoSession.getRutaMedicionDao().loadAll();
             ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
-            waypoints.add(startPoint);
-
-            //Segundo punto
-            GeoPoint endPoint = new GeoPoint(-43.294682, -65.082539);
-            final Marker endMarker = new Marker(map);
-            endMarker.setPosition(endPoint);
-            endMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    map.getOverlays().add(endMarker);
-                }
-            });
-
-            //Agrego el punto a la lista de puntos
-            waypoints.add(endPoint);
-
-            //Tercer punto
-            GeoPoint endPoint2 = new GeoPoint(-43.291572, -65.086545);
-            final Marker endMarker2 = new Marker(map);
-            endMarker2.setPosition(endPoint2);
-            endMarker2.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    map.getOverlays().add(endMarker2);
-                }
-            });
-
-            //Agrego el punto a la lista de puntos
-            waypoints.add(endPoint2);
+            //Por cada medidor
+            for (RutaMedicion m: medidores) {
+                //Obtengo ubicación del medidor y defino un punto
+                GeoPoint punto = new GeoPoint(Double.parseDouble(m.getLatitud()), Double.parseDouble(m.getLongitud()));
+                final Marker marcador = new Marker(map);
+                marcador.setPosition(punto);
+                marcador.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() { map.getOverlays().add(marcador);}
+                });
+                waypoints.add(punto);
+            }
             //Obtengo la ruta en base a la lista de puntos
             Road road = roadManager.getRoad(waypoints);
             //Dibujo la ruta sólo si pude conectarme y obtenerla
