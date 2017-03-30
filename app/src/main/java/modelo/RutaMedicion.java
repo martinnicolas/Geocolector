@@ -495,16 +495,15 @@ public class RutaMedicion {
         return medCom;
     }
 
-    public static List <RutaMedicion> obtMedActual(DaoSession daoSession ){
+    public static RutaMedicion obtMedActual(DaoSession daoSession ){
         RutaMedicionDao rutaMedicionDao = daoSession.getRutaMedicionDao();
-            List <RutaMedicion> medActual = rutaMedicionDao.queryBuilder()
+        List <RutaMedicion> medActual = rutaMedicionDao.queryBuilder()
                 .where(RutaMedicionDao.Properties.Medido.eq(0))
                 .orderAsc()
                 .limit(1)
                 .list();
 
-        return medActual;
-
+        return medActual.get(0);
     }
 
     public static Query query(RutaMedicionDao dao, String queryString) {
