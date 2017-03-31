@@ -88,7 +88,7 @@ public class TabMedir extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_tab_medir, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_tab_medir, container, false);
 
         final DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
 
@@ -102,34 +102,56 @@ public class TabMedir extends Fragment {
 
         final EditText estado_actual = (EditText) rootView.findViewById(R.id.edtEstAct);
 
-        RutaMedicion rutaMedicion = MedirZona.medidor_actual();
-        final TextView numero_usuario = (TextView) rootView.findViewById(R.id.txtNusr);
-        final TextView categoria_usuario = (TextView) rootView.findViewById(R.id.txtDescCat);
-        final TextView domicilio_usuario = (TextView) rootView.findViewById(R.id.txtDetDir);
-        numero_usuario.setText("1");
-        categoria_usuario.setText(rutaMedicion.getCategoria());
-        domicilio_usuario.setText(rutaMedicion.getDomicilio());
+        //Muestro los datos del usuario
+        setearDatosUsuario(rootView);
 
         //Manejo el evento del boton guardar en la medición
         Button btnGuardar = (Button) rootView.findViewById(R.id.btnGuardar);
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                RutaMedicion rutaMedicion = MedirZona.medidor_actual();
+                RutaMedicion rutaMedicion = MedirZona.getMedidorActual();
                 rutaMedicion.setEstado_actual(Integer.parseInt(estado_actual.getText().toString()));
                 rutaMedicion.setMedido(true);
                 rutaMedicion.setFecha(new Date());
                 rutaMedicion.setNovedad((Novedad)spinner.getSelectedItem());
                 daoSession.getRutaMedicionDao().update(rutaMedicion);
                 Toast.makeText(getActivity().getApplicationContext(), "Se ha guardado la medición!", Toast.LENGTH_SHORT).show();
-                //Obtengo el siguiente y actualizo textos
-                MedirZona.set_medidor_actual(RutaMedicion.obtMedActual(daoSession));
-                numero_usuario.setText("1");
-                categoria_usuario.setText(rutaMedicion.getCategoria());
-                domicilio_usuario.setText(rutaMedicion.getDomicilio());
+                //Obtengo el siguiente medidor
+                MedirZona.setMedidorActual(RutaMedicion.obtMedActual(daoSession));
+                //Muestro los datos del siguiente usuario
+                setearDatosUsuario(rootView);
+                //Limpio form
+                limpiarForm(rootView);
+
             }
         });
 
         return rootView;
+    }
+
+    /**
+     * Setea los datos del Usuario en la vista de medición
+     * @param v Vista correspondiente al fragment TabMedir
+     */
+    public void setearDatosUsuario(View v){
+        RutaMedicion rutaMedicion = MedirZona.getMedidorActual();
+        TextView numero_usuario = (TextView) v.findViewById(R.id.txtNusr);
+        TextView categoria_usuario = (TextView) v.findViewById(R.id.txtDescCat);
+        TextView domicilio_usuario = (TextView) v.findViewById(R.id.txtDetDir);
+        numero_usuario.setText(String.valueOf(rutaMedicion.getUsuario()));
+        categoria_usuario.setText(rutaMedicion.getCategoria());
+        domicilio_usuario.setText(rutaMedicion.getDomicilio());
+    }
+
+    /**
+     * Limpio los editText del formulario
+     * @param v Vista correspondiente al fragment TabMedir
+     */
+    public void limpiarForm(View v){
+        EditText codigo_novedad = (EditText) v.findViewById(R.id.edtCodNov);
+        EditText estado_actual = (EditText) v.findViewById(R.id.edtEstAct);
+        codigo_novedad.setText("");
+        estado_actual.setText("");
     }
 
     // TODO: Rename method, update argument and hook method into UI event

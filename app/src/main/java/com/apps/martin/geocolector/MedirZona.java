@@ -110,11 +110,11 @@ public class MedirZona extends Fragment {
         mListener = null;
     }
 
-    public static RutaMedicion medidor_actual(){
+    public static RutaMedicion getMedidorActual(){
         return medidor;
     }
 
-    public static void set_medidor_actual(RutaMedicion m){
+    public static void setMedidorActual(RutaMedicion m){
         medidor = m;
     }
 
