@@ -554,11 +554,9 @@
                         android:layout_margin="5dp" />
 
                     <TextView
-                        android:text="total"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtTotalNL"
-                        tools:text="0"
                         android:layout_marginBottom="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginLeft="5dp"
@@ -569,7 +567,8 @@
                         tools:textColor="@android:color/background_light"
                         android:layout_margin="5dp"
                         android:gravity="right"
-                        android:textStyle="normal|bold" />
+                        android:textStyle="normal|bold"
+                        android:textColor="@android:color/background_light" />
                 </TableRow>
 
                 <TableRow
@@ -640,7 +639,6 @@
                         android:background="@android:color/background_light" />
 
                     <TextView
-                        android:text="67"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtTotalL"

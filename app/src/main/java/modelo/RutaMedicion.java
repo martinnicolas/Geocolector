@@ -583,6 +583,7 @@ public class RutaMedicion {
     //incrementa los contadores de los medidores que fueron y NO leidos
     public void incrementarContadores(Long tipoMedidor, Boolean leido) {
 
+
         switch ( tipoMedidor.intValue() )
         {
             case 0: // Energía Activa
@@ -635,6 +636,24 @@ public class RutaMedicion {
             }
         }
     }
+
+
+    /**
+     * Pone en 0 todos los contadores del resumen de medicion
+     */
+    public void reiniciarContadores()
+    {
+        contMEANoLeidos= 0;
+        contMEALeidos= 0;
+        contMERNoLeidos= 0;
+        contMERLeidos= 0;
+        conMANoLeidos= 0;
+        conMALeidos= 0;
+        totMedNoLeidos= 0;
+        totMedLeidos= 0;
+        ultMedNoMed = 0;
+    }
+
 
     /**
      * Setea los contadores y en base a eso informa al usuario si la ruta está medida o no cargada
