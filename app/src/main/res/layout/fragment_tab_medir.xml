@@ -94,14 +94,14 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/filaEtq"
+                    android:id="@+id/medidor"
                     android:layout_marginBottom="2dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/txtDescNov"
-                        android:text="@string/txtDescNov"
+                        android:id="@+id/txtNroMed"
+                        android:text="@string/txtNroMed"
                         android:layout_marginBottom="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
@@ -110,17 +110,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/textView2"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginTop="5dp" />
-
-                    <TextView
-                        android:text="Descripcion novedad"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txtDetNov"
+                        android:id="@+id/medidor"
                         android:layout_marginBottom="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
@@ -201,7 +191,8 @@
                         android:layout_width="match_parent"
                         android:layout_marginRight="5dp"
                         android:layout_marginLeft="5dp"
-                        android:layout_weight="0.33" />
+                        android:layout_weight="0.33"
+                        android:textStyle="normal|bold" />
 
                     <TextView
                         android:text="Est. Ant."

@@ -43,6 +43,7 @@
     <string name="txt_nov">Cod. Nov.:</string>
     <string name="titInfoMed">INFORMACIÓN DEL MEDIDOR</string>
     <string name="txtDescNov">Desc. Nov.:</string>
+    <string name="txtNroMed">N° med.:</string>
     <string name="txtEstAct">Est. Act.</string>
     <string name="txtEstAnt">Est. Ant.</string>
     <string name="txtConsumo">Consumo</string>

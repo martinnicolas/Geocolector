@@ -27,6 +27,17 @@ public class RutaMedicion {
     private static final int PORCENTAJE_EXCESO = 70;
     private static  final  int m3Base = 25;   //indica los metros cúbicos base de agua
 
+    //atributos para las estadisticas de medicion. Por defecto lo asignamos a 0
+    public static int contMEANoLeidos= 0;
+    public static int contMEALeidos= 0;
+    public static int contMERNoLeidos= 0;
+    public static int contMERLeidos= 0;
+    public static int conMANoLeidos= 0;
+    public static int conMALeidos= 0;
+    public static int totMedNoLeidos= 0;
+    public static int totMedLeidos= 0;
+    public static int ultMedNoMed = 0;   //ver si vale la pena usarlo
+
     @Id
     private Long id;
 
@@ -495,6 +506,11 @@ public class RutaMedicion {
         return medCom;
     }
 
+    /**
+     * Retorna el primer medidor no medido de la ruta de medición
+     * @param daoSession
+     * @return
+     */
     public static RutaMedicion obtMedActual(DaoSession daoSession ){
         RutaMedicionDao rutaMedicionDao = daoSession.getRutaMedicionDao();
         List <RutaMedicion> medActual = rutaMedicionDao.queryBuilder()
@@ -506,11 +522,141 @@ public class RutaMedicion {
         return medActual.get(0);
     }
 
+
+    /**
+     * Devuelve el próximo medidor no medido de la ruta medición,
+     * @param daoSession
+     * @return
+     */
+    public RutaMedicion obtMedSgte(DaoSession daoSession ){
+        //String consulta = "SELECT * FROM ruta_medicion WHERE medido = 0 and id_ruta > " + this.getId() + " order by id_ruta asc";
+
+        RutaMedicionDao rutaMedicionDao = daoSession.getRutaMedicionDao();
+        List <RutaMedicion> medSgte;
+        medSgte = rutaMedicionDao.queryBuilder()
+                .where(RutaMedicionDao.Properties.Medido.eq(0),
+                        RutaMedicionDao.Properties.Id.ge(this.getId()))
+                .orderAsc()
+                .limit(1)
+                .list();
+
+        return medSgte.get(0);
+    }
+
     public static Query query(RutaMedicionDao dao, String queryString) {
         //"_id in (select min(_id) from ruta_medicion where medido = 0)";
         Query query = dao.queryBuilder().where(new WhereCondition.StringCondition(queryString)).build();
         return query;
     }
+
+    //nuevos métodos para manipular base de datos
+
+    /**
+     * Devuelve una lista con todos los medidores de la ruta de medición
+     * @return
+     */
+    public List<RutaMedicion> obtRutaCompleta(){
+        RutaMedicionDao rutaMedicionDao = daoSession.getRutaMedicionDao();
+        List<RutaMedicion> medidor = rutaMedicionDao.queryBuilder()
+                .orderAsc()
+                .list();
+
+        return medidor;
+    }
+
+
+    /**
+     * Setea todos los valores de los contadores del resumen de la medicion antes de comenzar el proceso de medición
+     */
+    public void iniciarContadores(){
+        List <RutaMedicion> ruta = this.obtRutaCompleta();
+
+        //No está cargada la ruta de medición
+        if ( ruta.size() ==  0)
+            return;
+
+        //seteamos los medidores
+        for(int i = 0;  i <= ruta.size() ; i++)
+            this.incrementarContadores( ruta.get(i).getTipo_medidorId(), ruta.get(i).getMedido() );
+    }
+
+    //incrementa los contadores de los medidores que fueron y NO leidos
+    public void incrementarContadores(Long tipoMedidor, Boolean leido) {
+
+        switch ( tipoMedidor.intValue() )
+        {
+            case 0: // Energía Activa
+            {
+                if (leido)
+                {
+                    this.contMEALeidos++;
+                    this.contMEANoLeidos--;
+                    this.totMedLeidos++;
+                    this.totMedNoLeidos--;
+                }
+                else//aca solo se accede en la carga inicial
+                {
+                    this.contMEANoLeidos++;
+                    this.totMedNoLeidos++;
+                }
+                break;
+            }
+            case 1: //Energía Reactiva
+            {
+                if (leido)
+                {
+                    this.contMERLeidos++;
+                    this.contMERNoLeidos--;
+                    this.totMedLeidos++;
+                    this.totMedNoLeidos--;
+                }
+                else
+                {
+                    this.contMERNoLeidos++;
+                    this.totMedNoLeidos++;
+                }
+                break;
+            }
+            case 2: //Agua
+            {
+                if (leido)
+                {
+                    this.conMALeidos++;
+                    this.conMANoLeidos--;
+                    this.totMedLeidos++;
+                    this.totMedNoLeidos--;
+                }
+                else
+                {
+                    this.conMANoLeidos++;
+                    this.totMedNoLeidos++;
+                }
+                break;
+            }
+        }
+    }
+
+    /**
+     * Setea los contadores y en base a eso informa al usuario si la ruta está medida o no cargada
+     * @return
+     */
+    public int iniciarMedicion()
+    {
+        this.iniciarContadores();       //seteamos los contadores de la ruta
+        int totalMedidores = totMedLeidos + totMedNoLeidos;
+
+        if( totalMedidores == 0 )   //la ruta está vacía
+            return -1;
+
+        if( totMedNoLeidos == 0)    //RUTA medida completa
+            return 0;
+
+        return 1;
+    }
+
+
+
+
 
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 102263451)

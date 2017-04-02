@@ -143,6 +143,7 @@ public class TabMedir extends Fragment {
         domicilio_usuario.setText(rutaMedicion.getDomicilio());
     }
 
+
     /**
      * Limpio los editText del formulario
      * @param v Vista correspondiente al fragment TabMedir
