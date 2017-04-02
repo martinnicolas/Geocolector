@@ -104,6 +104,8 @@ public class TabMedir extends Fragment {
 
         //Muestro los datos del usuario
         setearDatosUsuario(rootView);
+        //Muestro los datos del medidor
+        setearDatosMedidor(rootView);
         //muestro los datos del resumen de la medición
         setearResumenMedicion(rootView);
 
@@ -122,9 +124,12 @@ public class TabMedir extends Fragment {
                 MedirZona.setMedidorActual(RutaMedicion.obtMedActual(daoSession));
                 //Muestro los datos del siguiente usuario
                 setearDatosUsuario(rootView);
+                //Muestro los datos del medidor
+                setearDatosMedidor(rootView);
+                //muestro los datos del resumen de la medición
+                setearResumenMedicion(rootView);
                 //Limpio form
                 limpiarForm(rootView);
-
             }
         });
 
@@ -143,6 +148,20 @@ public class TabMedir extends Fragment {
         numero_usuario.setText(String.valueOf(rutaMedicion.getUsuario()));
         categoria_usuario.setText(rutaMedicion.getCategoria());
         domicilio_usuario.setText(rutaMedicion.getDomicilio());
+    }
+
+    /**
+     * Setea los datos del Medidor en la vista de medición
+     * @param v Vista correspondiente al fragment TabMedir
+     */
+    public void setearDatosMedidor(View v) {
+        RutaMedicion rutaMedicion = MedirZona.getMedidorActual();
+        TextView estado_anterior = (TextView) v.findViewById(R.id.txtDescEA);
+        TextView consumo = (TextView) v.findViewById(R.id.txtConsumo);
+        TextView medidor = (TextView) v.findViewById(R.id.nro_medidor);
+        estado_anterior.setText(String.valueOf(rutaMedicion.getEstado_anterior()));
+        consumo.setText(String.valueOf(rutaMedicion.calcularConsumo()));
+        medidor.setText(String.valueOf(rutaMedicion.getNro_medidor()));
     }
 
     public void setearResumenMedicion(View v){

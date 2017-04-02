@@ -23,52 +23,59 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:weightSum="1">
 
                 <Button
                     android:id="@+id/btn1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.33"
                     android:text="Descargar Zona"
-                    android:drawableTop="@drawable/ic_menu_download" />
+                    android:drawableTop="@drawable/ic_menu_download"
+                    android:textSize="12sp" />
 
                 <Button
                     android:id="@+id/btn2"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="0.33"
                     android:text="Medir Zona"
-                    android:drawableTop="@drawable/ic_menu_medir" />
+                    android:drawableTop="@drawable/ic_menu_medir"
+                    android:textSize="12sp" />
 
                 <Button
                     android:id="@+id/btn3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.33"
                     android:text="Zona de Medición"
-                    android:drawableTop="@drawable/ic_menu_ruta" />
+                    android:drawableTop="@drawable/ic_menu_ruta"
+                    android:textSize="12sp" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:weightSum="1">
 
                 <Button
                     android:id="@+id/btn4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.5"
                     android:text="Cargar Zona"
-                    android:drawableTop="@drawable/ic_menu_cargar" />
+                    android:drawableTop="@drawable/ic_menu_cargar"
+                    android:textSize="12sp" />
 
                 <Button
                     android:id="@+id/btn5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.5"
                     android:text="Mapa de Medidores"
-                    android:drawableTop="@drawable/ic_menu_map" />
+                    android:drawableTop="@drawable/ic_menu_map"
+                    android:textSize="12sp" />
             </TableRow>
 
         </TableLayout>

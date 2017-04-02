@@ -76,30 +76,40 @@ public class MenuPrincipal extends Fragment {
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new DescargarRuta()).commit();
                 getActivity().setTitle("Descargar ruta");
+                NavigationView navigationView  = (NavigationView) getActivity().findViewById(R.id.nav_view);
+                navigationView.setCheckedItem(R.id.nav_gallery);
             }
         });
         boton2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new MedirZona()).commit();
                 getActivity().setTitle("Medir zona");
+                NavigationView navigationView  = (NavigationView) getActivity().findViewById(R.id.nav_view);
+                navigationView.setCheckedItem(R.id.nav_camera);
             }
         });
         boton3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new ZonaMedicion()).commit();
                 getActivity().setTitle("Zona de medición");
+                NavigationView navigationView  = (NavigationView) getActivity().findViewById(R.id.nav_view);
+                navigationView.setCheckedItem(R.id.nav_slideshow);
             }
         });
         boton4.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new CargarZona()).commit();
                 getActivity().setTitle("Cargar zona");
+                NavigationView navigationView  = (NavigationView) getActivity().findViewById(R.id.nav_view);
+                navigationView.setCheckedItem(R.id.nav_share);
             }
         });
         boton5.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new VerMapa()).commit();
                 getActivity().setTitle("Mapa de medidores");
+                NavigationView navigationView  = (NavigationView) getActivity().findViewById(R.id.nav_view);
+                navigationView.setCheckedItem(R.id.nav_map);
             }
         });
         return rootView;
