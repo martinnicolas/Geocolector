@@ -102,6 +102,7 @@ public class TabMedir extends Fragment {
 
         final EditText estado_actual = (EditText) rootView.findViewById(R.id.edtEstAct);
 
+
         //Muestro los datos del usuario
         setearDatosUsuario(rootView);
         //muestro los datos del resumen de la medición
@@ -122,6 +123,8 @@ public class TabMedir extends Fragment {
                 MedirZona.setMedidorActual(RutaMedicion.obtMedActual(daoSession));
                 //Muestro los datos del siguiente usuario
                 setearDatosUsuario(rootView);
+                //actualizamos el resumen de la ruta de medición
+                actResuMed(rootView);
                 //Limpio form
                 limpiarForm(rootView);
 
@@ -145,10 +148,31 @@ public class TabMedir extends Fragment {
         domicilio_usuario.setText(rutaMedicion.getDomicilio());
     }
 
+    /**
+     * Obtiene los valores del contadores y los carga en la pantalla. Sólo debe ser empleado al incio de la app, de lo contrario el comportamiento no será el esperado
+     * @param v
+     */
     public void setearResumenMedicion(View v){
         RutaMedicion rutaMedicion = MedirZona.getMedidorActual();
+        rutaMedicion.reiniciarContadores();
         rutaMedicion.iniciarContadores();
+        this.actResMedForm(v,rutaMedicion);
+    }
 
+    /**
+     * Actualiza los contadores del resumen de medición y los muestra en pantalla
+     * @param v
+     */
+    public void actResuMed(View v)
+    {
+        RutaMedicion rutaMedicion = MedirZona.getMedidorActual();
+        rutaMedicion.iniciarContadores();
+        this.actResMedForm(v,rutaMedicion);
+    }
+
+
+    public void actResMedForm(View v,RutaMedicion rutaMedicion)
+    {
         //obtenemos los text del fragment
         TextView MA = (TextView) v.findViewById(R.id.txtMANL);
         TextView MAL = (TextView) v.findViewById(R.id.txtMAL);
@@ -166,10 +190,9 @@ public class TabMedir extends Fragment {
         MERL.setText(String.valueOf(rutaMedicion.contMERLeidos));
         MEA.setText(String.valueOf(rutaMedicion.contMEANoLeidos));
         MEAL.setText(String.valueOf(rutaMedicion.contMEALeidos));
-        totalNL.setText(String.valueOf(rutaMedicion.totMedNoLeidos));
         totalL.setText(String.valueOf(rutaMedicion.totMedLeidos));
+        totalNL.setText(String.valueOf(rutaMedicion.totMedNoLeidos));
     }
-
 
     /**
      * Limpio los editText del formulario
