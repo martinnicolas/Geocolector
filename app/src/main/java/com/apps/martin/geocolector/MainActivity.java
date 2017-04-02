@@ -35,7 +35,7 @@ import modelo.NovedadDao;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DescargarRuta.OnFragmentInteractionListener, VerMapa.OnFragmentInteractionListener, MedirZona.OnFragmentInteractionListener,
-        ZonaMedicion.OnFragmentInteractionListener, TabMedir.OnFragmentInteractionListener, TabComentario.OnFragmentInteractionListener, TabFoto.OnFragmentInteractionListener, CargarZona.OnFragmentInteractionListener {
+        ZonaMedicion.OnFragmentInteractionListener, TabMedir.OnFragmentInteractionListener, TabComentario.OnFragmentInteractionListener, TabFoto.OnFragmentInteractionListener, CargarZona.OnFragmentInteractionListener, MenuPrincipal.OnFragmentInteractionListener {
 
     //Variable que representa una sesion en la base de datos;
     private DaoSession daoSession;
@@ -44,6 +44,11 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Para mostrar fragment principal
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new MenuPrincipal()).commit();
+        }
 
         //Almaceno base de datos en /storage/emulated/0/geocolector
         File path = new File(Environment.getExternalStorageDirectory(), "geocolector/geocolectorDB");
