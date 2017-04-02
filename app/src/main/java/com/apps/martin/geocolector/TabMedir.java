@@ -104,6 +104,8 @@ public class TabMedir extends Fragment {
 
         //Muestro los datos del usuario
         setearDatosUsuario(rootView);
+        //muestro los datos del resumen de la medición
+        setearResumenMedicion(rootView);
 
         //Manejo el evento del boton guardar en la medición
         Button btnGuardar = (Button) rootView.findViewById(R.id.btnGuardar);
@@ -141,6 +143,31 @@ public class TabMedir extends Fragment {
         numero_usuario.setText(String.valueOf(rutaMedicion.getUsuario()));
         categoria_usuario.setText(rutaMedicion.getCategoria());
         domicilio_usuario.setText(rutaMedicion.getDomicilio());
+    }
+
+    public void setearResumenMedicion(View v){
+        RutaMedicion rutaMedicion = MedirZona.getMedidorActual();
+        rutaMedicion.iniciarContadores();
+
+        //obtenemos los text del fragment
+        TextView MA = (TextView) v.findViewById(R.id.txtMANL);
+        TextView MAL = (TextView) v.findViewById(R.id.txtMAL);
+        TextView MER = (TextView) v.findViewById(R.id.txtMERNL);
+        TextView MERL = (TextView) v.findViewById(R.id.txtMERL);
+        TextView MEA = (TextView) v.findViewById(R.id.txtMEANL);
+        TextView MEAL = (TextView) v.findViewById(R.id.txtMEAL);
+        TextView totalNL = (TextView) v.findViewById(R.id.txtTotalNL);
+        TextView totalL = (TextView) v.findViewById(R.id.txtTotalL);
+
+        //cargamos los valores de las variables
+        MA.setText(String.valueOf(rutaMedicion.conMANoLeidos));
+        MAL.setText(String.valueOf(rutaMedicion.conMALeidos));
+        MER.setText(String.valueOf(rutaMedicion.contMERNoLeidos));
+        MERL.setText(String.valueOf(rutaMedicion.contMERLeidos));
+        MEA.setText(String.valueOf(rutaMedicion.contMEANoLeidos));
+        MEAL.setText(String.valueOf(rutaMedicion.contMEALeidos));
+        totalNL.setText(String.valueOf(rutaMedicion.totMedNoLeidos));
+        totalL.setText(String.valueOf(rutaMedicion.totMedLeidos));
     }
 
 

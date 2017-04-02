@@ -576,7 +576,7 @@ public class RutaMedicion {
             return;
 
         //seteamos los medidores
-        for(int i = 0;  i <= ruta.size() ; i++)
+        for(int i = 0;  i < ruta.size() ; i++)
             this.incrementarContadores( ruta.get(i).getTipo_medidorId(), ruta.get(i).getMedido() );
     }
 
