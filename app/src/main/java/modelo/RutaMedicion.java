@@ -543,19 +543,13 @@ public class RutaMedicion {
         return medSgte.get(0);
     }
 
-    public static Query query(RutaMedicionDao dao, String queryString) {
-        //"_id in (select min(_id) from ruta_medicion where medido = 0)";
-        Query query = dao.queryBuilder().where(new WhereCondition.StringCondition(queryString)).build();
-        return query;
-    }
-
-    //nuevos métodos para manipular base de datos
+   //nuevos métodos para manipular base de datos
 
     /**
      * Devuelve una lista con todos los medidores de la ruta de medición
      * @return
      */
-    public List<RutaMedicion> obtRutaCompleta(){
+    public static List<RutaMedicion> obtRutaCompleta(DaoSession daoSession){
         RutaMedicionDao rutaMedicionDao = daoSession.getRutaMedicionDao();
         List<RutaMedicion> medidor = rutaMedicionDao.queryBuilder()
                 .orderAsc()
@@ -564,12 +558,19 @@ public class RutaMedicion {
         return medidor;
     }
 
+    public static Query query(RutaMedicionDao dao, String queryString) {
+        //"_id in (select min(_id) from ruta_medicion where medido = 0)";
+        Query query = dao.queryBuilder().where(new WhereCondition.StringCondition(queryString)).build();
+        return query;
+    }
+
 
     /**
      * Setea todos los valores de los contadores del resumen de la medicion antes de comenzar el proceso de medición
      */
-    public void iniciarContadores(){
-        List <RutaMedicion> ruta = this.obtRutaCompleta();
+    public static void iniciarContadores(DaoSession daoSession){
+        //List <RutaMedicion> ruta = RutaMedicion.obtRutaCompleta(daoSession);
+        List <RutaMedicion> ruta = daoSession.getRutaMedicionDao().loadAll();
 
         //No está cargada la ruta de medición
         if ( ruta.size() ==  0)
@@ -577,11 +578,11 @@ public class RutaMedicion {
         reiniciarContadores();
         //seteamos los medidores
         for(int i = 0;  i < ruta.size() ; i++)
-            this.incrementarContadores( ruta.get(i).getTipo_medidorId(), ruta.get(i).getMedido() );
+            RutaMedicion.incrementarContadores( ruta.get(i).getTipo_medidorId(), ruta.get(i).getMedido() );
     }
 
     //incrementa los contadores de los medidores que fueron y NO leidos
-    public void incrementarContadores(Long tipoMedidor, Boolean leido) {
+    public static void incrementarContadores(Long tipoMedidor, Boolean leido) {
 
         switch ( tipoMedidor.intValue() )
         {
@@ -589,15 +590,15 @@ public class RutaMedicion {
             {
                 if (leido)
                 {
-                    this.contMEALeidos++;
-                    this.contMEANoLeidos--;
-                    this.totMedLeidos++;
-                    this.totMedNoLeidos--;
+                    RutaMedicion.contMEALeidos++;
+                    RutaMedicion.contMEANoLeidos--;
+                    RutaMedicion.totMedLeidos++;
+                    RutaMedicion.totMedNoLeidos--;
                 }
                 else//aca solo se accede en la carga inicial
                 {
-                    this.contMEANoLeidos++;
-                    this.totMedNoLeidos++;
+                    RutaMedicion.contMEANoLeidos++;
+                    RutaMedicion.totMedNoLeidos++;
                 }
                 break;
             }
@@ -605,15 +606,15 @@ public class RutaMedicion {
             {
                 if (leido)
                 {
-                    this.contMERLeidos++;
-                    this.contMERNoLeidos--;
-                    this.totMedLeidos++;
-                    this.totMedNoLeidos--;
+                    RutaMedicion.contMERLeidos++;
+                    RutaMedicion.contMERNoLeidos--;
+                    RutaMedicion.totMedLeidos++;
+                    RutaMedicion.totMedNoLeidos--;
                 }
                 else
                 {
-                    this.contMERNoLeidos++;
-                    this.totMedNoLeidos++;
+                    RutaMedicion.contMERNoLeidos++;
+                    RutaMedicion.totMedNoLeidos++;
                 }
                 break;
             }
@@ -621,15 +622,15 @@ public class RutaMedicion {
             {
                 if (leido)
                 {
-                    this.conMALeidos++;
-                    this.conMANoLeidos--;
-                    this.totMedLeidos++;
-                    this.totMedNoLeidos--;
+                    RutaMedicion.conMALeidos++;
+                    RutaMedicion.conMANoLeidos--;
+                    RutaMedicion.totMedLeidos++;
+                    RutaMedicion.totMedNoLeidos--;
                 }
                 else
                 {
-                    this.conMANoLeidos++;
-                    this.totMedNoLeidos++;
+                    RutaMedicion.conMANoLeidos++;
+                    RutaMedicion.totMedNoLeidos++;
                 }
                 break;
             }
@@ -640,17 +641,17 @@ public class RutaMedicion {
     /**
      * Pone en 0 todos los contadores del resumen de medicion
      */
-    public void reiniciarContadores()
+    public static void reiniciarContadores()
     {
-        contMEANoLeidos= 0;
-        contMEALeidos= 0;
-        contMERNoLeidos= 0;
-        contMERLeidos= 0;
-        conMANoLeidos= 0;
-        conMALeidos= 0;
-        totMedNoLeidos= 0;
-        totMedLeidos= 0;
-        ultMedNoMed = 0;
+        RutaMedicion.contMEANoLeidos= 0;
+        RutaMedicion.contMEALeidos= 0;
+        RutaMedicion.contMERNoLeidos= 0;
+        RutaMedicion.contMERLeidos= 0;
+        RutaMedicion.conMANoLeidos= 0;
+        RutaMedicion.conMALeidos= 0;
+        RutaMedicion.totMedNoLeidos= 0;
+        RutaMedicion.totMedLeidos= 0;
+        RutaMedicion.ultMedNoMed = 0;
     }
 
 
@@ -658,9 +659,9 @@ public class RutaMedicion {
      * Setea los contadores y en base a eso informa al usuario si la ruta está medida o no cargada
      * @return
      */
-    public int iniciarMedicion()
+    public int iniciarMedicion(DaoSession daoSession)
     {
-        this.iniciarContadores();       //seteamos los contadores de la ruta
+        this.iniciarContadores(daoSession);       //seteamos los contadores de la ruta
         int totalMedidores = totMedLeidos + totMedNoLeidos;
 
         if( totalMedidores == 0 )   //la ruta está vacía

@@ -107,7 +107,7 @@ public class TabMedir extends Fragment {
         //Muestro los datos del medidor
         setearDatosMedidor(rootView);
         //muestro los datos del resumen de la medición
-        setearResumenMedicion(rootView);
+        setearResumenMedicion(rootView, daoSession);
 
         //Manejo el evento del boton guardar en la medición
         Button btnGuardar = (Button) rootView.findViewById(R.id.btnGuardar);
@@ -127,7 +127,7 @@ public class TabMedir extends Fragment {
                 //Muestro los datos del medidor
                 setearDatosMedidor(rootView);
                 //muestro los datos del resumen de la medición
-                setearResumenMedicion(rootView);
+                setearResumenMedicion(rootView,daoSession);
                 //Limpio form
                 limpiarForm(rootView);
             }
@@ -164,9 +164,9 @@ public class TabMedir extends Fragment {
         medidor.setText(String.valueOf(rutaMedicion.getNro_medidor()));
     }
 
-    public void setearResumenMedicion(View v){
-        RutaMedicion rutaMedicion = MedirZona.getMedidorActual();
-        rutaMedicion.iniciarContadores();
+    public void setearResumenMedicion(View v, DaoSession daoSession){
+        //RutaMedicion rutaMedicion = MedirZona.getMedidorActual();
+        RutaMedicion.iniciarContadores(daoSession);
 
         //obtenemos los text del fragment
         TextView MA = (TextView) v.findViewById(R.id.txtMANL);
@@ -179,14 +179,14 @@ public class TabMedir extends Fragment {
         TextView totalL = (TextView) v.findViewById(R.id.txtTotalL);
 
         //cargamos los valores de las variables
-        MA.setText(String.valueOf(rutaMedicion.conMANoLeidos));
-        MAL.setText(String.valueOf(rutaMedicion.conMALeidos));
-        MER.setText(String.valueOf(rutaMedicion.contMERNoLeidos));
-        MERL.setText(String.valueOf(rutaMedicion.contMERLeidos));
-        MEA.setText(String.valueOf(rutaMedicion.contMEANoLeidos));
-        MEAL.setText(String.valueOf(rutaMedicion.contMEALeidos));
-        totalNL.setText(String.valueOf(rutaMedicion.totMedNoLeidos));
-        totalL.setText(String.valueOf(rutaMedicion.totMedLeidos));
+        MA.setText(String.valueOf(RutaMedicion.conMANoLeidos));
+        MAL.setText(String.valueOf(RutaMedicion.conMALeidos));
+        MER.setText(String.valueOf(RutaMedicion.contMERNoLeidos));
+        MERL.setText(String.valueOf(RutaMedicion.contMERLeidos));
+        MEA.setText(String.valueOf(RutaMedicion.contMEANoLeidos));
+        MEAL.setText(String.valueOf(RutaMedicion.contMEALeidos));
+        totalNL.setText(String.valueOf(RutaMedicion.totMedNoLeidos));
+        totalL.setText(String.valueOf(RutaMedicion.totMedLeidos));
     }
 
 
