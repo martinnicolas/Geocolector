@@ -574,7 +574,7 @@ public class RutaMedicion {
         //No está cargada la ruta de medición
         if ( ruta.size() ==  0)
             return;
-
+        reiniciarContadores();
         //seteamos los medidores
         for(int i = 0;  i < ruta.size() ; i++)
             this.incrementarContadores( ruta.get(i).getTipo_medidorId(), ruta.get(i).getMedido() );
@@ -582,7 +582,6 @@ public class RutaMedicion {
 
     //incrementa los contadores de los medidores que fueron y NO leidos
     public void incrementarContadores(Long tipoMedidor, Boolean leido) {
-
 
         switch ( tipoMedidor.intValue() )
         {
