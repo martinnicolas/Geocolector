@@ -22,10 +22,12 @@ import org.greenrobot.greendao.query.WhereCondition;
 @Entity
 public class RutaMedicion {
 
-    //Porcentaje del consumo promedio en que el consumo se considera excedido (75%)
     //Se controla por la Ley de Defensa del Consumidor  que el usuario no gaste un 70% mas que el promedio
     private static final int PORCENTAJE_EXCESO = 70;
     private static  final  int m3Base = 25;   //indica los metros cúbicos base de agua
+    private static final int tipoMedEA = 0;
+    private static final int tipoMedER = 1;
+    private static final int tipoMedAgua = 2 ;
 
     //atributos para las estadisticas de medicion. Por defecto lo asignamos a 0
     public static int contMEANoLeidos= 0;
@@ -448,11 +450,22 @@ public class RutaMedicion {
 
 
     /**
-     * Valida si el consumo supero más del 70% del promedio, hay que validarlo por una Ley de Defensa al Consumidor
+     *  Valida si el consumo de un medidor de agua superó el porcentaje de exceso y el consumo base de agua. Es necesario hacerlo por una Ley de Defensa al Consumidor
      * @return
      */
-    public boolean consumoPromedioExcedido() {
-      //  int consumo = this.getEstado_anterior() - this.getEstado_actual();// no siempre es asi
+    public boolean altoConsumoAgua(){
+        int consumo = this.calcularConsumo();
+        int promedio = this.getPromedio();
+        int porcentaje = promedio * PORCENTAJE_EXCESO / 100;
+        return ( consumo > m3Base && (consumo > porcentaje) );
+    }
+
+
+    /**
+     * Valida si el consumo superó el porcentaje de exceso, hay que validarlo por una Ley de Defensa al Consumidor
+     * @return
+     */
+    public boolean altoConsumoEnergia() {
         int consumo = this.calcularConsumo();
         int promedio = this.getPromedio();
         int porcentaje = promedio * PORCENTAJE_EXCESO / 100;
@@ -467,10 +480,10 @@ public class RutaMedicion {
         int consumo;
 
         //verificamos si el medidor volvio a 0 (se dio vuelta el contador)
-        if ( this.getEstado_anterior() <= this.getEstado_actual() )
-            consumo = this.calConsMedidorAgotado();
+        if ( getEstado_anterior() <= getEstado_actual() )
+            consumo = calConsMedidorAgotado();
         else
-            consumo = this.getEstado_anterior() - this.getEstado_actual();
+            consumo = getEstado_anterior() - getEstado_actual();
 
         return  consumo;
     }
@@ -490,6 +503,17 @@ public class RutaMedicion {
         int consumo = getEstado_actual() - getEstado_anterior();
 
         return consumo;
+    }
+
+    /**
+     * Devuelve verdadero si un medidor registra un consumo excesivo, falso en caso contrario
+     * @return
+     */
+    public boolean consumoExcedido(){
+        if( this.tipo_medidorId == tipoMedAgua )
+            return altoConsumoAgua();
+        else
+            return altoConsumoEnergia();
     }
 
     /**
@@ -543,8 +567,6 @@ public class RutaMedicion {
         return medSgte.get(0);
     }
 
-   //nuevos métodos para manipular base de datos
-
     /**
      * Devuelve una lista con todos los medidores de la ruta de medición
      * @return
@@ -578,7 +600,7 @@ public class RutaMedicion {
         reiniciarContadores();
         //seteamos los medidores
         for(int i = 0;  i < ruta.size() ; i++)
-            RutaMedicion.incrementarContadores( ruta.get(i).getTipo_medidorId(), ruta.get(i).getMedido() );
+            incrementarContadores( ruta.get(i).getTipo_medidorId(), ruta.get(i).getMedido() );
     }
 
     //incrementa los contadores de los medidores que fueron y NO leidos
@@ -586,72 +608,91 @@ public class RutaMedicion {
 
         switch ( tipoMedidor.intValue() )
         {
-            case 0: // Energía Activa
+            case tipoMedEA: // Energía Activa
             {
-                if (leido)
-                {
-                    RutaMedicion.contMEALeidos++;
-                    RutaMedicion.contMEANoLeidos--;
-                    RutaMedicion.totMedLeidos++;
-                    RutaMedicion.totMedNoLeidos--;
-                }
-                else//aca solo se accede en la carga inicial
-                {
-                    RutaMedicion.contMEANoLeidos++;
-                    RutaMedicion.totMedNoLeidos++;
-                }
+                actContME(leido);
                 break;
             }
-            case 1: //Energía Reactiva
+            case tipoMedER: //Energía Reactiva
             {
-                if (leido)
-                {
-                    RutaMedicion.contMERLeidos++;
-                    RutaMedicion.contMERNoLeidos--;
-                    RutaMedicion.totMedLeidos++;
-                    RutaMedicion.totMedNoLeidos--;
-                }
-                else
-                {
-                    RutaMedicion.contMERNoLeidos++;
-                    RutaMedicion.totMedNoLeidos++;
-                }
+                actContMER(leido);
                 break;
             }
-            case 2: //Agua
+            case tipoMedAgua: //Agua
             {
-                if (leido)
-                {
-                    RutaMedicion.conMALeidos++;
-                    RutaMedicion.conMANoLeidos--;
-                    RutaMedicion.totMedLeidos++;
-                    RutaMedicion.totMedNoLeidos--;
-                }
-                else
-                {
-                    RutaMedicion.conMANoLeidos++;
-                    RutaMedicion.totMedNoLeidos++;
-                }
+                actContMA(leido);
                 break;
             }
         }
+        actualizarTotales();
     }
 
+    /**
+     * Actualiza los contadores del resuemen de medicion correspondiente a los medidores de ENERGÍA ACTIVA
+     * @param leido
+     */
+    public static void actContME(boolean leido){
+        if (leido)
+        {
+            contMEALeidos++;
+            contMEANoLeidos--;
+        }
+        else//aca solo se accede en la carga inicial
+            contMEANoLeidos++;
+    }
+
+
+    /**
+     * Actualiza los contadores del resuemen de medicion correspondiente a los medidores de ENERGÍA REACTIVA
+     * @param leido    indica si el medidor fue leído
+     */
+    public static void actContMER(boolean leido){
+        if (leido)
+        {
+            contMERLeidos++;
+            contMERNoLeidos--;
+        }
+        else
+            contMERNoLeidos++;
+    }
+
+    /**
+     * Actualiza los contadores del resuemen de medicion correspondiente a los medidores de AGUA
+     * @param leido indica si el medidor fue leído
+     */
+    public static void actContMA(boolean leido){
+        if (leido)
+        {
+            conMALeidos++;
+            conMANoLeidos--;
+        }
+        else
+            conMANoLeidos++;
+    }
+
+
+    /**
+     * Actualiza los contadores de la cantidad total de medidores leídos y no leídos
+     */
+    public static void actualizarTotales(){
+        totMedNoLeidos = contMEANoLeidos + contMERNoLeidos + conMANoLeidos;
+        totMedLeidos = contMEALeidos + contMERLeidos + conMALeidos;
+    }
 
     /**
      * Pone en 0 todos los contadores del resumen de medicion
      */
     public static void reiniciarContadores()
     {
-        RutaMedicion.contMEANoLeidos= 0;
-        RutaMedicion.contMEALeidos= 0;
-        RutaMedicion.contMERNoLeidos= 0;
-        RutaMedicion.contMERLeidos= 0;
-        RutaMedicion.conMANoLeidos= 0;
-        RutaMedicion.conMALeidos= 0;
-        RutaMedicion.totMedNoLeidos= 0;
-        RutaMedicion.totMedLeidos= 0;
-        RutaMedicion.ultMedNoMed = 0;
+        contMEANoLeidos= 0;
+        contMEALeidos= 0;
+        contMERNoLeidos= 0;
+        contMERLeidos= 0;
+        conMANoLeidos= 0;
+        conMALeidos= 0;
+        totMedNoLeidos= 0;
+        totMedLeidos= 0;
+        ultMedNoMed = 0;
     }
 
 
@@ -670,11 +711,8 @@ public class RutaMedicion {
         if( totMedNoLeidos == 0)    //RUTA medida completa
             return 0;
 
-        return 1;
+        return 1;   //quedan medidores por medir
     }
-
-
-
 
 
     /** called by internal mechanisms, do not call yourself. */
