@@ -31,6 +31,7 @@ import java.util.List;
 import modelo.DaoSession;
 import modelo.Novedad;
 import modelo.RutaMedicion;
+import utilidades.MapsUtilities;
 
 
 /**
@@ -98,7 +99,7 @@ public class ZonaMedicion extends Fragment {
         map.setTileSource(TileSourceFactory.MAPNIK);
         IMapController mapController = map.getController();
         mapController.setZoom(15);
-        GeoPoint centerPoint = new GeoPoint(-43.296344, -65.091966);
+        GeoPoint centerPoint = new GeoPoint(MapsUtilities.getCentroRawsonMapa());
         mapController.setCenter(centerPoint);
         MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getActivity().getApplicationContext()),map);
         mLocationOverlay.enableMyLocation();

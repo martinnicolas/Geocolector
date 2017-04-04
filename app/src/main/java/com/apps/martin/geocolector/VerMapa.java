@@ -15,6 +15,8 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
+import utilidades.MapsUtilities;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -81,7 +83,7 @@ public class VerMapa extends Fragment {
         map.setTileSource(TileSourceFactory.MAPNIK);
         IMapController mapController = map.getController();
         mapController.setZoom(15);
-        GeoPoint startPoint = new GeoPoint(-43.296344, -65.091966);
+        GeoPoint startPoint = new GeoPoint(MapsUtilities.getCentroRawsonMapa());
         mapController.setCenter(startPoint);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);

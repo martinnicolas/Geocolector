@@ -1,7 +1,10 @@
 package com.apps.martin.geocolector;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -41,7 +44,7 @@ import utilidades.MapsUtilities;
  * Use the {@link TabMedir#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TabMedir extends Fragment {
+public class TabMedir extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -118,7 +121,10 @@ public class TabMedir extends Fragment {
                 rutaMedicion.setMedido(true);
                 rutaMedicion.setFecha(new Date());
                 rutaMedicion.setNovedad((Novedad)spinner.getSelectedItem());
-                daoSession.getRutaMedicionDao().update(rutaMedicion);
+                if (rutaMedicion.consumoExcedido()) //Si el consumo se excede se necesita confirmar
+                    confirmarYGuardar(rutaMedicion);
+                else
+                    daoSession.getRutaMedicionDao().update(rutaMedicion);
                 Toast.makeText(getActivity().getApplicationContext(), "Se ha guardado la medición!", Toast.LENGTH_SHORT).show();
                 //Obtengo el siguiente medidor
                 MedirZona.setMedidorActual(RutaMedicion.obtMedActual(daoSession));
@@ -134,6 +140,27 @@ public class TabMedir extends Fragment {
         });
 
         return rootView;
+    }
+
+
+    public void confirmarYGuardar(RutaMedicion r){
+        final RutaMedicion ruta = r;
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Atención!");
+        builder.setMessage("Estado actual es menor al estado anterior.\nConsumo: ----\nDesea continuar?");
+        builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ((MainActivity)getActivity()).getDaoSession().update(ruta);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.create().show();
     }
 
     /**
