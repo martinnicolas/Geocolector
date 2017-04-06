@@ -93,7 +93,7 @@ public class TabMedir extends Fragment{
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_tab_medir, container, false);
 
-        final DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
+        DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
 
         List<Novedad> novedades = daoSession.getNovedadDao().loadAll();
         final Spinner spinner = (Spinner) rootView.findViewById(R.id.spNov);
@@ -121,54 +121,24 @@ public class TabMedir extends Fragment{
                 rutaMedicion.setMedido(true);
                 rutaMedicion.setFecha(new Date());
                 rutaMedicion.setNovedad((Novedad)spinner.getSelectedItem());
-                if (rutaMedicion.consumoExcedido()){ //Si el consumo se excede se necesita confirmar
-                    if (confirmarConsumo(rutaMedicion.calcularConsumo())) {
-                        daoSession.getRutaMedicionDao().update(rutaMedicion);
-                        Toast.makeText(getActivity().getApplicationContext(), "Se ha guardado la medición!", Toast.LENGTH_SHORT).show();
-                        //Obtengo el siguiente medidor
-                        MedirZona.setMedidorActual(RutaMedicion.obtMedActual(daoSession));
-                        //Muestro los datos del siguiente usuario
-                        setearDatosUsuario(rootView);
-                        //Muestro los datos del medidor
-                        setearDatosMedidor(rootView);
-                        //muestro los datos del resumen de la medición
-                        setearResumenMedicion(rootView, daoSession);
-                        //Limpio form
-                        limpiarForm(rootView);
-                    }
-                }
+                if (rutaMedicion.consumoExcedido()) //Si el consumo se excede se necesita confirmar
+                    confirmarYGuardar(rutaMedicion, rootView);
                 else
-                {
-                     daoSession.getRutaMedicionDao().update(rutaMedicion);
-                     Toast.makeText(getActivity().getApplicationContext(), "Se ha guardado la medición!", Toast.LENGTH_SHORT).show();
-                     //Obtengo el siguiente medidor
-                     MedirZona.setMedidorActual(RutaMedicion.obtMedActual(daoSession));
-                     //Muestro los datos del siguiente usuario
-                     setearDatosUsuario(rootView);
-                     //Muestro los datos del medidor
-                     setearDatosMedidor(rootView);
-                     //muestro los datos del resumen de la medición
-                     setearResumenMedicion(rootView,daoSession);
-                     //Limpio form
-                     limpiarForm(rootView);
-                }
+                    guardarMedicion(rutaMedicion, rootView);
             }
         });
-
         return rootView;
     }
 
 
-    public boolean confirmarConsumo(int consumo){
-        final Bundle b = new Bundle();
-        b.putBoolean("confirmado",false);
+    public void confirmarYGuardar(final RutaMedicion rutaMedicion, final View rootView){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Atención!");
-        builder.setMessage("Estado actual es menor al estado anterior.\nConsumo: "+consumo+"\nDesea continuar?");
+        builder.setMessage("Estado actual es menor al estado anterior.\nConsumo: "+rutaMedicion.calcularConsumo()+"\nDesea continuar?");
         builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                b.putBoolean("confirmado",true);
+                guardarMedicion(rutaMedicion, rootView);
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -178,7 +148,22 @@ public class TabMedir extends Fragment{
             }
         });
         builder.create().show();
-        return b.getBoolean("confirmado");
+    }
+
+    public void guardarMedicion(RutaMedicion rutaMedicion, View rootView){
+        DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
+        daoSession.getRutaMedicionDao().update(rutaMedicion);
+        Toast.makeText(getActivity().getApplicationContext(), "Se ha guardado la medición!", Toast.LENGTH_SHORT).show();
+        //Obtengo el siguiente medidor
+        MedirZona.setMedidorActual(RutaMedicion.obtMedActual(daoSession));
+        //Muestro los datos del siguiente usuario
+        setearDatosUsuario(rootView);
+        //Muestro los datos del medidor
+        setearDatosMedidor(rootView);
+        //muestro los datos del resumen de la medición
+        setearResumenMedicion(rootView, daoSession);
+        //Limpio form
+        limpiarForm(rootView);
     }
 
     /**
