@@ -24,7 +24,7 @@ public class RutaMedicion {
 
     //Se controla por la Ley de Defensa del Consumidor  que el usuario no gaste un 70% mas que el promedio
     private static final int PORCENTAJE_EXCESO = 70;
-    private static  final  int m3Base = 25;   //indica los metros cúbicos base de agua
+    private static  final  int m3Base = 50;   //indica los metros cúbicos base de agua, son 25 por mes, como la medicion es bimensual son 50m3
     private static final int tipoMedEA = 0;
     private static final int tipoMedER = 1;
     private static final int tipoMedAgua = 2 ;
@@ -39,6 +39,11 @@ public class RutaMedicion {
     public static int totMedNoLeidos= 0;
     public static int totMedLeidos= 0;
     public static int ultMedNoMed = 0;   //ver si vale la pena usarlo
+
+    //Constantes para control lectura ruta
+    public static int RUTA_OK = 1;
+    public static int RUTA_VACIA = -1;
+    public static int RUTA_COMPLETA = 0;
 
     @Id
     private Long id;
@@ -483,7 +488,7 @@ public class RutaMedicion {
         if ( getEstado_anterior() <= getEstado_actual() )
             consumo = calConsMedidorAgotado();
         else
-            consumo = getEstado_anterior() - getEstado_actual();
+            consumo = estado_actual - estado_anterior;
 
         return  consumo;
     }
@@ -548,7 +553,7 @@ public class RutaMedicion {
 
 
     /**
-     * Devuelve el próximo medidor no medido de la ruta medición,
+     * Devuelve el próximo medidor no medido de la ruta medición, null en caso de que no queden medidores por medir
      * @param daoSession
      * @return
      */
@@ -564,28 +569,51 @@ public class RutaMedicion {
                 .limit(1)
                 .list();
 
+        if( medSgte.isEmpty() )
+            return  null;
+
         return medSgte.get(0);
     }
 
     /**
-     * Devuelve una lista con todos los medidores de la ruta de medición
+     * Retorna todos los datos de un medidor a partir del nro del mismo
+     * @param nroMed
+     * @param tipoMedidor
      * @return
      */
-    public static List<RutaMedicion> obtRutaCompleta(DaoSession daoSession){
+    public RutaMedicion obtPorNroMed(DaoSession daoSession, int nroMed, int tipoMedidor){
         RutaMedicionDao rutaMedicionDao = daoSession.getRutaMedicionDao();
-        List<RutaMedicion> medidor = rutaMedicionDao.queryBuilder()
-                .orderAsc()
+
+        List <RutaMedicion> medidor = rutaMedicionDao.queryBuilder()
+                .where(RutaMedicionDao.Properties.Nro_medidor.eq(nroMed),RutaMedicionDao.Properties.Tipo_medidorId.eq(tipoMedidor))
+                .limit(1)
                 .list();
 
+        if (medidor.isEmpty()) //NO EXISTE el medidor
+            return  null;
+
+        return medidor.get(0);
+    }
+
+    /**
+     * Devuelve una lista con los medidores que pertenece al usuario pasado por parámetro
+     * @param nro_usr número de usuario que lo identifica unívocamente
+     * @return
+     */
+    public List<RutaMedicion> obtMedUsuario(DaoSession daoSession, int nro_usr){
+        RutaMedicionDao rutaMedicionDao = daoSession.getRutaMedicionDao();
+
+        List <RutaMedicion> medidor = rutaMedicionDao.queryBuilder()
+                .where(RutaMedicionDao.Properties.Usuario.eq(nro_usr))
+                .list();
+
+        if (medidor.isEmpty()) //NO EXISTE el usuario
+            return  null;
+
         return medidor;
-    }
 
-    public static Query query(RutaMedicionDao dao, String queryString) {
-        //"_id in (select min(_id) from ruta_medicion where medido = 0)";
-        Query query = dao.queryBuilder().where(new WhereCondition.StringCondition(queryString)).build();
-        return query;
-    }
 
+    }
 
     /**
      * Setea todos los valores de los contadores del resumen de la medicion antes de comenzar el proceso de medición
@@ -706,12 +734,12 @@ public class RutaMedicion {
         int totalMedidores = totMedLeidos + totMedNoLeidos;
 
         if( totalMedidores == 0 )   //la ruta está vacía
-            return -1;
+            return RUTA_VACIA;
 
         if( totMedNoLeidos == 0)    //RUTA medida completa
-            return 0;
+            return RUTA_COMPLETA;
 
-        return 1;   //quedan medidores por medir
+        return RUTA_OK;   //quedan medidores por medir
     }
 
 
