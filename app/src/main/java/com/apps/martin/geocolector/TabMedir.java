@@ -121,21 +121,37 @@ public class TabMedir extends Fragment{
                 rutaMedicion.setMedido(true);
                 rutaMedicion.setFecha(new Date());
                 rutaMedicion.setNovedad((Novedad)spinner.getSelectedItem());
-                if (rutaMedicion.consumoExcedido()) //Si el consumo se excede se necesita confirmar
-                    confirmarYGuardar(rutaMedicion);
+                if (rutaMedicion.consumoExcedido()){ //Si el consumo se excede se necesita confirmar
+                    if (confirmarConsumo(rutaMedicion.calcularConsumo())) {
+                        daoSession.getRutaMedicionDao().update(rutaMedicion);
+                        Toast.makeText(getActivity().getApplicationContext(), "Se ha guardado la medición!", Toast.LENGTH_SHORT).show();
+                        //Obtengo el siguiente medidor
+                        MedirZona.setMedidorActual(RutaMedicion.obtMedActual(daoSession));
+                        //Muestro los datos del siguiente usuario
+                        setearDatosUsuario(rootView);
+                        //Muestro los datos del medidor
+                        setearDatosMedidor(rootView);
+                        //muestro los datos del resumen de la medición
+                        setearResumenMedicion(rootView, daoSession);
+                        //Limpio form
+                        limpiarForm(rootView);
+                    }
+                }
                 else
-                    daoSession.getRutaMedicionDao().update(rutaMedicion);
-                Toast.makeText(getActivity().getApplicationContext(), "Se ha guardado la medición!", Toast.LENGTH_SHORT).show();
-                //Obtengo el siguiente medidor
-                MedirZona.setMedidorActual(RutaMedicion.obtMedActual(daoSession));
-                //Muestro los datos del siguiente usuario
-                setearDatosUsuario(rootView);
-                //Muestro los datos del medidor
-                setearDatosMedidor(rootView);
-                //muestro los datos del resumen de la medición
-                setearResumenMedicion(rootView,daoSession);
-                //Limpio form
-                limpiarForm(rootView);
+                {
+                     daoSession.getRutaMedicionDao().update(rutaMedicion);
+                     Toast.makeText(getActivity().getApplicationContext(), "Se ha guardado la medición!", Toast.LENGTH_SHORT).show();
+                     //Obtengo el siguiente medidor
+                     MedirZona.setMedidorActual(RutaMedicion.obtMedActual(daoSession));
+                     //Muestro los datos del siguiente usuario
+                     setearDatosUsuario(rootView);
+                     //Muestro los datos del medidor
+                     setearDatosMedidor(rootView);
+                     //muestro los datos del resumen de la medición
+                     setearResumenMedicion(rootView,daoSession);
+                     //Limpio form
+                     limpiarForm(rootView);
+                }
             }
         });
 
@@ -143,15 +159,16 @@ public class TabMedir extends Fragment{
     }
 
 
-    public void confirmarYGuardar(RutaMedicion r){
-        final RutaMedicion ruta = r;
+    public boolean confirmarConsumo(int consumo){
+        final Bundle b = new Bundle();
+        b.putBoolean("confirmado",false);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Atención!");
-        builder.setMessage("Estado actual es menor al estado anterior.\nConsumo: ----\nDesea continuar?");
+        builder.setMessage("Estado actual es menor al estado anterior.\nConsumo: "+consumo+"\nDesea continuar?");
         builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ((MainActivity)getActivity()).getDaoSession().update(ruta);
+                b.putBoolean("confirmado",true);
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -161,6 +178,7 @@ public class TabMedir extends Fragment{
             }
         });
         builder.create().show();
+        return b.getBoolean("confirmado");
     }
 
     /**
