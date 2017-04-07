@@ -55,6 +55,9 @@ public class TabMedir extends Fragment{
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private EditText estado_actual;
+    private Spinner spinner;
+    private View rootView;
 
     public TabMedir() {
         // Required empty public constructor
@@ -91,19 +94,23 @@ public class TabMedir extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View rootView = inflater.inflate(R.layout.fragment_tab_medir, container, false);
+        //final View rootView = inflater.inflate(R.layout.fragment_tab_medir, container, false);
+        rootView = inflater.inflate(R.layout.fragment_tab_medir, container, false);
 
         DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
 
         List<Novedad> novedades = daoSession.getNovedadDao().loadAll();
-        final Spinner spinner = (Spinner) rootView.findViewById(R.id.spNov);
+        //final Spinner spinner = (Spinner) rootView.findViewById(R.id.spNov);
+        spinner = (Spinner) rootView.findViewById(R.id.spNov);
+
         ArrayAdapter<Novedad> adapter = new ArrayAdapter<Novedad>(getActivity(),android.R.layout.simple_spinner_item, novedades);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-        final EditText estado_actual = (EditText) rootView.findViewById(R.id.edtEstAct);
+        //final EditText estado_actual = (EditText) rootView.findViewById(R.id.edtEstAct);
+        estado_actual = (EditText) rootView.findViewById(R.id.edtEstAct);
 
         //Muestro los datos del usuario
         setearDatosUsuario(rootView);
@@ -116,7 +123,7 @@ public class TabMedir extends Fragment{
         Button btnGuardar = (Button) rootView.findViewById(R.id.btnGuardar);
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                RutaMedicion rutaMedicion = MedirZona.getMedidorActual();
+                /*RutaMedicion rutaMedicion = MedirZona.getMedidorActual();
                 rutaMedicion.setEstado_actual(Integer.parseInt(estado_actual.getText().toString()));
                 rutaMedicion.setMedido(true);
                 rutaMedicion.setFecha(new Date());
@@ -124,17 +131,35 @@ public class TabMedir extends Fragment{
                 if (rutaMedicion.consumoExcedido()) //Si el consumo se excede se necesita confirmar
                     confirmarYGuardar(rutaMedicion, rootView);
                 else
-                    guardarMedicion(rutaMedicion, rootView);
+                    guardarMedicion(rutaMedicion, rootView);*/
+                validarMedicion();
             }
         });
         return rootView;
     }
 
+    public void validarMedicion(){
+        RutaMedicion rutaMedicion = MedirZona.getMedidorActual();
+        rutaMedicion.setEstado_actual(Integer.parseInt(estado_actual.getText().toString()));
+        rutaMedicion.setMedido(true);
+        rutaMedicion.setFecha(new Date());
+        rutaMedicion.setNovedad((Novedad)spinner.getSelectedItem());
 
-    public void confirmarYGuardar(final RutaMedicion rutaMedicion, final View rootView){
+        if( rutaMedicion.getEstado_actual() < rutaMedicion.getEstado_anterior())
+            confirmarYGuardar(rutaMedicion, rootView, "El estado actual es menor que el anterior.");
+        else
+        {
+            if (rutaMedicion.consumoExcedido()) //Si el consumo se excede se necesita confirmar
+                confirmarYGuardar(rutaMedicion, rootView, "Alto consumo.");
+            else
+                guardarMedicion(rutaMedicion, rootView);
+        }
+    }
+
+    public void confirmarYGuardar(final RutaMedicion rutaMedicion, final View rootView, String mje){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Atención!");
-        builder.setMessage("Estado actual es menor al estado anterior.\nConsumo: "+rutaMedicion.calcularConsumo()+"\nDesea continuar?");
+        builder.setMessage(mje + "\nConsumo: "+rutaMedicion.calcularConsumo()+"\nDesea continuar?");
         builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

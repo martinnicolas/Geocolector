@@ -485,7 +485,7 @@ public class RutaMedicion {
         int consumo;
 
         //verificamos si el medidor volvio a 0 (se dio vuelta el contador)
-        if ( getEstado_anterior() <= getEstado_actual() )
+        if ( estado_actual <= estado_anterior )
             consumo = calConsMedidorAgotado();
         else
             consumo = estado_actual - estado_anterior;
