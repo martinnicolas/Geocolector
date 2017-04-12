@@ -450,7 +450,7 @@ public class RutaMedicion {
 
     @Override
     public String toString(){
-        return "Ruta: - "+this.getId();
+        return "Usuario: "+this.getUsuario()+" Domicilio: "+this.getDomicilio()+" Nro. Medidor:"+this.getNro_medidor();
     }
 
 

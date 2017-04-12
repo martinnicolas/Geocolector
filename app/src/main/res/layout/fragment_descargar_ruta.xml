@@ -18,5 +18,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/boton_descargar_ruta"
             android:text="@string/action_descargar_ruta" />
+
+        <ListView
+            android:id="@+id/ruta"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 </FrameLayout>
