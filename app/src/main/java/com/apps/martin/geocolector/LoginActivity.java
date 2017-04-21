@@ -41,8 +41,13 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +55,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import utilidades.Session;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -82,7 +89,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    try {
+                        attemptLogin();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     return true;
                 }
 
@@ -94,7 +105,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                try {
+                    attemptLogin();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -211,7 +226,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private void attemptLogin() throws JSONException {
 
         // Reset errors.
         mEmailView.setError(null);
@@ -256,59 +271,64 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(true);
             SharedPreferences prefs = getSharedPreferences("Configuracion", Context.MODE_PRIVATE);
             String ip_server = prefs.getString("ip_server", "");
+            JSONObject credencials = new JSONObject();
+            credencials.put("nombre",email);
+            credencials.put("contrasenia",password);
             RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-            StringRequest postRequest = new StringRequest(Request.Method.POST, "http://"+ip_server+"/restful/log_in",
-                    new Response.Listener<String>()
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, "http://"+ip_server+"/restful/signin",
+                    credencials,
+                    new Response.Listener<JSONObject>()
                     {
                         @Override
-                        public void onResponse(String response) {
-                            if (response.equals("1")){
-                                finish();
-                                //Guardo Datos del usuario en archivo de Configuración
-                                SharedPreferences prefs = getSharedPreferences("Configuracion", Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = prefs.edit();
-                                editor.putString("usuario", email);
-                                editor.commit();
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        public void onResponse(JSONObject response) {
+                            try {
+                                procesarRespuesta(response);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            else
-                            {
-                                showProgress(false);
-                                mPasswordView.requestFocus();
-                                Toast.makeText(getApplicationContext(), "El nombre de usuario o la clave ingresada son incorrectas", Toast.LENGTH_SHORT).show();
-                            }
-
                         }
                     },
                     new Response.ErrorListener()
                     {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            // error
-                            showProgress(false);
-                            Toast.makeText(getApplicationContext(), "No se pudo establecer la conexion \nVerifique la configuracion.", Toast.LENGTH_SHORT).show();
-                            //Guardo Datos del usuario en archivo de Configuración
-                            SharedPreferences prefs = getSharedPreferences("Configuracion", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = prefs.edit();
-                            editor.putString("usuario", email);
-                            editor.commit();
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            procesarRespuestaErronea(error);
                         }
                     }
-            ) {
-                @Override
-                protected Map<String, String> getParams()
-                {
-                    Map<String, String>  params = new HashMap<String, String>();
-                    params.put("nombre", email);
-                    params.put("contrasenia", password);
-
-                    return params;
-                }
-            };
-            queue.add(postRequest);
-
+            );
+            queue.add(jsonObjectRequest);
         }
+    }
+
+    /**
+     * Procesa la respuesta del servidor
+     *
+     * @param response JSONObject que representa al usuario
+     * @throws JSONException
+     */
+    private void procesarRespuesta(JSONObject response) throws JSONException {
+        if (response.has("errors")){
+            showProgress(false);
+            mPasswordView.requestFocus();
+            Toast.makeText(getApplicationContext(), response.getString("errors"), Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            finish();
+            Session.createSession(getApplicationContext(),response);
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        }
+    }
+
+    /**
+     * Procesa una respuesta errónea por parte del servidor
+     *
+     * @param error
+     */
+    private void procesarRespuestaErronea(VolleyError error){
+        showProgress(false);
+        Toast.makeText(getApplicationContext(), "No se pudo establecer la conexion \nVerifique la configuracion."+error.getMessage(), Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
     }
 
     private boolean isEmailValid(String email) {

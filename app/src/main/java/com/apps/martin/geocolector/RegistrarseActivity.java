@@ -19,8 +19,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,110 +51,132 @@ public class RegistrarseActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText mEmailView = (EditText) findViewById(R.id.email);
-                EditText mPasswordView = (EditText) findViewById(R.id.password);
-                EditText mConfirmPasswordView = (EditText) findViewById(R.id.confirm_password);
-
-                // Reset errors.
-                mEmailView.setError(null);
-                mPasswordView.setError(null);
-
-                // Store values at the time of the register attempt.
-                final String email = mEmailView.getText().toString();
-                final String password = mPasswordView.getText().toString();
-                final String confirm_password = mConfirmPasswordView.getText().toString();
-
-                boolean cancel = false;
-                View focusView = null;
-
-                // Check for a valid confirmed password.
-                if (TextUtils.isEmpty(confirm_password)) {
-                    mConfirmPasswordView.setError(getString(R.string.error_field_required));
-                    focusView = mConfirmPasswordView;
-                    cancel = true;
-                } else if (!isPasswordValid(confirm_password)) {
-                    mConfirmPasswordView.setError(getString(R.string.error_invalid_password));
-                    focusView = mConfirmPasswordView;
-                    cancel = true;
-                } else if (!confirmedPassword(confirm_password)) {
-                    mConfirmPasswordView.setError(getString(R.string.error_confirm_password));
-                    focusView = mConfirmPasswordView;
-                    cancel = true;
-                }
-
-                // Check for a valid password.
-                if (TextUtils.isEmpty(password)) {
-                    mPasswordView.setError(getString(R.string.error_field_required));
-                    focusView = mPasswordView;
-                    cancel = true;
-                } else if (!isPasswordValid(password)) {
-                    mPasswordView.setError(getString(R.string.error_invalid_password));
-                    focusView = mPasswordView;
-                    cancel = true;
-                }
-
-                // Check for a valid email address.
-                if (TextUtils.isEmpty(email)) {
-                    mEmailView.setError(getString(R.string.error_field_required));
-                    focusView = mEmailView;
-                    cancel = true;
-                } else if (!isEmailValid(email)) {
-                    mEmailView.setError(getString(R.string.error_invalid_email));
-                    focusView = mEmailView;
-                    cancel = true;
-                }
-
-                if (cancel) {
-                    // There was an error; don't attempt sign up and focus the first
-                    // form field with an error.
-                    focusView.requestFocus();
-                } else {
-                    showProgress(true);
-                    SharedPreferences prefs = getSharedPreferences("Configuracion", Context.MODE_PRIVATE);
-                    String ip_server = prefs.getString("ip_server", "");
-                    RequestQueue queue = Volley.newRequestQueue(RegistrarseActivity.this);
-                    StringRequest postRequest = new StringRequest(Request.Method.POST, "http://"+ip_server+"/restful/log_up",
-                            new Response.Listener<String>()
-                            {
-                                @Override
-                                public void onResponse(String response) {
-                                    if (response.equals("1")){
-                                        showProgress(false);
-                                        finish();
-                                        Toast.makeText(getApplicationContext(), "Se ha registrado con exito", Toast.LENGTH_SHORT).show();
-                                    }
-                                    else
-                                    {
-                                        showProgress(false);
-                                        Toast.makeText(getApplicationContext(), "Ocurrio un error durante la creacion \n contactese con el administrador", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                }
-                            },
-                            new Response.ErrorListener()
-                            {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    // error
-                                    showProgress(false);
-                                    Toast.makeText(getApplicationContext(), "No se pudo establecer la conexion \n Verifique la configuracion.", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                    ) {
-                        @Override
-                        protected Map<String, String> getParams()
-                        {
-                            Map<String, String>  params = new HashMap<String, String>();
-                            params.put("nombre", email);
-                            params.put("contrasenia", password);
-
-                            return params;
-                        }
-                    };
-                    queue.add(postRequest);
+                try {
+                    attemptSignUp();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });
+    }
+
+    private void attemptSignUp() throws JSONException {
+        EditText mEmailView = (EditText) findViewById(R.id.email);
+        EditText mPasswordView = (EditText) findViewById(R.id.password);
+        EditText mConfirmPasswordView = (EditText) findViewById(R.id.confirm_password);
+
+        // Reset errors.
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+
+        // Store values at the time of the register attempt.
+        final String email = mEmailView.getText().toString();
+        final String password = mPasswordView.getText().toString();
+        final String confirm_password = mConfirmPasswordView.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        // Check for a valid confirmed password.
+        if (TextUtils.isEmpty(confirm_password)) {
+            mConfirmPasswordView.setError(getString(R.string.error_field_required));
+            focusView = mConfirmPasswordView;
+            cancel = true;
+        } else if (!isPasswordValid(confirm_password)) {
+            mConfirmPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mConfirmPasswordView;
+            cancel = true;
+        } else if (!confirmedPassword(confirm_password)) {
+            mConfirmPasswordView.setError(getString(R.string.error_confirm_password));
+            focusView = mConfirmPasswordView;
+            cancel = true;
+        }
+
+        // Check for a valid password.
+        if (TextUtils.isEmpty(password)) {
+            mPasswordView.setError(getString(R.string.error_field_required));
+            focusView = mPasswordView;
+            cancel = true;
+        } else if (!isPasswordValid(password)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
+        }
+
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt sign up and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+            showProgress(true);
+            SharedPreferences prefs = getSharedPreferences("Configuracion", Context.MODE_PRIVATE);
+            String ip_server = prefs.getString("ip_server", "");
+            JSONObject credencials = new JSONObject();
+            credencials.put("nombre",email);
+            credencials.put("contrasenia",password);
+            RequestQueue queue = Volley.newRequestQueue(RegistrarseActivity.this);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, "http://"+ip_server+"/restful/signup",
+                    credencials,
+                    new Response.Listener<JSONObject>()
+                    {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                procesarRespuesta(response);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener()
+                    {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            procesarRespuestaErronea(error);
+                        }
+                    }
+            );
+            queue.add(jsonObjectRequest);
+        }
+    }
+
+    /**
+     * Procesa la respuesta del servidor
+     *
+     * @param response JSONObject que representa al usuario
+     * @throws JSONException
+     */
+    private void procesarRespuesta(JSONObject response) throws JSONException {
+        if (response.has("errors")){
+            showProgress(false);
+            Toast.makeText(getApplicationContext(), response.getString("errors"), Toast.LENGTH_SHORT).show();
+        }
+        else {
+            showProgress(false);
+            finish();
+            Toast.makeText(getApplicationContext(), "Se ha registrado con exito", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Procesa una respuesta errónea por parte del servidor
+     *
+     * @param error
+     */
+    private void procesarRespuestaErronea(VolleyError error){
+        showProgress(false);
+        Toast.makeText(getApplicationContext(), "No se pudo establecer la conexion \n Verifique la configuracion.", Toast.LENGTH_SHORT).show();
     }
 
     private boolean isEmailValid(String email) {

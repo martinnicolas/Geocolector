@@ -21,15 +21,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import android.widget.TextView;
-
 import org.greenrobot.greendao.database.Database;
-
 import java.io.File;
-
 import modelo.DaoMaster;
 import modelo.DaoSession;
+import utilidades.Session;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DescargarRuta.OnFragmentInteractionListener, VerMapa.OnFragmentInteractionListener, MedirZona.OnFragmentInteractionListener,
@@ -71,9 +68,7 @@ public class MainActivity extends AppCompatActivity
 
         View v = navigationView.getHeaderView(0);
         TextView credenciales = (TextView ) v.findViewById(R.id.textView);
-        SharedPreferences prefs = getSharedPreferences("Configuracion", Context.MODE_PRIVATE);
-        String usuario = prefs.getString("usuario", "");
-        credenciales.setText(usuario);
+        credenciales.setText(Session.getSession().getUsuario());
     }
 
     @Override
