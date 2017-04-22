@@ -68,7 +68,8 @@ public class MainActivity extends AppCompatActivity
 
         View v = navigationView.getHeaderView(0);
         TextView credenciales = (TextView ) v.findViewById(R.id.textView);
-        credenciales.setText(Session.getSession().getUsuario());
+        //Session.getSession().getUsuario()
+        credenciales.setText("session!");
     }
 
     @Override
