@@ -3,11 +3,8 @@ package com.apps.martin.geocolector;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,24 +13,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.greenrobot.greendao.database.Database;
-
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
-import modelo.DaoMaster;
 import modelo.DaoSession;
 import modelo.Novedad;
-import modelo.NovedadDao;
 import modelo.RutaMedicion;
-import utilidades.MapsUtilities;
+
 
 
 /**
@@ -56,8 +43,11 @@ public class TabMedir extends Fragment{
 
     private OnFragmentInteractionListener mListener;
     private EditText estado_actual;
+    private TextView consumo;
     private Spinner spinner;
     private View rootView;
+    private boolean respuesta;
+    private RutaMedicion rutaMedicion;
 
     public TabMedir() {
         // Required empty public constructor
@@ -104,46 +94,231 @@ public class TabMedir extends Fragment{
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
         estado_actual = (EditText) rootView.findViewById(R.id.edtEstAct);
+        rutaMedicion = MedirZona.getMedidorActual();
+
+        if (rutaMedicion ==  null){
+            mostrarMje("Fallo al inicio","Verifique la ruta de medición");
+            return rootView;
+        }
+
+
         setearDatosUsuario();//Muestro los datos del usuario
         setearDatosMedidor();//Muestro los datos del medidor
         setearResumenMedicion(daoSession);//muestro los datos del resumen de la medición
 
-        //Manejo el evento del boton guardar en la medición
-        Button btnGuardar = (Button) rootView.findViewById(R.id.btnGuardar);
-        btnGuardar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                validarMedicion();
+        //validamos el consumo cuando el componente pierde el foco
+        consumo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    validar_medicion();
+                }
             }
         });
+
+        //Manejo el evento del boton guardar en la medición
+        Button btnGuardar = (Button) rootView.findViewById(R.id.btnGuardar);
+        /*btnGuardar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {validarMedicion();}});*/
+        btnGuardar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {guardar();}});
         return rootView;
     }
 
+    /***
+     *
+     * nuevos métodos para validacion y guardar la medicion
+     *
+     */
+
+    /**
+     * Registra la medición de un me
+     */
+    public void guardar(){
+        if( validar_medicion()){
+            registrarOperacion();
+            obtenerMedSgte();
+        }
+    }
+
+    public void registrarOperacion(){
+        DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
+        //rutaMedicion.setEstado_actual(Integer.parseInt(estado_actual.getText().toString()));
+        rutaMedicion.setMedido(true);
+        rutaMedicion.setFecha(new Date());//estampamos la fecha y hora de la medicion
+        rutaMedicion.setNovedad((Novedad)spinner.getSelectedItem());
+        //rutaMedicion.setToma_estadoId();//registramos el toma estado que meidió
+        //cargar comentario
+        //cargar foto
+        daoSession.getRutaMedicionDao().update(rutaMedicion);
+        Toast.makeText(getActivity().getApplicationContext(), "Se ha guardado la medición!", Toast.LENGTH_SHORT).show();
+    }
+
+    /***
+     * retorna verdadero si la medicion es correcta, falso en caso contrario
+     */
+    public boolean validar_medicion(){
+        if( ! validar_parametros() )
+            return false;
+
+        if( ! validar_consumo() )
+            return false;
+
+        return true;
+    }
+
+
+    /**
+     * Retorna verdadero si están ingresados la novedad de la medición y el estado del medidor, falso en caso contrario
+     * @return
+     */
+    public boolean validar_parametros() {
+        rutaMedicion.setNovedad((Novedad)spinner.getSelectedItem());
+
+        //no hay cargadas ni la novedad ni el estado actual
+        if (rutaMedicion.getNovedadId() == 0 && estado_actual.getText().toString().isEmpty() ) {
+            mostrarMje("¡ERROR!", "No ingresó novedad ni estado actual");
+            return false;
+        }
+
+        //no hay novedad
+        if (rutaMedicion.getNovedadId() == 0) {
+            mostrarMje("¡ERROR!", "No ingresó novedad");
+            return false;
+        }
+
+        //no hay estado actual
+        if(estado_actual.getText().toString().isEmpty()){
+            mostrarMje("¡ERROR!","No ingresó el estado actual");
+            return false;
+        }
+
+        rutaMedicion.setEstado_actual(Integer.parseInt(estado_actual.getText().toString()));
+        consumo.setText(String.valueOf(rutaMedicion.calcularConsumo()));
+
+        return true;
+    }
+
+    /**
+     * Retorna verdadero  si la medicion es correcta, falso en caso contrario
+     * @return
+     */
+    public boolean validar_consumo(){
+        if( rutaMedicion.getEstado_actual() < rutaMedicion.getEstado_anterior())
+            return confirmarConsumo("El estado actual es menor que el anterior.");
+
+        if (rutaMedicion.consumoExcedido()) //Si el consumo se excede se necesita confirmar
+            return confirmarConsumo("Alto consumo.");
+
+        return true;
+    }
+
+
+    /**
+     * Retorna verdadero si el usuario acepta el mensaje mostrado, falso caso contario
+     * @param mje Mensaje que se mostrará al usuario
+     * @return
+     */
+    public boolean confirmarConsumo(String mje){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Atención!");
+        builder.setMessage(mje + "\nConsumo: "+rutaMedicion.calcularConsumo()+"\nDesea continuar?");
+            builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                respuesta = true;
+                }
+            });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    respuesta = false;
+                    dialog.cancel();
+                }
+        });
+        builder.create().show();
+        return respuesta;
+    }
+
+    /**
+     *
+     * @param titulo Título de la ventana que se mostrará al usuario
+     * @param mje mensjae que se mostrará al usuario
+     */
+    public void mostrarMje(String titulo, String mje){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(titulo);
+        builder.setMessage(mje);
+        builder.create().show();
+    }
+
+    public void obtenerMedSgte(){
+        DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
+        MedirZona.setMedidorActual(RutaMedicion.obtMedActual(daoSession));//Obtengo el siguiente medidor
+
+        if (MedirZona.getMedidorActual() ==  null){
+            mostrarMje("Medición finalizada","No quedan medidores sin medir");
+            return;
+        }
+
+        rutaMedicion = MedirZona.getMedidorActual();
+        mostrarEnPantalla();
+    }
+
+    /**
+     * Muestra toda la información correspondiente un medidor y su respectiva pantalla
+     */
+    public void mostrarEnPantalla(){
+        limpiarForm();
+        mostarDatosMedidor();
+        mostrarDatosUsuario();
+    }
+
+    public void mostrarDatosUsuario(){
+        TextView numero_usuario = (TextView) rootView.findViewById(R.id.txtNusr);
+        TextView categoria_usuario = (TextView) rootView.findViewById(R.id.txtDescCat);
+        TextView domicilio_usuario = (TextView) rootView.findViewById(R.id.txtDetDir);
+        numero_usuario.setText(String.valueOf(rutaMedicion.getUsuario()));
+        categoria_usuario.setText(rutaMedicion.getCategoria());
+        domicilio_usuario.setText(rutaMedicion.getDomicilio());
+    }
+
+    public void mostarDatosMedidor(){
+        TextView estado_anterior = (TextView) rootView.findViewById(R.id.txtDescEA);
+        consumo = (TextView) rootView.findViewById(R.id.txtConsumo);
+        TextView medidor = (TextView) rootView.findViewById(R.id.nro_medidor);
+        estado_anterior.setText(String.valueOf(rutaMedicion.getEstado_anterior()));
+        consumo.setText("");
+        medidor.setText(String.valueOf(rutaMedicion.getNro_medidor()));
+    }
+
+
+
     public void validarMedicion(){
-        RutaMedicion rutaMedicion = MedirZona.getMedidorActual();
         rutaMedicion.setEstado_actual(Integer.parseInt(estado_actual.getText().toString()));
         rutaMedicion.setMedido(true);
         rutaMedicion.setFecha(new Date());
         rutaMedicion.setNovedad((Novedad)spinner.getSelectedItem());
 
         if( rutaMedicion.getEstado_actual() < rutaMedicion.getEstado_anterior())
-            confirmarYGuardar(rutaMedicion, "El estado actual es menor que el anterior.");
+            confirmarYGuardar("El estado actual es menor que el anterior.");
         else
         {
             if (rutaMedicion.consumoExcedido()) //Si el consumo se excede se necesita confirmar
-                confirmarYGuardar(rutaMedicion,"Alto consumo.");
+                confirmarYGuardar("Alto consumo.");
             else
-                guardarMedicion(rutaMedicion);
+                guardarMedicion();
         }
     }
 
-    public void confirmarYGuardar(final RutaMedicion rutaMedicion, String mje){
+    public void confirmarYGuardar(String mje){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Atención!");
         builder.setMessage(mje + "\nConsumo: "+rutaMedicion.calcularConsumo()+"\nDesea continuar?");
         builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                guardarMedicion(rutaMedicion);
+                guardarMedicion();
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -155,8 +330,10 @@ public class TabMedir extends Fragment{
         builder.create().show();
     }
 
-    public void guardarMedicion(RutaMedicion rutaMedicion){
+    public void guardarMedicion(){
         DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
+        rutaMedicion.setFecha(new Date());//estampamos la fecha y hora de la medicion
+        System.out.println( "hora:" + rutaMedicion.getFecha());
         daoSession.getRutaMedicionDao().update(rutaMedicion);
         Toast.makeText(getActivity().getApplicationContext(), "Se ha guardado la medición!", Toast.LENGTH_SHORT).show();
         MedirZona.setMedidorActual(RutaMedicion.obtMedActual(daoSession));//Obtengo el siguiente medidor
@@ -166,11 +343,12 @@ public class TabMedir extends Fragment{
         limpiarForm();//Limpio form
     }
 
+
+
     /**
      * Setea los datos del Usuario en la vista de medición
      */
     public void setearDatosUsuario(){
-        RutaMedicion rutaMedicion = MedirZona.getMedidorActual();
         TextView numero_usuario = (TextView) rootView.findViewById(R.id.txtNusr);
         TextView categoria_usuario = (TextView) rootView.findViewById(R.id.txtDescCat);
         TextView domicilio_usuario = (TextView) rootView.findViewById(R.id.txtDetDir);
@@ -183,12 +361,12 @@ public class TabMedir extends Fragment{
      * Setea los datos del Medidor en la vista de medición
      */
     public void setearDatosMedidor() {
-        RutaMedicion rutaMedicion = MedirZona.getMedidorActual();
         TextView estado_anterior = (TextView) rootView.findViewById(R.id.txtDescEA);
-        TextView consumo = (TextView) rootView.findViewById(R.id.txtConsumo);
+        consumo = (TextView) rootView.findViewById(R.id.txtConsumo);
         TextView medidor = (TextView) rootView.findViewById(R.id.nro_medidor);
         estado_anterior.setText(String.valueOf(rutaMedicion.getEstado_anterior()));
-        consumo.setText(String.valueOf(rutaMedicion.calcularConsumo()));
+        //consumo.setText(String.valueOf(rutaMedicion.calcularConsumo()));
+        consumo.setText("");
         medidor.setText(String.valueOf(rutaMedicion.getNro_medidor()));
     }
 
@@ -221,10 +399,9 @@ public class TabMedir extends Fragment{
      * Limpio los editText del formulario
      */
     public void limpiarForm(){
-        EditText codigo_novedad = (EditText) rootView.findViewById(R.id.edtCodNov);
         EditText estado_actual = (EditText) rootView.findViewById(R.id.edtEstAct);
-        codigo_novedad.setText("");
         estado_actual.setText("");
+        spinner.setSelection(0);//apuntamos el spinner a la primer posición
     }
 
     // TODO: Rename method, update argument and hook method into UI event

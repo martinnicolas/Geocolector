@@ -504,8 +504,8 @@ public class RutaMedicion {
 
         int aux = Integer.toString(getEstado_anterior()).length();
         int cantDigMed = (int) Math.pow(10, aux);
-        setEstado_actual( cantDigMed + getEstado_actual());
-        int consumo = getEstado_actual() - getEstado_anterior();
+        aux = cantDigMed + getEstado_actual();
+        int consumo = aux - getEstado_anterior();
 
         return consumo;
     }
@@ -547,6 +547,10 @@ public class RutaMedicion {
                 .orderAsc()
                 .limit(1)
                 .list();
+
+        //validacion para evitar error en tiempo de ejecucion
+        if(medActual.isEmpty())
+            return null;
 
         return medActual.get(0);
     }

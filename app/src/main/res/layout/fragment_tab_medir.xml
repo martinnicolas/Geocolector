@@ -59,26 +59,13 @@
                         android:text="@string/txt_nov"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtCodNov"
-                        android:layout_width="50dp"
                         android:layout_margin="5dp"
                         android:layout_marginBottom="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:layout_marginTop="5dp" />
-
-                    <EditText
-                        android:layout_height="wrap_content"
-                        android:inputType="number"
-                        android:ems="10"
-                        android:id="@+id/edtCodNov"
-                        android:maxLength="2"
-                        android:background="@android:color/background_light"
-                        android:textColor="?android:attr/textColorPrimaryDisableOnly"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
                         android:layout_marginTop="5dp"
-                        android:layout_width="60dp" />
+                        android:layout_width="70dp"
+                        android:elevation="1dp" />
 
                     <Spinner
                         android:layout_height="wrap_content"
@@ -240,10 +227,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_span="2"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="3dp"
                 android:textStyle="normal|bold"
                 android:id="@+id/btnGuardar" />
         </LinearLayout>
@@ -401,10 +388,10 @@
                 android:textStyle="normal|bold|italic"
                 android:textAllCaps="true"
                 android:textSize="15sp"
-                android:paddingBottom="4dp"
+                android:paddingBottom="3dp"
                 android:paddingLeft="2dp"
                 android:paddingRight="2dp"
-                android:paddingTop="4dp" />
+                android:paddingTop="3dp" />
 
             <TableLayout
                 android:layout_width="match_parent"
