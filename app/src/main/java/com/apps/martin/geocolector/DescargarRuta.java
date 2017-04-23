@@ -36,6 +36,7 @@ import java.util.Map;
 
 import modelo.DaoSession;
 import modelo.RutaMedicion;
+import utilidades.Session;
 
 
 /**
@@ -109,10 +110,7 @@ public class DescargarRuta extends Fragment {
 
         List<RutaMedicion> ruta = daoSession.getRutaMedicionDao().loadAll();
         if (!ruta.isEmpty())
-        {
             mostrar_ruta();
-            //btnDescargar.setEnabled(false);
-        }
 
         return rootView;
     }
@@ -126,31 +124,50 @@ public class DescargarRuta extends Fragment {
                 {
                     @Override
                     public void onResponse(JSONArray response) {
-                        ArrayList<JSONObject> medidores = new ArrayList<>();
-                        for (int i=0;i<response.length();i++){
-                            try {
-                                medidores.add(response.getJSONObject(i));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        guardarRuta(medidores);
-                        Toast.makeText(getActivity().getApplicationContext(), "La ruta se descargo con exito!.", Toast.LENGTH_SHORT).show();
+                        procesarRespuesta(response);
                     }
                 },
                 new Response.ErrorListener()
                 {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getActivity().getApplicationContext(), "No se pudo establecer la conexion \nVerifique la configuracion.", Toast.LENGTH_SHORT).show();
-                        error.printStackTrace();
+                        procesarRespuestaErronea();
                     }
                 }
         );
         queue.add(getRequest);
     }
 
-    public void guardarRuta(ArrayList<JSONObject> medidores){
+    /**
+     * Procesa la respuesta del servidor
+     *
+     * @param response
+     */
+    private void procesarRespuesta(JSONArray response){
+        ArrayList<JSONObject> medidores = new ArrayList<>();
+        for (int i=0;i<response.length();i++){
+            try {
+                medidores.add(response.getJSONObject(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        guardarRuta(medidores);
+    }
+
+    /**
+     * Procesa una respuseta erronea por parte del servidor
+     */
+    private void procesarRespuestaErronea(){
+        Toast.makeText(getActivity().getApplicationContext(), "No se pudo establecer la conexion \nVerifique la configuracion.", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Guarda la ruta descargada
+     *
+     * @param medidores
+     */
+    private void guardarRuta(ArrayList<JSONObject> medidores){
         try{
             for (JSONObject m: medidores) {
                 RutaMedicion rutaMedicion = new RutaMedicion();
@@ -167,21 +184,25 @@ public class DescargarRuta extends Fragment {
                 rutaMedicion.setMedido(false);//Chequear
                 rutaMedicion.setFecha(new Date());//Chequear
                 rutaMedicion.setDemanda(0);//Chequear
-                rutaMedicion.setObservacion("observacion");//Chequear
-                rutaMedicion.setToma_estadoId(0l);//Chequear
+                rutaMedicion.setObservacion("");
+                rutaMedicion.setTomaEstado(Session.getSession().getTomaEstado());
                 rutaMedicion.setTipo_medidorId((long)m.getInt("tipo_medidor_id"));
                 rutaMedicion.setZonaId((long)m.getInt("zona_id"));
                 rutaMedicion.setNovedadId(0l);
                 daoSession.getRutaMedicionDao().insert(rutaMedicion);
             }
             mostrar_ruta();
+            Toast.makeText(getActivity().getApplicationContext(), "La ruta se descargo con exito!.", Toast.LENGTH_SHORT).show();
         }
         catch (JSONException e){
             e.printStackTrace();
         }
     }
 
-    public void mostrar_ruta(){
+    /**
+     * Muestra la ruta descargada
+     */
+    private void mostrar_ruta(){
         ListView ruta = (ListView) rootView.findViewById(R.id.ruta);
         List<RutaMedicion> medidores = daoSession.getRutaMedicionDao().loadAll();
         ArrayAdapter<RutaMedicion> adapter = new ArrayAdapter<RutaMedicion>(
