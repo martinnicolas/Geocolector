@@ -328,7 +328,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void procesarRespuestaErronea(VolleyError error){
         showProgress(false);
         Toast.makeText(getApplicationContext(), "No se pudo establecer la conexion \nVerifique la configuracion.", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
     }
 
     private boolean isEmailValid(String email) {

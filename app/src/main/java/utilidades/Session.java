@@ -18,6 +18,7 @@ public class Session {
     private int nro_legajo;
     private String usuario;
     private TomaEstado tomaEstado;
+    private String user_token;
     private static Session actual_session;
 
     public Session() {
@@ -29,6 +30,7 @@ public class Session {
         session.setId(session_data.getInt("id"));
         session.setNro_legajo(session_data.getInt("nro_legajo"));
         session.setUsuario(session_data.getString("email"));
+        session.setUser_token(session_data.getString("authentication_token"));
         session.storeSession(context);
         //Creo TomaEstado vinculado a la session
         TomaEstado tomaEstado = new TomaEstado();
@@ -85,5 +87,13 @@ public class Session {
 
     public void setTomaEstado(TomaEstado tomaEstado) {
         this.tomaEstado = tomaEstado;
+    }
+
+    public String getUser_token() {
+        return user_token;
+    }
+
+    public void setUser_token(String user_token) {
+        this.user_token = user_token;
     }
 }

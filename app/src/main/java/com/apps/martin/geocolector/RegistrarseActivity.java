@@ -45,7 +45,7 @@ public class RegistrarseActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         signUpFormView = findViewById(R.id.sign_up_form);
-        mProgressView = findViewById(R.id.login_progress);
+        mProgressView = findViewById(R.id.signup_progress);
 
         Button signUpButton = (Button) findViewById(R.id.sign_up_button);
         signUpButton.setOnClickListener(new View.OnClickListener() {

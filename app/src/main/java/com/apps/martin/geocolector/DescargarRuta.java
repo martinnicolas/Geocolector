@@ -1,12 +1,19 @@
 package com.apps.martin.geocolector;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +27,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.JsonArray;
@@ -62,6 +70,9 @@ public class DescargarRuta extends Fragment {
     private DaoSession daoSession;
     private View rootView;
 
+    private View mProgressView;
+    private View mDescargarRutaForm;
+
     public DescargarRuta() {
         // Required empty public constructor
     }
@@ -100,31 +111,76 @@ public class DescargarRuta extends Fragment {
         daoSession = ((MainActivity)getActivity()).getDaoSession();
         rootView = inflater.inflate(R.layout.fragment_descargar_ruta, container, false);
 
+        final List<RutaMedicion> ruta = daoSession.getRutaMedicionDao().loadAll();
+
+        mDescargarRutaForm = rootView.findViewById(R.id.descargar_ruta_form);
+        mProgressView = rootView.findViewById(R.id.download_progress);
         //Manejo el evento del boton guardar en la medición
         Button btnDescargar= (Button) rootView.findViewById(R.id.boton_descargar_ruta);
         btnDescargar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                descargarRuta();
+                if (!ruta.isEmpty())
+                    confirmarEliminarYDescargar("Quiere eliminar la ruta actual y descargar nuevamente?");
+                else
+                {
+                    try {
+                        descargarRuta();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
 
-        List<RutaMedicion> ruta = daoSession.getRutaMedicionDao().loadAll();
         if (!ruta.isEmpty())
             mostrar_ruta();
 
         return rootView;
     }
 
-    public void descargarRuta(){
+    public void confirmarEliminarYDescargar(String mje){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Atención!");
+        builder.setMessage(mje);
+        builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    daoSession.getRutaMedicionDao().deleteAll();
+                    descargarRuta();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.create().show();
+    }
+
+    public void descargarRuta() throws JSONException {
+        showProgress(true);
         SharedPreferences prefs = getActivity().getSharedPreferences("Configuracion", Context.MODE_PRIVATE);
         String ip_server = prefs.getString("ip_server", "");
+        JSONObject credencials = new JSONObject();
+        credencials.put("nombre",Session.getSession().getUsuario());
+        credencials.put("user_token",Session.getSession().getUser_token());
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        JsonArrayRequest getRequest = new JsonArrayRequest("http://"+ip_server+"/restful/descargar_ruta",
-                new Response.Listener<JSONArray>()
+        JsonObjectRequest getRequest = new JsonObjectRequest("http://"+ip_server+"/restful/descargar_ruta",
+                credencials,
+                new Response.Listener<JSONObject>()
                 {
                     @Override
-                    public void onResponse(JSONArray response) {
-                        procesarRespuesta(response);
+                    public void onResponse(JSONObject response) {
+                        try {
+                            procesarRespuesta(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 },
                 new Response.ErrorListener()
@@ -143,16 +199,23 @@ public class DescargarRuta extends Fragment {
      *
      * @param response
      */
-    private void procesarRespuesta(JSONArray response){
-        ArrayList<JSONObject> medidores = new ArrayList<>();
-        for (int i=0;i<response.length();i++){
-            try {
-                medidores.add(response.getJSONObject(i));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+    private void procesarRespuesta(JSONObject response) throws JSONException {
+        if (response.has("errors")){
+            Toast.makeText(getActivity().getApplicationContext(), response.getString("errors"), Toast.LENGTH_SHORT).show();
         }
-        guardarRuta(medidores);
+        else{
+            JSONArray ruta = response.getJSONArray("ruta");
+            ArrayList<JSONObject> medidores = new ArrayList<>();
+            for (int i=0;i<ruta.length();i++){
+                try {
+                    medidores.add(ruta.getJSONObject(i));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            guardarRuta(medidores);
+        }
+        showProgress(false);
     }
 
     /**
@@ -160,6 +223,7 @@ public class DescargarRuta extends Fragment {
      */
     private void procesarRespuestaErronea(){
         Toast.makeText(getActivity().getApplicationContext(), "No se pudo establecer la conexion \nVerifique la configuracion.", Toast.LENGTH_SHORT).show();
+        showProgress(false);
     }
 
     /**
@@ -177,9 +241,9 @@ public class DescargarRuta extends Fragment {
                 rutaMedicion.setUsuario(m.getInt("numero"));
                 rutaMedicion.setLatitud(m.getString("latitud"));
                 rutaMedicion.setLongitud(m.getString("longitud"));
-                rutaMedicion.setEstado_anterior(0);//Chequear
-                rutaMedicion.setPromedio(0);//Chequear
-                rutaMedicion.setMultiplicador(0);
+                rutaMedicion.setEstado_anterior(m.getInt("estado_anterior"));
+                rutaMedicion.setPromedio(0);
+                rutaMedicion.setMultiplicador(m.getInt("multiplicador"));
                 rutaMedicion.setEstado_actual(0);//Chequear
                 rutaMedicion.setMedido(false);//Chequear
                 rutaMedicion.setFecha(new Date());//Chequear
@@ -211,6 +275,42 @@ public class DescargarRuta extends Fragment {
                 medidores
         );
         ruta.setAdapter(adapter);
+    }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mDescargarRutaForm.setVisibility(show ? View.GONE : View.VISIBLE);
+            mDescargarRutaForm.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mDescargarRutaForm.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mDescargarRutaForm.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
