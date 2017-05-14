@@ -3,6 +3,7 @@ package com.apps.martin.geocolector;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,12 +16,24 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import modelo.DaoSession;
 import modelo.Novedad;
 import modelo.RutaMedicion;
-
+import utilidades.Session;
 
 
 /**
@@ -147,11 +160,81 @@ public class TabMedir extends Fragment{
         rutaMedicion.setMedido(true);
         rutaMedicion.setFecha(new Date());//estampamos la fecha y hora de la medicion
         rutaMedicion.setNovedad((Novedad)spinner.getSelectedItem());
-        //rutaMedicion.setToma_estadoId();//registramos el toma estado que meidió
         //cargar comentario
         //cargar foto
         daoSession.getRutaMedicionDao().update(rutaMedicion);
         Toast.makeText(getActivity().getApplicationContext(), "Se ha guardado la medición!", Toast.LENGTH_SHORT).show();
+        try {
+            enviarMedicion(rutaMedicion);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Envia los datos de la medición al servidor
+     * @param ruta
+     * @throws JSONException
+     */
+    public void enviarMedicion(final RutaMedicion ruta) throws JSONException {
+        SharedPreferences prefs = getActivity().getSharedPreferences("Configuracion", Context.MODE_PRIVATE);
+        String ip_server = prefs.getString("ip_server", "");
+        JSONObject credencials_and_data = new JSONObject();
+        credencials_and_data.put("nombre", Session.getSession().getUsuario());
+        credencials_and_data.put("user_token",Session.getSession().getUser_token());
+        credencials_and_data.put("medidor_id", ruta.getMedidor_id());
+        credencials_and_data.put("novedad_id",ruta.getNovedadId());
+        credencials_and_data.put("estado_actual",ruta.getEstado_actual());
+        credencials_and_data.put("estado_anterior",ruta.getEstado_anterior());
+        credencials_and_data.put("promedio",ruta.getPromedio());
+        credencials_and_data.put("demanda",ruta.getDemanda());
+        credencials_and_data.put("observacion",ruta.getObservacion());
+        credencials_and_data.put("fecha_medicion",ruta.getFecha());
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        JsonObjectRequest getRequest = new JsonObjectRequest("http://"+ip_server+"/restful/guardar_medicion",
+                credencials_and_data,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            procesarRespuesta(response,ruta);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        procesarRespuestaErronea();
+                    }
+                }
+        );
+        queue.add(getRequest);
+    }
+
+    /**
+     * Procesa la respuesta del servidor
+     *
+     * @param response
+     */
+    public void procesarRespuesta(JSONObject response, RutaMedicion ruta) throws JSONException {
+        if (response.has("errors")){
+            Toast.makeText(getActivity().getApplicationContext(), response.getString("errors"), Toast.LENGTH_SHORT).show();
+        }
+        else{
+            ruta.setAck(true);
+            ruta.update();
+        }
+    }
+
+    /**
+     * Procesa una respuseta erronea por parte del servidor
+     */
+    public void procesarRespuestaErronea(){
+        Toast.makeText(getActivity().getApplicationContext(), "No se pudo establecer la conexion \nVerifique la configuracion.", Toast.LENGTH_SHORT).show();
     }
 
     /***

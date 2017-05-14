@@ -51,6 +51,7 @@ public class RutaMedicion {
     private String domicilio;
     private String categoria;
     private int nro_medidor;
+    private int medidor_id;
     private int usuario;
     private String latitud;
     private String longitud;
@@ -59,6 +60,7 @@ public class RutaMedicion {
     private double multiplicador;
     private int estado_actual;
     private Boolean medido;
+    private Boolean ack;
     private Date fecha;
     private double demanda;
     private String observacion;
@@ -94,17 +96,15 @@ public class RutaMedicion {
     @Generated(hash = 253730192)
     private transient RutaMedicionDao myDao;
 
-    @Generated(hash = 1652426482)
-    public RutaMedicion(Long id, String domicilio, String categoria,
-            int nro_medidor, int usuario, String latitud, String longitud,
-            int estado_anterior, int promedio, double multiplicador,
-            int estado_actual, Boolean medido, Date fecha, double demanda,
-            String observacion, Long toma_estadoId, Long tipo_medidorId,
-            Long zonaId, long novedadId) {
+    @Generated(hash = 146796908)
+    public RutaMedicion(Long id, String domicilio, String categoria, int nro_medidor, int medidor_id, int usuario, String latitud, String longitud, int estado_anterior,
+            int promedio, double multiplicador, int estado_actual, Boolean medido, Boolean ack, Date fecha, double demanda, String observacion, Long toma_estadoId,
+            Long tipo_medidorId, Long zonaId, long novedadId) {
         this.id = id;
         this.domicilio = domicilio;
         this.categoria = categoria;
         this.nro_medidor = nro_medidor;
+        this.medidor_id = medidor_id;
         this.usuario = usuario;
         this.latitud = latitud;
         this.longitud = longitud;
@@ -113,6 +113,7 @@ public class RutaMedicion {
         this.multiplicador = multiplicador;
         this.estado_actual = estado_actual;
         this.medido = medido;
+        this.ack = ack;
         this.fecha = fecha;
         this.demanda = demanda;
         this.observacion = observacion;
@@ -276,6 +277,22 @@ public class RutaMedicion {
 
     public void setNovedadId(long novedadId) {
         this.novedadId = novedadId;
+    }
+
+    public int getMedidor_id() {
+        return this.medidor_id;
+    }
+
+    public void setMedidor_id(int medidor_id) {
+        this.medidor_id = medidor_id;
+    }
+
+    public Boolean getAck() {
+        return this.ack;
+    }
+
+    public void setAck(Boolean ack) {
+        this.ack = ack;
     }
 
     @Generated(hash = 1361011882)
@@ -745,7 +762,6 @@ public class RutaMedicion {
 
         return RUTA_OK;   //quedan medidores por medir
     }
-
 
     /** called by internal mechanisms, do not call yourself. */
     @Generated(hash = 102263451)

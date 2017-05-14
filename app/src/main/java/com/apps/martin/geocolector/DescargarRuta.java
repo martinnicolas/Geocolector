@@ -238,6 +238,7 @@ public class DescargarRuta extends Fragment {
                 rutaMedicion.setDomicilio(m.getString("domicilio_postal"));
                 rutaMedicion.setCategoria(m.getString("categoria"));
                 rutaMedicion.setNro_medidor(m.getInt("numero_medidor"));
+                rutaMedicion.setMedidor_id(m.getInt("id_medidor"));
                 rutaMedicion.setUsuario(m.getInt("numero"));
                 rutaMedicion.setLatitud(m.getString("latitud"));
                 rutaMedicion.setLongitud(m.getString("longitud"));
@@ -246,6 +247,7 @@ public class DescargarRuta extends Fragment {
                 rutaMedicion.setMultiplicador(m.getInt("multiplicador"));
                 rutaMedicion.setEstado_actual(0);//Chequear
                 rutaMedicion.setMedido(false);//Chequear
+                rutaMedicion.setAck(false);
                 rutaMedicion.setFecha(new Date());//Chequear
                 rutaMedicion.setDemanda(0);//Chequear
                 rutaMedicion.setObservacion("");
