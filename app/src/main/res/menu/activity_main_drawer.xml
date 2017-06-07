@@ -3,25 +3,25 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_medir"
-            android:title="Medir zona" />
-        <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_download"
-            android:title="Descargar ruta" />
+            android:title="@string/action_descargar_ruta" />
         <item
-            android:id="@+id/nav_share"
-            android:icon="@drawable/ic_menu_cargar"
-            android:title="Cargar zona" />
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_menu_medir"
+            android:title="@string/action_medir_zona" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_ruta"
-            android:title="Zona de medición" />
+            android:title="@string/action_zona_medicion" />
         <item
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_menu_map"
-            android:title="Mapa de medidores" />
+            android:title="@string/action_ver_mapa" />
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_menu_cargar"
+            android:title="@string/action_cargar_zona" />
     </group>
 
     <item android:title="Mi cuenta">
