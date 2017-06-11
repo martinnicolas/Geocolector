@@ -115,7 +115,7 @@ public class DescargarRuta extends Fragment {
 
         mDescargarRutaForm = rootView.findViewById(R.id.descargar_ruta_form);
         mProgressView = rootView.findViewById(R.id.download_progress);
-        //Manejo el evento del boton guardar en la medición
+        //Manejo el evento del boton descargar
         Button btnDescargar= (Button) rootView.findViewById(R.id.boton_descargar_ruta);
         btnDescargar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {

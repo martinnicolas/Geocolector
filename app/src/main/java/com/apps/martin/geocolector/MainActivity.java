@@ -140,19 +140,19 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
         if (id == R.id.nav_camera) {
             fragment = new MedirZona();
-            setTitle("Medir zona");
+            setTitle(R.string.action_medir_zona);
         } else if (id == R.id.nav_gallery) {
             fragment = new DescargarRuta();
-            setTitle("Descargar ruta");
+            setTitle(R.string.action_descargar_ruta);
         } else if (id == R.id.nav_share) {
             fragment = new CargarZona();
-            setTitle("Cargar zona");
+            setTitle(R.string.action_cargar_zona);
         } else if (id == R.id.nav_slideshow) {
             fragment = new ZonaMedicion();
-            setTitle("Zona de medición");
+            setTitle(R.string.action_zona_medicion);
         } else if (id == R.id.nav_map) {
             fragment = new VerMapa();
-            setTitle("Mapa de medidores");
+            setTitle(R.string.action_ver_mapa);
         } else if (id == R.id.nav_manage) {
             startActivity(new Intent(MainActivity.this, AdministrarCuentaActivity.class));
         } else if (id == R.id.nav_exit) {

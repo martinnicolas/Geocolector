@@ -30,8 +30,8 @@
     <string name="title_activity_configuracion">Configuración</string>
     <string name="prompt_servidor">Dirección IP o nombre de Dominio</string>
 
-    <!-- Strings related to Fragment DescargarRuta -->
-    <string name="action_descargar_ruta">Descargar Ruta</string>
+    <!-- Strings related to Fragment MedirZona -->
+    <string name="action_medir_zona">Medir zona</string>
 
     <!-- Strings related to Fragment TabComentario -->
     <string name="prompt_comentario">Escribe un comentario</string>
@@ -60,21 +60,27 @@
     <string name="txtTotal">Total</string>
     <string name="txtOrdenMed">Orden:</string>
 
+    <!-- Strings related to Fragment DescargarRuta -->
+    <string name="action_descargar_ruta">Descargar zona</string>
 
     <!-- Strings related to Fragment CargarZona-->
     <string name="action_cargar_zona">Cargar zona</string>
 
+    <!-- Strings related to Fragment ZonaMedicion -->
+    <string name="action_zona_medicion">Zona de medición</string>
+
+    <!-- Strings related to Fragment VerMapa -->
+    <string name="action_ver_mapa">Mapa de medidores</string>
+
     <!-- Strings related to Activity AdministrarActivity-->
     <string name="title_activity_administrar_cuenta">Administrar cuenta</string>
 
+
     <!-- Strings de uso general -->
+
     <string name="action_save">Guardar</string>
     <string name="action_delete">Borrar</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="search_title">Buscar</string>
     <string name="search_hint">Buscar medidor</string>
-
 </resources>
