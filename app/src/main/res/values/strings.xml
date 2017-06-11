@@ -41,7 +41,7 @@
 
     <!-- Strings related to Fragment TabMedir-->
     <string name="txt_nov">Cod. Nov.:</string>
-    <string name="titInfoMed">INFORMACIÓN DEL MEDIDOR</string>
+    <string name="titInfoMed">INFORMACIÓN</string>
     <string name="txtDescNov">Desc. Nov.:</string>
     <string name="txtNroMed">N° med.:</string>
     <string name="txtEstAct">Est. Act.</string>
@@ -58,6 +58,7 @@
     <string name="txtMER">MER</string>
     <string name="txtMEA">MEA</string>
     <string name="txtTotal">Total</string>
+    <string name="txtOrdenMed">Orden:</string>
 
 
     <!-- Strings related to Fragment CargarZona-->

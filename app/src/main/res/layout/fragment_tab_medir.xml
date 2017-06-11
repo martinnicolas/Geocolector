@@ -25,7 +25,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/medicion"
             android:background="#FFEBEE"
-            android:layout_weight="0.20">
+            android:layout_weight="0.20"
+            android:weightSum="1">
 
             <TextView
                 android:text="@string/titInfoMed"
@@ -53,7 +54,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/filaNov"
-                    android:layout_marginBottom="2dp">
+                    android:layout_marginBottom="2dp"
+                    android:weightSum="1">
 
                     <TextView
                         android:text="@string/txt_nov"
@@ -78,6 +80,12 @@
 
                 </TableRow>
 
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -92,7 +100,8 @@
                         android:layout_marginBottom="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:layout_marginTop="5dp" />
+                        android:layout_marginTop="5dp"
+                        android:layout_weight="0.20"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -105,10 +114,26 @@
                         android:background="@android:color/background_light"
                         android:textColor="@android:color/black"
                         android:textStyle="normal|bold"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:layout_weight="0.20"/>
+
+                    <TextView
+                        android:text="@string/txtOrdenMed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView2"
+                        android:layout_weight="0.1"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtOrdMed"
+                        android:textStyle="normal|bold"
+                        android:textColor="@android:color/black"
+                        android:background="@android:color/background_light"
+                        android:layout_weight="0.30"/>
 
                 </TableRow>
-
             </TableLayout>
 
             <TableLayout
@@ -297,41 +322,6 @@
                         android:layout_marginRight="5dp"
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="5dp" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/filaCatUsr">
-
-                    <TextView
-                        android:text="@string/txtCategoria"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txtCat"
-                        tools:text="Categoria:"
-                        android:gravity="right"
-                        android:layout_marginRight="5dp"
-                        android:layout_margin="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="5dp" />
-
-                    <TextView
-                        android:text="Residencial"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txtDescCat"
-                        tools:text="Residencial"
-                        android:background="@android:color/background_light"
-                        android:layout_margin="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginEnd="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginStart="5dp" />
                 </TableRow>
 
                 <TableRow

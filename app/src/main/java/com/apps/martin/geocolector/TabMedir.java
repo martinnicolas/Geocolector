@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,10 +58,12 @@ public class TabMedir extends Fragment{
     private OnFragmentInteractionListener mListener;
     private EditText estado_actual;
     private TextView consumo;
+    private TextView ordenMedicion;
     private Spinner spinner;
     private View rootView;
     private boolean respuesta;
     private RutaMedicion rutaMedicion;
+    private TextView infoMedidor;
 
     public TabMedir() {
         // Required empty public constructor
@@ -107,6 +110,8 @@ public class TabMedir extends Fragment{
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
         estado_actual = (EditText) rootView.findViewById(R.id.edtEstAct);
+        ordenMedicion = (TextView) rootView.findViewById(R.id.txtOrdMed);
+        infoMedidor = (TextView) rootView.findViewById(R.id.txtTitMed);
         rutaMedicion = MedirZona.getMedidorActual();
 
         if (rutaMedicion ==  null){
@@ -359,10 +364,10 @@ public class TabMedir extends Fragment{
 
     public void mostrarDatosUsuario(){
         TextView numero_usuario = (TextView) rootView.findViewById(R.id.txtNusr);
-        TextView categoria_usuario = (TextView) rootView.findViewById(R.id.txtDescCat);
+        //TextView categoria_usuario = (TextView) rootView.findViewById(R.id.txtDescCat);
         TextView domicilio_usuario = (TextView) rootView.findViewById(R.id.txtDetDir);
-        numero_usuario.setText(String.valueOf(rutaMedicion.getUsuario()));
-        categoria_usuario.setText(rutaMedicion.getCategoria());
+        numero_usuario.setText( this.obtFormUsr( String.valueOf( rutaMedicion.getUsuario() ) ) );
+        //categoria_usuario.setText(rutaMedicion.getCategoria());
         domicilio_usuario.setText(rutaMedicion.getDomicilio());
     }
 
@@ -373,6 +378,10 @@ public class TabMedir extends Fragment{
         estado_anterior.setText(String.valueOf(rutaMedicion.getEstado_anterior()));
         consumo.setText("");
         medidor.setText(String.valueOf(rutaMedicion.getNro_medidor()));
+        ordenMedicion.setText(String.valueOf(rutaMedicion.getId()));
+
+        //mostramos el tipo de medidor
+        infoMedidor.setText(getString(R.string.titInfoMed) + rutaMedicion.getTipoMedidor().getDescripcion());
     }
 
 
@@ -433,10 +442,12 @@ public class TabMedir extends Fragment{
      */
     public void setearDatosUsuario(){
         TextView numero_usuario = (TextView) rootView.findViewById(R.id.txtNusr);
-        TextView categoria_usuario = (TextView) rootView.findViewById(R.id.txtDescCat);
+        //TextView categoria_usuario = (TextView) rootView.findViewById(R.id.txtDescCat);
         TextView domicilio_usuario = (TextView) rootView.findViewById(R.id.txtDetDir);
-        numero_usuario.setText(String.valueOf(rutaMedicion.getUsuario()));
-        categoria_usuario.setText(rutaMedicion.getCategoria());
+        String nroUsr = String.valueOf(rutaMedicion.getUsuario());
+
+        //numero_usuario.setText(String.valueOf(rutaMedicion.getUsuario()));
+        //categoria_usuario.setText(rutaMedicion.getCategoria());
         domicilio_usuario.setText(rutaMedicion.getDomicilio());
     }
 
@@ -451,6 +462,7 @@ public class TabMedir extends Fragment{
         //consumo.setText(String.valueOf(rutaMedicion.calcularConsumo()));
         consumo.setText("");
         medidor.setText(String.valueOf(rutaMedicion.getNro_medidor()));
+        ordenMedicion.setText(String.valueOf(rutaMedicion.getId()));
     }
 
     public void setearResumenMedicion(DaoSession daoSession){
@@ -524,5 +536,18 @@ public class TabMedir extends Fragment{
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    /**
+     *
+     * @param nroUsr el número del usuario del usuario que queremos obtener con el formato XX-XXX-XX
+     * @return
+     */
+    private String obtFormUsr(String nroUsr){
+        nroUsr = nroUsr.trim();
+        nroUsr = StringUtils.leftPad(nroUsr,7,'0');
+        nroUsr = nroUsr.substring(0,2) + "-" + nroUsr.substring(2,5) + "-" + nroUsr.substring(5,7);
+
+        return nroUsr;
     }
 }
