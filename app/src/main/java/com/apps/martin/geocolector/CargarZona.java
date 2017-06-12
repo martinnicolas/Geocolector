@@ -59,6 +59,7 @@ public class CargarZona extends Fragment {
 
     private View mProgressView;
     private View mDCargarZonaForm;
+    private View btnCargarZona;
 
     public CargarZona() {
         // Required empty public constructor
@@ -97,19 +98,24 @@ public class CargarZona extends Fragment {
         // Inflate the layout for this fragment
         daoSession = ((MainActivity)getActivity()).getDaoSession();
         rootView = inflater.inflate(R.layout.fragment_cargar_zona, container, false);
-
-        final List<RutaMedicion> medidores = medidoresPendientes();
-        if (!medidores.isEmpty())
-            mostrarRuta();
-
         mDCargarZonaForm = rootView.findViewById(R.id.cargar_zona_form);
         mProgressView = rootView.findViewById(R.id.download_progress);
+        btnCargarZona = rootView.findViewById(R.id.boton_cargar_zona);
+
+        if (!medidoresPendientes().isEmpty())
+        {
+            btnCargarZona.setEnabled(true);
+            mostrarRuta();
+        }
+        else
+        {
+            btnCargarZona.setEnabled(false);
+        }
         //Manejo el evento del boton cargar zona
-        Button btnCargarZona = (Button) rootView.findViewById(R.id.boton_cargar_zona);
         btnCargarZona.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 try {
-                    enviarMedicionesPendientes(medidores);
+                    enviarMedicionesPendientes(medidoresPendientes());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -126,7 +132,11 @@ public class CargarZona extends Fragment {
         for (RutaMedicion m:medidores) {
             enviarMedicion(m);
         }
-        mostrarRuta();
+        if (medidoresPendientes().isEmpty())
+        {
+            ocultarRuta();
+            btnCargarZona.setEnabled(false);
+        }
     }
 
     /**
@@ -199,7 +209,7 @@ public class CargarZona extends Fragment {
     }
 
     /**
-     * Obtiene una lsita de medidores pendientes de envio
+     * Obtiene una lista de medidores pendientes de envio
      * @return Lista de medidores pendientes de envio
      */
     private List<RutaMedicion> medidoresPendientes(){
@@ -223,6 +233,14 @@ public class CargarZona extends Fragment {
                 medidores
         );
         ruta.setAdapter(adapter);
+    }
+
+    /**
+     * Oculta la ruta de medidores pendientes
+     */
+    private void ocultarRuta(){
+        ListView ruta = (ListView) rootView.findViewById(R.id.ruta);
+        ruta.setVisibility(View.GONE);
     }
 
     /**

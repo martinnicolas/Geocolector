@@ -28,7 +28,7 @@
             android:text="@string/action_cargar_zona"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/boton_cargar_zona" />
+            android:id="@+id/boton_cargar_zona"/>
 
         <ListView
             android:id="@+id/ruta"
