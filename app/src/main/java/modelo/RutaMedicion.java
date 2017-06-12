@@ -25,9 +25,9 @@ public class RutaMedicion {
     //Se controla por la Ley de Defensa del Consumidor  que el usuario no gaste un 70% mas que el promedio
     private static final int PORCENTAJE_EXCESO = 70;
     private static  final  int m3Base = 50;   //indica los metros cúbicos base de agua, son 25 por mes, como la medicion es bimensual son 50m3
-    private static final int tipoMedEA = 0;
-    private static final int tipoMedER = 1;
-    private static final int tipoMedAgua = 2 ;
+    private static final int tipoMedEA = 2;
+    private static final int tipoMedER = 3;
+    private static final int tipoMedAgua = 1 ;
 
     //atributos para las estadisticas de medicion. Por defecto lo asignamos a 0
     public static int contMEANoLeidos= 0;
