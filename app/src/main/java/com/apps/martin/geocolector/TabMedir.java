@@ -381,7 +381,7 @@ public class TabMedir extends Fragment{
         ordenMedicion.setText(String.valueOf(rutaMedicion.getId()));
 
         //mostramos el tipo de medidor
-        infoMedidor.setText(getString(R.string.titInfoMed) + rutaMedicion.getTipoMedidor().getDescripcion());
+        infoMedidor.setText(getString(R.string.titInfoMed) + " " + rutaMedicion.getTipoMedidor().getDescripcion());
     }
 
 
@@ -442,12 +442,8 @@ public class TabMedir extends Fragment{
      */
     public void setearDatosUsuario(){
         TextView numero_usuario = (TextView) rootView.findViewById(R.id.txtNusr);
-        //TextView categoria_usuario = (TextView) rootView.findViewById(R.id.txtDescCat);
         TextView domicilio_usuario = (TextView) rootView.findViewById(R.id.txtDetDir);
-        String nroUsr = String.valueOf(rutaMedicion.getUsuario());
-
-        //numero_usuario.setText(String.valueOf(rutaMedicion.getUsuario()));
-        //categoria_usuario.setText(rutaMedicion.getCategoria());
+        numero_usuario.setText( this.obtFormUsr( String.valueOf( rutaMedicion.getUsuario() ) ) );
         domicilio_usuario.setText(rutaMedicion.getDomicilio());
     }
 
@@ -463,6 +459,7 @@ public class TabMedir extends Fragment{
         consumo.setText("");
         medidor.setText(String.valueOf(rutaMedicion.getNro_medidor()));
         ordenMedicion.setText(String.valueOf(rutaMedicion.getId()));
+        infoMedidor.setText(getString(R.string.titInfoMed) + " " + rutaMedicion.getTipoMedidor().getDescripcion());
     }
 
     public void setearResumenMedicion(DaoSession daoSession){

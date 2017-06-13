@@ -41,7 +41,7 @@
 
     <!-- Strings related to Fragment TabMedir-->
     <string name="txt_nov">Cod. Nov.:</string>
-    <string name="titInfoMed">INFORMACIÓN</string>
+    <string name="titInfoMed">INFORMACIÓN </string>
     <string name="txtDescNov">Desc. Nov.:</string>
     <string name="txtNroMed">N° med.:</string>
     <string name="txtEstAct">Est. Act.</string>
