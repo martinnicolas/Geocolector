@@ -75,7 +75,7 @@ public class MenuPrincipal extends Fragment {
         boton1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new DescargarRuta()).commit();
-                getActivity().setTitle("Descargar ruta");
+                getActivity().setTitle(R.string.action_descargar_ruta);
                 NavigationView navigationView  = (NavigationView) getActivity().findViewById(R.id.nav_view);
                 navigationView.setCheckedItem(R.id.nav_gallery);
             }
@@ -83,7 +83,7 @@ public class MenuPrincipal extends Fragment {
         boton2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new MedirZona()).commit();
-                getActivity().setTitle("Medir zona");
+                getActivity().setTitle(R.string.action_medir_zona);
                 NavigationView navigationView  = (NavigationView) getActivity().findViewById(R.id.nav_view);
                 navigationView.setCheckedItem(R.id.nav_camera);
             }
@@ -91,7 +91,7 @@ public class MenuPrincipal extends Fragment {
         boton3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new ZonaMedicion()).commit();
-                getActivity().setTitle("Zona de medición");
+                getActivity().setTitle(R.string.action_zona_medicion);
                 NavigationView navigationView  = (NavigationView) getActivity().findViewById(R.id.nav_view);
                 navigationView.setCheckedItem(R.id.nav_slideshow);
             }
@@ -99,7 +99,7 @@ public class MenuPrincipal extends Fragment {
         boton4.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new CargarZona()).commit();
-                getActivity().setTitle("Cargar zona");
+                getActivity().setTitle(R.string.action_cargar_zona);
                 NavigationView navigationView  = (NavigationView) getActivity().findViewById(R.id.nav_view);
                 navigationView.setCheckedItem(R.id.nav_share);
             }
@@ -107,7 +107,7 @@ public class MenuPrincipal extends Fragment {
         boton5.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new VerMapa()).commit();
-                getActivity().setTitle("Mapa de medidores");
+                getActivity().setTitle(R.string.action_ver_mapa);
                 NavigationView navigationView  = (NavigationView) getActivity().findViewById(R.id.nav_view);
                 navigationView.setCheckedItem(R.id.nav_map);
             }
