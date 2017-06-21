@@ -6,6 +6,8 @@ import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.ToOne;
 
+import java.util.List;
+
 /**
  * Created by fede on 09/03/2017.
  */
@@ -68,6 +70,32 @@ public class Novedad {
     @Override
     public String toString(){
         return this.getCodigo()+" - "+this.getDescripcion();
+    }
+
+    //retorna las novedades que se aplican a un determinado tipo de medidor
+    public List<Novedad> obtenerNovedades(DaoSession daoSession, int codigoMedidor){
+        int agua = 0;
+        NovedadDao novedadDao = daoSession.getNovedadDao();
+        List <Novedad> novedades;
+
+        if (codigoMedidor == agua){
+            novedades = novedadDao.queryBuilder()
+                    .where( NovedadDao.Properties.CodServicio.in('A','T'))
+                    .orderAsc()
+                    .list();
+        }else
+        {
+            novedades = novedadDao.queryBuilder()
+                    .where(NovedadDao.Properties.CodServicio.in('E','T'))
+                    .orderAsc()
+                    .list();
+        }
+
+        if( novedades.isEmpty() )
+            return  null;
+
+        return novedades;
+
     }
 
 }
