@@ -8,6 +8,7 @@ import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.ToOne;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -621,19 +622,101 @@ public class RutaMedicion {
      * @param nro_usr número de usuario que lo identifica unívocamente
      * @return
      */
-    public List<RutaMedicion> obtMedUsuario(DaoSession daoSession, int nro_usr){
+    public static List<RutaMedicion> obtMedUsuario(DaoSession daoSession, int nro_usr){
         RutaMedicionDao rutaMedicionDao = daoSession.getRutaMedicionDao();
-
         List <RutaMedicion> medidor = rutaMedicionDao.queryBuilder()
                 .where(RutaMedicionDao.Properties.Usuario.eq(nro_usr))
                 .list();
-
         if (medidor.isEmpty()) //NO EXISTE el usuario
             return  null;
-
         return medidor;
+    }
 
+    /**
+     * Verifica si todos los medidores del usuario fueron medidos y enviados
+     * @param daoSession Database session
+     * @param nro_usr Número de usuario
+     * @return true si todos los medidores del usuario fueron medidos y enviados, false en caso contrario
+     */
+    public static boolean medidosYEnviados(DaoSession daoSession, int nro_usr){
+        boolean medidos = false;
+        List<RutaMedicion> medidores = obtMedUsuario(daoSession,nro_usr);
+        for (RutaMedicion m:medidores) {
+            if (m.getMedido() && m.getAck()){
+                medidos = true;
+            }
+            else
+            {
+                medidos = false;
+                break;
+            }
+        }
+        return medidos;
+    }
 
+    /**
+     * Verifica si alguno de los medidores del usuario fue medido pero no enviado
+     * @param daoSession Database session
+     * @param nro_usr Número de usuario
+     * @return true si alguno de los medidores del usuario fue medido pero no enviado
+     */
+    public static boolean medidosYNoEnviados(DaoSession daoSession, int nro_usr){
+        boolean medidos = false;
+        List<RutaMedicion> medidores = obtMedUsuario(daoSession,nro_usr);
+        for (RutaMedicion m:medidores) {
+            if (m.getMedido() && !m.getAck()){
+                medidos = true;
+                break;
+            }
+        }
+        return medidos;
+    }
+
+    /**
+     * Verifica si alguno de los medidores del usuario no fue medido
+     * @param daoSession Database session
+     * @param nro_usr Número de usuario
+     * @return true si alguno de los medidores del usuario no fue medido, false en caso contrario
+     */
+    public static boolean noMedidos(DaoSession daoSession, int nro_usr){
+        boolean medidos = false;
+        List<RutaMedicion> medidores = obtMedUsuario(daoSession,nro_usr);
+        for (RutaMedicion m:medidores) {
+            if (!m.getMedido()){
+                medidos = true;
+                break;
+            }
+        }
+        return medidos;
+    }
+
+    /**
+     * Obtiene una lista de usuarios de una ruta
+     * @param daoSession Database session
+     * @return Listado de usuarios de una ruta
+     */
+    public static List<RutaMedicion> obtenerUsuarios(DaoSession daoSession){
+        String query = "SELECT distinct usuario FROM ruta_medicion";
+        List<RutaMedicion> usuarios = new ArrayList<>();
+        Cursor c = daoSession.getDatabase().rawQuery(query, null);
+        c.moveToFirst();
+        do{
+            usuarios.add(obtenerUsuario(daoSession, c.getInt(0)));
+        }while(c.moveToNext());
+        return usuarios;
+    }
+
+    /**
+     * Obtiene los datos de un usuario a partir de su numero de usuario
+     * @param daoSession Database session
+     * @param nro_usuario Numero de usuario
+     * @return Objeto RutaMedicion con los datos del usuario
+     */
+    public static RutaMedicion obtenerUsuario(DaoSession daoSession, int nro_usuario){
+        List<RutaMedicion> usuarios = daoSession.getRutaMedicionDao().queryBuilder().where(RutaMedicionDao.Properties.Usuario.eq(nro_usuario)).limit(1).list();
+        if (usuarios.isEmpty()) //NO EXISTE el usuario
+            return  null;
+        return usuarios.get(0);
     }
 
     /**

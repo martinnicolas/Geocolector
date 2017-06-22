@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -132,11 +131,6 @@ public class CargarZona extends Fragment {
         for (RutaMedicion m:medidores) {
             enviarMedicion(m);
         }
-        if (medidoresPendientes().isEmpty())
-        {
-            ocultarRuta();
-            btnCargarZona.setEnabled(false);
-        }
     }
 
     /**
@@ -196,6 +190,11 @@ public class CargarZona extends Fragment {
         else{
             ruta.setAck(true);
             ruta.update();
+        }
+        if (medidoresPendientes().isEmpty())
+        {
+            ocultarRuta();
+            btnCargarZona.setEnabled(false);
         }
         showProgress(false);
     }

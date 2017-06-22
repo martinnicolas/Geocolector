@@ -98,12 +98,12 @@ public class ZonaMedicion extends Fragment {
         MapView map = (MapView) rootView.findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         IMapController mapController = map.getController();
-        mapController.setZoom(15);
-        GeoPoint centerPoint = new GeoPoint(MapsUtilities.getCentroRawsonMapa());
-        mapController.setCenter(centerPoint);
+        mapController.setZoom(16);
         MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getActivity().getApplicationContext()),map);
         mLocationOverlay.enableMyLocation();
         map.getOverlays().add(mLocationOverlay);
+        GeoPoint centerPoint = new GeoPoint(MapsUtilities.getCentroRawsonMapa());
+        mapController.setCenter(centerPoint);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         map.setTilesScaledToDpi(true);
@@ -175,19 +175,12 @@ public class ZonaMedicion extends Fragment {
 
             //Obtengo todos los medidores
             final DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
-            List<RutaMedicion> medidores = daoSession.getRutaMedicionDao().loadAll();
+            List<RutaMedicion> medidores = RutaMedicion.obtenerUsuarios(daoSession);
             ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
             //Por cada medidor
-            for (RutaMedicion m: medidores) {
+            for (RutaMedicion m: medidores){
                 //Obtengo ubicación del medidor y defino un punto
                 GeoPoint punto = new GeoPoint(Double.parseDouble(m.getLatitud()), Double.parseDouble(m.getLongitud()));
-                final Marker marcador = new Marker(map);
-                marcador.setPosition(punto);
-                marcador.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() { map.getOverlays().add(marcador);}
-                });
                 waypoints.add(punto);
             }
             //Obtengo la ruta en base a la lista de puntos
@@ -204,10 +197,42 @@ public class ZonaMedicion extends Fragment {
                     @Override
                     public void run() { map.getOverlays().add(roadOverlay); }
                 });
-
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() { map.invalidate(); }
+                });
+            }
+
+            List<RutaMedicion> usuarios = daoSession.getRutaMedicionDao().loadAll();
+            //Por cada medidor
+            for (RutaMedicion u: usuarios) {
+                //Obtengo ubicación del medidor y defino un punto
+                GeoPoint punto = new GeoPoint(Double.parseDouble(u.getLatitud()), Double.parseDouble(u.getLongitud()));
+                //Creo un marcador con la ubicacion del medidor
+                final Marker marcador = new Marker(map);
+                marcador.setPosition(punto);
+                marcador.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                if (RutaMedicion.medidosYEnviados(daoSession, u.getUsuario())) //Medido y enviado
+                    marcador.setIcon(getResources().getDrawable(R.drawable.greenmarker2));
+                else
+                if (RutaMedicion.medidosYNoEnviados(daoSession, u.getUsuario())) //Medido y no enviado
+                    marcador.setIcon(getResources().getDrawable(R.drawable.yellowmarker2));
+                else
+                if (RutaMedicion.noMedidos(daoSession, u.getUsuario())) //No medido
+                    marcador.setIcon(getResources().getDrawable(R.drawable.redmarker2));
+                //Seteo titulo y data del bubble del marcador
+                marcador.setTitle("Usuario N° "+u.getUsuario());
+                //Obtengo medidores del usuario y agrego data al bubble
+                List<RutaMedicion> medidores_de_usuario = RutaMedicion.obtMedUsuario(daoSession, u.getUsuario());
+                String data_medidores = "";
+                for (RutaMedicion mu : medidores_de_usuario) {
+                    data_medidores = data_medidores+"Medidor N° "+mu.getNro_medidor()+" -- Orden: "+mu.getId()+"<br/>";
+                }
+                marcador.setSnippet(data_medidores);
+                //Agrego el marcador con la data al mapa
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() { map.getOverlays().add(marcador);}
                 });
             }
             return road;
