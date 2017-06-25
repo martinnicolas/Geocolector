@@ -1,13 +1,19 @@
 package utilidades;
 
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
+import android.util.Log;
+
 import org.osmdroid.util.GeoPoint;
+
+import static android.content.Context.LOCATION_SERVICE;
 
 /**
  * Created by martin on 20/03/2017.
  */
 
 public class MapsUtilities {
-
     /**
      * Latitud y Longitud correspondientes al punto céntrico de Rawson;
      */

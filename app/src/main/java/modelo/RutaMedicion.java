@@ -706,6 +706,14 @@ public class RutaMedicion {
         return usuarios;
     }
 
+    public String obtenerEstadoMedicion(){
+        return (this.getMedido())? "Medido":"No medido";
+    }
+
+    public String obtenerEstadoEnvio(){
+        return (this.getAck())? "Enviado":"No enviado";
+    }
+
     /**
      * Obtiene los datos de un usuario a partir de su numero de usuario
      * @param daoSession Database session

@@ -2,6 +2,8 @@ package com.apps.martin.geocolector;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationProvider;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,15 +25,14 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import modelo.DaoSession;
-import modelo.Novedad;
 import modelo.RutaMedicion;
-import utilidades.MapsUtilities;
 
 
 /**
@@ -98,12 +99,13 @@ public class ZonaMedicion extends Fragment {
         MapView map = (MapView) rootView.findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         IMapController mapController = map.getController();
-        mapController.setZoom(16);
-        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getActivity().getApplicationContext()),map);
+        mapController.setZoom(15);
+        //GeoPoint centerPoint = new GeoPoint(MapsUtilities.getCentroRawsonMapa());
+        //mapController.setCenter(centerPoint);
+        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getActivity().getApplicationContext()), map);
         mLocationOverlay.enableMyLocation();
+        mLocationOverlay.enableFollowLocation();
         map.getOverlays().add(mLocationOverlay);
-        GeoPoint centerPoint = new GeoPoint(MapsUtilities.getCentroRawsonMapa());
-        mapController.setCenter(centerPoint);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         map.setTilesScaledToDpi(true);
@@ -153,7 +155,6 @@ public class ZonaMedicion extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-
     class EnBackground extends AsyncTask<MapView, Void, Road> {
 
         private ProgressDialog pDialog;
@@ -169,14 +170,15 @@ public class ZonaMedicion extends Fragment {
 
         @Override
         protected Road doInBackground(MapView... params) {
-            //Mapa y administrador de Rutas
+            //Mapa, administrador de Rutas y Database Session
             final MapView map = params[0];
             RoadManager roadManager = new OSRMRoadManager(getActivity());
+            final DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
 
             //Obtengo todos los medidores
-            final DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
-            List<RutaMedicion> medidores = RutaMedicion.obtenerUsuarios(daoSession);
-            ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
+            //List<RutaMedicion> medidores = RutaMedicion.obtenerUsuarios(daoSession);
+            List<RutaMedicion> medidores = daoSession.getRutaMedicionDao().loadAll();
+            final ArrayList<GeoPoint> waypoints = new ArrayList<>();
             //Por cada medidor
             for (RutaMedicion m: medidores){
                 //Obtengo ubicación del medidor y defino un punto
@@ -191,7 +193,6 @@ public class ZonaMedicion extends Fragment {
                 //Seteo el tipo de linea para dibujar la ruta
                 final Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
                 roadOverlay.setWidth(10);
-
                 //Dibujo la ruta y actualizo el mapa
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -226,7 +227,7 @@ public class ZonaMedicion extends Fragment {
                 List<RutaMedicion> medidores_de_usuario = RutaMedicion.obtMedUsuario(daoSession, u.getUsuario());
                 String data_medidores = "";
                 for (RutaMedicion mu : medidores_de_usuario) {
-                    data_medidores = data_medidores+"Medidor N° "+mu.getNro_medidor()+" -- Orden: "+mu.getId()+"<br/>";
+                    data_medidores = data_medidores+"Medidor N° "+mu.getNro_medidor()+" -- Orden: "+mu.getId()+"<br/>("+mu.obtenerEstadoMedicion()+", "+mu.obtenerEstadoEnvio()+")<br/>";
                 }
                 marcador.setSnippet(data_medidores);
                 //Agrego el marcador con la data al mapa
