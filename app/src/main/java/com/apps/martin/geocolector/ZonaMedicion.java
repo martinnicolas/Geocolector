@@ -24,6 +24,8 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.ScaleBarOverlay;
+import org.osmdroid.views.overlay.mylocation.DirectedLocationOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -33,6 +35,7 @@ import java.util.List;
 
 import modelo.DaoSession;
 import modelo.RutaMedicion;
+import utilidades.MapsUtilities;
 
 
 /**
@@ -99,13 +102,21 @@ public class ZonaMedicion extends Fragment {
         MapView map = (MapView) rootView.findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         IMapController mapController = map.getController();
-        mapController.setZoom(15);
-        //GeoPoint centerPoint = new GeoPoint(MapsUtilities.getCentroRawsonMapa());
-        //mapController.setCenter(centerPoint);
-        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getActivity().getApplicationContext()), map);
+        mapController.setZoom(MapsUtilities.DEFAULT_ZOOM);
+        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getActivity().getApplicationContext()),map);
         mLocationOverlay.enableMyLocation();
         mLocationOverlay.enableFollowLocation();
+        GeoPoint mi_ubicacion = MapsUtilities.getUbicacion(getActivity().getApplicationContext());
+        if (mi_ubicacion == null){
+            GeoPoint centerPoint = new GeoPoint(MapsUtilities.getCentroRawsonMapa());
+            mapController.animateTo(centerPoint);
+        }
+        else{
+            mapController.animateTo(mi_ubicacion);
+        }
         map.getOverlays().add(mLocationOverlay);
+        ScaleBarOverlay scaleBarOverlay = new ScaleBarOverlay(map);
+        map.getOverlays().add(scaleBarOverlay);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         map.setTilesScaledToDpi(true);
@@ -179,6 +190,9 @@ public class ZonaMedicion extends Fragment {
             //List<RutaMedicion> medidores = RutaMedicion.obtenerUsuarios(daoSession);
             List<RutaMedicion> medidores = daoSession.getRutaMedicionDao().loadAll();
             final ArrayList<GeoPoint> waypoints = new ArrayList<>();
+            GeoPoint mi_ubicacion = MapsUtilities.getUbicacion(getActivity().getApplicationContext());
+            if (mi_ubicacion != null)
+                waypoints.add(mi_ubicacion);
             //Por cada medidor
             for (RutaMedicion m: medidores){
                 //Obtengo ubicación del medidor y defino un punto
@@ -229,7 +243,7 @@ public class ZonaMedicion extends Fragment {
                 for (RutaMedicion mu : medidores_de_usuario) {
                     data_medidores = data_medidores+"Medidor N° "+mu.getNro_medidor()+" -- Orden: "+mu.getId()+"<br/>("+mu.obtenerEstadoMedicion()+", "+mu.obtenerEstadoEnvio()+")<br/>";
                 }
-                marcador.setSnippet(data_medidores);
+                marcador.setSnippet(data_medidores+"<br/>Dom. serv.: "+u.getDomicilio());
                 //Agrego el marcador con la data al mapa
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
