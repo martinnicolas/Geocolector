@@ -3,11 +3,16 @@ package utilidades;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.support.v4.app.ActivityCompat;
+
+import com.apps.martin.geocolector.R;
+
 import org.osmdroid.util.GeoPoint;
 import java.util.List;
 
@@ -73,5 +78,92 @@ public class MapsUtilities {
         crit.setPowerRequirement(Criteria.POWER_LOW);
         String provider = mLocationManager.getBestProvider(crit, true);
         return mLocationManager.getProvider(provider);
+    }
+
+    public static Drawable getDirectionIcon(Context context, int instruction){
+        Drawable icon = null;
+        switch (instruction){
+            case 0: icon = context.getResources().getDrawable(R.drawable.ic_empty);
+                break;
+            case 1: icon = context.getResources().getDrawable(R.drawable.ic_continue);
+                break;
+            case 2: icon = context.getResources().getDrawable(R.drawable.ic_continue);
+                break;
+            case 3: icon = context.getResources().getDrawable(R.drawable.ic_slight_left);
+                break;
+            case 4: icon = context.getResources().getDrawable(R.drawable.ic_turn_left);
+                break;
+            case 5: icon = context.getResources().getDrawable(R.drawable.ic_sharp_left);
+                break;
+            case 6: icon = context.getResources().getDrawable(R.drawable.ic_slight_right);
+                break;
+            case 7: icon = context.getResources().getDrawable(R.drawable.ic_turn_right);
+                break;
+            case 8: icon = context.getResources().getDrawable(R.drawable.ic_sharp_right);
+                break;
+            case 9: icon = context.getResources().getDrawable(R.drawable.ic_empty);
+                break;
+            case 10: icon = context.getResources().getDrawable(R.drawable.ic_empty);
+                break;
+            case 11: icon = context.getResources().getDrawable(R.drawable.ic_continue);
+                break;
+            case 12: icon = context.getResources().getDrawable(R.drawable.ic_u_turn);
+                break;
+            case 13: icon = context.getResources().getDrawable(R.drawable.ic_u_turn);
+                break;
+            case 14: icon = context.getResources().getDrawable(R.drawable.ic_u_turn);
+                break;
+            case 15: icon = context.getResources().getDrawable(R.drawable.ic_slight_left);
+                break;
+            case 16: icon = context.getResources().getDrawable(R.drawable.ic_slight_right);
+                break;
+            case 17: icon = context.getResources().getDrawable(R.drawable.ic_slight_left);
+                break;
+            case 18: icon = context.getResources().getDrawable(R.drawable.ic_slight_right);
+                break;
+            case 19: icon = context.getResources().getDrawable(R.drawable.ic_continue);
+                break;
+            case 20: icon = context.getResources().getDrawable(R.drawable.ic_empty);
+                break;
+            case 21: icon = context.getResources().getDrawable(R.drawable.ic_empty);
+                break;
+            case 22: icon = context.getResources().getDrawable(R.drawable.ic_empty);
+                break;
+            case 23: icon = context.getResources().getDrawable(R.drawable.ic_empty);
+                break;
+            case 24: icon = context.getResources().getDrawable(R.drawable.ic_arrived);
+                break;
+            case 25: icon = context.getResources().getDrawable(R.drawable.ic_arrived);
+                break;
+            case 26: icon = context.getResources().getDrawable(R.drawable.ic_arrived);
+                break;
+            case 27: icon = context.getResources().getDrawable(R.drawable.ic_roundabout);
+                break;
+            case 28: icon = context.getResources().getDrawable(R.drawable.ic_roundabout);
+                break;
+            case 29: icon = context.getResources().getDrawable(R.drawable.ic_roundabout);
+                break;
+            case 30: icon = context.getResources().getDrawable(R.drawable.ic_roundabout);
+                break;
+            case 31: icon = context.getResources().getDrawable(R.drawable.ic_roundabout);
+                break;
+            case 32: icon = context.getResources().getDrawable(R.drawable.ic_roundabout);
+                break;
+            case 33: icon = context.getResources().getDrawable(R.drawable.ic_roundabout);
+                break;
+            case 34: icon = context.getResources().getDrawable(R.drawable.ic_roundabout);
+                break;
+            case 35: icon = context.getResources().getDrawable(R.drawable.ic_empty);
+                break;
+            case 36: icon = context.getResources().getDrawable(R.drawable.ic_empty);
+                break;
+            case 37: icon = context.getResources().getDrawable(R.drawable.ic_empty);
+                break;
+            case 38: icon = context.getResources().getDrawable(R.drawable.ic_empty);
+                break;
+            case 39: icon = context.getResources().getDrawable(R.drawable.ic_empty);
+                break;
+        }
+        return icon;
     }
 }

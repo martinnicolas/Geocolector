@@ -241,9 +241,9 @@ public class VerMapa extends Fragment {
                 final Marker nodeMarker = new Marker(map);
                 nodeMarker.setPosition(node.mLocation);
                 nodeMarker.setIcon(nodeIcon);
-                nodeMarker.setTitle("Paso "+i);
+                nodeMarker.setTitle("Paso "+(i+1));
                 nodeMarker.setSnippet(node.mInstructions);
-                Drawable icon = getResources().getDrawable(R.drawable.ic_continue);
+                Drawable icon = MapsUtilities.getDirectionIcon(getActivity().getApplicationContext(), node.mManeuverType);
                 nodeMarker.setSubDescription(Road.getLengthDurationText(getActivity().getApplicationContext(),node.mLength,node.mDuration));
                 nodeMarker.setImage(icon);
                 getActivity().runOnUiThread(new Runnable() {
