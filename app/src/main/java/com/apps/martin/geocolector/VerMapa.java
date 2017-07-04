@@ -3,6 +3,7 @@ package com.apps.martin.geocolector;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -243,7 +244,9 @@ public class VerMapa extends Fragment {
                 nodeMarker.setIcon(nodeIcon);
                 nodeMarker.setTitle("Paso "+(i+1));
                 nodeMarker.setSnippet(node.mInstructions);
-                Drawable icon = MapsUtilities.getDirectionIcon(getActivity().getApplicationContext(), node.mManeuverType);
+                TypedArray iconIds = getActivity().getApplicationContext().getResources().obtainTypedArray(R.array.direction_icons);
+                int iconId = iconIds.getResourceId(node.mManeuverType, R.drawable.ic_empty);
+                Drawable icon = getActivity().getApplicationContext().getResources().getDrawable(iconId);
                 nodeMarker.setSubDescription(Road.getLengthDurationText(getActivity().getApplicationContext(),node.mLength,node.mDuration));
                 nodeMarker.setImage(icon);
                 getActivity().runOnUiThread(new Runnable() {
