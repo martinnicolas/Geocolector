@@ -39,8 +39,7 @@
                     android:imeOptions="actionUnspecified"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:inputType="text"
-                    android:digits="1234567890.:" />
+                    android:inputType="text"/>
 
             </android.support.design.widget.TextInputLayout>
 
