@@ -706,6 +706,22 @@ public class RutaMedicion {
         return usuarios;
     }
 
+    /**
+     * Obtiene una lista de usuarios de una ruta
+     * @param daoSession Database session
+     * @return Listado de cadenas representando usuario y numero
+     */
+    public static ArrayList<String> obtenerNumerosUsuarios(DaoSession daoSession){
+        String query = "SELECT distinct usuario FROM ruta_medicion";
+        ArrayList<String> usuarios = new ArrayList<>();
+        Cursor c = daoSession.getDatabase().rawQuery(query, null);
+        c.moveToFirst();
+        do{
+            usuarios.add("Usuario N° "+c.getInt(0));
+        }while(c.moveToNext());
+        return usuarios;
+    }
+
     public String obtenerEstadoMedicion(){
         return (this.getMedido())? "Medido":"No medido";
     }

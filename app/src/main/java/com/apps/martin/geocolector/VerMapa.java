@@ -1,17 +1,19 @@
 package com.apps.martin.geocolector;
 
 import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.database.AbstractCursor;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.SearchView;
-import android.view.ContextMenu;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,7 +38,9 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import modelo.DaoSession;
 import modelo.RutaMedicion;
@@ -62,7 +66,9 @@ public class VerMapa extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private RutaMedicion usuario;
+    private DaoSession daoSession;
+    private MapView map;
+    private static ArrayList<String> mResults;
 
     public VerMapa() {
         // Required empty public constructor
@@ -100,10 +106,60 @@ public class VerMapa extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_ver_mapa, menu);
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu){
+        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSuggestionsAdapter(new SearchSuggestionsAdapter(getActivity().getApplicationContext(), daoSession));
+        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener()
+        {
+
+            @Override
+            public boolean onSuggestionSelect(int position) {
+                Toast.makeText(getActivity().getApplicationContext(), "Position: " + position, Toast.LENGTH_SHORT).show();
+                searchView.clearFocus();
+
+                //Las tareas que hacen peticiones http deben ejecutarse en un hilo diferente
+                String numero_usuario = mResults.get(position).replaceAll("\\D","");
+                int numero = Integer.parseInt(numero_usuario);
+                RutaMedicion u = RutaMedicion.obtenerUsuario(daoSession,numero);
+                new EnBackground().execute(u);
+                return true;
+            }
+
+            @Override
+            public boolean onSuggestionClick(int position) {
+                Toast.makeText(getActivity().getApplicationContext(), "Position: " + position, Toast.LENGTH_SHORT).show();
+                searchView.clearFocus();
+
+                //Las tareas que hacen peticiones http deben ejecutarse en un hilo diferente
+                String numero_usuario = mResults.get(position).replaceAll("\\D","");
+                int numero = Integer.parseInt(numero_usuario);
+                RutaMedicion u = RutaMedicion.obtenerUsuario(daoSession,numero);
+                new EnBackground().execute(u);
+                return false;
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
+            @Override
+            public boolean onQueryTextSubmit(String query)
+            {
+                Toast.makeText(getActivity().getApplicationContext(), query, Toast.LENGTH_SHORT).show();
+                searchView.clearFocus();
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText)
+            {
+                return false;
+            }
+        });
+        super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -114,9 +170,9 @@ public class VerMapa extends Fragment {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.search) {
-            return true;
-        }
+        //if (id == R.id.search) {
+        //    return true;
+        //}
 
         return super.onOptionsItemSelected(item);
     }
@@ -126,12 +182,13 @@ public class VerMapa extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_ver_mapa, container, false);
+        daoSession = ((MainActivity)getActivity()).getDaoSession();
 
         Context ctx = getActivity().getApplicationContext();
         //important! set your user agent to prevent getting banned from the osm servers
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
-        MapView map = (MapView) rootView.findViewById(R.id.map);
+        map = (MapView) rootView.findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         IMapController mapController = map.getController();
         mapController.setZoom(MapsUtilities.DEFAULT_ZOOM);
@@ -153,15 +210,13 @@ public class VerMapa extends Fragment {
         map.setMultiTouchControls(true);
         map.setTilesScaledToDpi(true);
 
-        //Las tareas que hacen peticiones http deben ejecutarse en un hilo diferente
-        new EnBackground().execute(map);
-
         return rootView;
     }
 
-    class EnBackground extends AsyncTask<MapView, Void, Road> {
+    class EnBackground extends AsyncTask<RutaMedicion, Void, Road> {
 
         private ProgressDialog pDialog;
+        private Polyline roadOverlay;
 
         @Override
         protected void onPreExecute() {
@@ -173,20 +228,16 @@ public class VerMapa extends Fragment {
         }
 
         @Override
-        protected Road doInBackground(MapView... params) {
+        protected Road doInBackground(RutaMedicion... params) {
             //Mapa, administrador de Rutas y Database Session
-            final MapView map = params[0];
+            RutaMedicion u = params[0];
             RoadManager roadManager = new OSRMRoadManager(getActivity());
-            //roadManager.addRequestOption("locale=es");
-            final DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
 
             ArrayList<GeoPoint> waypoints = new ArrayList<>();
             GeoPoint mi_ubicacion = MapsUtilities.getUbicacion(getActivity().getApplicationContext());
             if (mi_ubicacion != null)
                 waypoints.add(mi_ubicacion);
-            int numero_usuario = 504200; //Hardcodeo numero de usuario
-            RutaMedicion u = RutaMedicion.obtenerUsuario(daoSession,numero_usuario);
-            System.out.println("usuario "+ u.toString()+" latitud: "+u.getLatitud()+" longitud:"+u.getLongitud());
+
             //Obtengo ubicación del usuario y defino un punto
             GeoPoint punto = new GeoPoint(Double.parseDouble(u.getLatitud()), Double.parseDouble(u.getLongitud()));
             //Creo un marcador con la ubicacion del usuario
@@ -223,7 +274,7 @@ public class VerMapa extends Fragment {
             if (road.mStatus == Road.STATUS_OK)
             {
                 //Seteo el tipo de linea para dibujar la ruta
-                final Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+                roadOverlay = RoadManager.buildRoadOverlay(road);
                 roadOverlay.setWidth(10);
                 //Dibujo la ruta y actualizo el mapa
                 getActivity().runOnUiThread(new Runnable() {
@@ -264,6 +315,107 @@ public class VerMapa extends Fragment {
             //Si no pude conectarme y obtener la ruta
             if (road.mStatus != Road.STATUS_OK)
                 Toast.makeText(getActivity().getApplicationContext(), "Error en la conexión.\nVerifique su conexión a internet", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static class SearchSuggestionsAdapter extends SimpleCursorAdapter
+    {
+        private static final String[] mFields  = { "_id", "result" };
+        private static final String[] mVisible = { "result" };
+        private static final int[]    mViewIds = { android.R.id.text1 };
+        private static DaoSession daoSession = null;
+
+
+        public SearchSuggestionsAdapter(Context context, DaoSession dataBaseSession)
+        {
+            super(context, android.R.layout.simple_list_item_1, null, mVisible, mViewIds, 0);
+            daoSession = dataBaseSession;
+        }
+
+        @Override
+        public Cursor runQueryOnBackgroundThread(CharSequence constraint)
+        {
+            return new SuggestionsCursor(constraint);
+        }
+
+        private static class SuggestionsCursor extends AbstractCursor
+        {
+            //private ArrayList<String> mResults;
+
+            public SuggestionsCursor(CharSequence constraint)
+            {
+                mResults = RutaMedicion.obtenerNumerosUsuarios(daoSession);
+                if(!TextUtils.isEmpty(constraint)){
+                    String constraintString = constraint.toString().toLowerCase(Locale.ROOT);
+                    Iterator<String> iter = mResults.iterator();
+                    while(iter.hasNext()){
+                        if(!iter.next().toLowerCase(Locale.ROOT).contains(constraintString))
+                        {
+                            iter.remove();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public int getCount()
+            {
+                return mResults.size();
+            }
+
+            @Override
+            public String[] getColumnNames()
+            {
+                return mFields;
+            }
+
+            @Override
+            public long getLong(int column)
+            {
+                if(column == 0){
+                    return mPos;
+                }
+                throw new UnsupportedOperationException("unimplemented");
+            }
+
+            @Override
+            public String getString(int column)
+            {
+                if(column == 1){
+                    return mResults.get(mPos);
+                }
+                throw new UnsupportedOperationException("unimplemented");
+            }
+
+            @Override
+            public short getShort(int column)
+            {
+                throw new UnsupportedOperationException("unimplemented");
+            }
+
+            @Override
+            public int getInt(int column)
+            {
+                throw new UnsupportedOperationException("unimplemented");
+            }
+
+            @Override
+            public float getFloat(int column)
+            {
+                throw new UnsupportedOperationException("unimplemented");
+            }
+
+            @Override
+            public double getDouble(int column)
+            {
+                throw new UnsupportedOperationException("unimplemented");
+            }
+
+            @Override
+            public boolean isNull(int column)
+            {
+                return false;
+            }
         }
     }
 
