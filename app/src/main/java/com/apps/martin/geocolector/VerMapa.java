@@ -31,6 +31,7 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
@@ -69,6 +70,8 @@ public class VerMapa extends Fragment {
     private DaoSession daoSession;
     private MapView map;
     private static ArrayList<String> mResults;
+    private Polyline roadOverlay;
+    private FolderOverlay roadNodeMarkers;
 
     public VerMapa() {
         // Required empty public constructor
@@ -195,6 +198,9 @@ public class VerMapa extends Fragment {
         MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getActivity().getApplicationContext()),map);
         mLocationOverlay.enableMyLocation();
         mLocationOverlay.enableFollowLocation();
+        //Agrego repositorio de marcadores
+        roadNodeMarkers = new FolderOverlay();
+        map.getOverlays().add(roadNodeMarkers);
         GeoPoint mi_ubicacion = MapsUtilities.getUbicacion(getActivity().getApplicationContext());
         if (mi_ubicacion == null){
             GeoPoint centerPoint = new GeoPoint(MapsUtilities.getCentroRawsonMapa());
@@ -216,7 +222,6 @@ public class VerMapa extends Fragment {
     class EnBackground extends AsyncTask<RutaMedicion, Void, Road> {
 
         private ProgressDialog pDialog;
-        private Polyline roadOverlay;
 
         @Override
         protected void onPreExecute() {
@@ -229,9 +234,20 @@ public class VerMapa extends Fragment {
 
         @Override
         protected Road doInBackground(RutaMedicion... params) {
-            //Mapa, administrador de Rutas y Database Session
+            //Usuario y Administrador de Rutas
             RutaMedicion u = params[0];
             RoadManager roadManager = new OSRMRoadManager(getActivity());
+
+            //Elimino la ruta que se había dibujado anteriormente
+            if (roadOverlay != null) {
+                roadNodeMarkers.getItems().clear();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        map.getOverlays().remove(roadOverlay);
+                    }
+                });
+            }
 
             ArrayList<GeoPoint> waypoints = new ArrayList<>();
             GeoPoint mi_ubicacion = MapsUtilities.getUbicacion(getActivity().getApplicationContext());
@@ -262,10 +278,11 @@ public class VerMapa extends Fragment {
             }
             marcador.setSnippet(data_medidores+"<br/>Dom. serv.: "+u.getDomicilio());
             //Agrego el marcador con la data al mapa
-            getActivity().runOnUiThread(new Runnable() {
+            /*getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() { map.getOverlays().add(marcador);}
-            });
+            });*/
+            roadNodeMarkers.add(marcador);
             //Agrego ubicacion del usuario a lista de puntos
             waypoints.add(punto);
             //Obtengo la ruta en base a la lista de puntos
@@ -277,10 +294,11 @@ public class VerMapa extends Fragment {
                 roadOverlay = RoadManager.buildRoadOverlay(road);
                 roadOverlay.setWidth(10);
                 //Dibujo la ruta y actualizo el mapa
-                getActivity().runOnUiThread(new Runnable() {
+                roadNodeMarkers.add(roadOverlay);
+                /*getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() { map.getOverlays().add(roadOverlay); }
-                });
+                });*/
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() { map.invalidate(); }
@@ -300,10 +318,11 @@ public class VerMapa extends Fragment {
                 Drawable icon = getActivity().getApplicationContext().getResources().getDrawable(iconId);
                 nodeMarker.setSubDescription(Road.getLengthDurationText(getActivity().getApplicationContext(),node.mLength,node.mDuration));
                 nodeMarker.setImage(icon);
-                getActivity().runOnUiThread(new Runnable() {
+                /*getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() { map.getOverlays().add(nodeMarker); }
-                });
+                });*/
+                roadNodeMarkers.add(nodeMarker);
             }
 
             return road;
@@ -340,7 +359,6 @@ public class VerMapa extends Fragment {
 
         private static class SuggestionsCursor extends AbstractCursor
         {
-            //private ArrayList<String> mResults;
 
             public SuggestionsCursor(CharSequence constraint)
             {
