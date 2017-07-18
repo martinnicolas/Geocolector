@@ -70,7 +70,7 @@
     <string name="action_zona_medicion">Zona de medición</string>
 
     <!-- Strings related to Fragment VerMapa -->
-    <string name="action_ver_mapa">Mapa de medidores</string>
+    <string name="action_ver_mapa">Mapa de usuarios</string>
 
     <!-- Strings related to Activity AdministrarActivity-->
     <string name="title_activity_administrar_cuenta">Administrar cuenta</string>
