@@ -152,8 +152,15 @@ public class VerMapa extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query)
             {
-                Toast.makeText(getActivity().getApplicationContext(), query, Toast.LENGTH_SHORT).show();
                 searchView.clearFocus();
+                String numero_usuario = query.replaceAll("\\D","");
+                searchView.setQuery("Usuario N° "+numero_usuario,false);
+                int numero = Integer.parseInt(numero_usuario);
+                RutaMedicion u = RutaMedicion.obtenerUsuario(daoSession,numero);
+                if (u != null)
+                    new EnBackground().execute(u);
+                else
+                    Toast.makeText(getActivity().getApplicationContext(), "El Usuario no existe en la zona de medición asignada. Verifique la zona de medición", Toast.LENGTH_SHORT).show();
 
                 return true;
             }

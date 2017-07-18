@@ -182,7 +182,7 @@ public class ZonaMedicion extends Fragment {
         @Override
         protected void onPreExecute() {
             pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("Calculando la ruta.\nPor favor espere un momento.");
+            pDialog.setMessage("Cargando la zona.\nPor favor espere un momento.");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
