@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.SearchView;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -35,6 +36,9 @@ import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
+import org.osmdroid.views.overlay.compass.CompassOverlay;
+import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
+import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -70,7 +74,6 @@ public class VerMapa extends Fragment {
     private DaoSession daoSession;
     private MapView map;
     private static ArrayList<String> mResults;
-    private Polyline roadOverlay;
     private FolderOverlay roadNodeMarkers;
 
     public VerMapa() {
@@ -115,32 +118,31 @@ public class VerMapa extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu){
         final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setInputType(InputType.TYPE_CLASS_NUMBER);
         searchView.setSuggestionsAdapter(new SearchSuggestionsAdapter(getActivity().getApplicationContext(), daoSession));
         searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener()
         {
 
             @Override
             public boolean onSuggestionSelect(int position) {
-                Toast.makeText(getActivity().getApplicationContext(), "Position: " + position, Toast.LENGTH_SHORT).show();
                 searchView.clearFocus();
-
-                //Las tareas que hacen peticiones http deben ejecutarse en un hilo diferente
                 String numero_usuario = mResults.get(position).replaceAll("\\D","");
+                searchView.setQuery("Usuario N° "+numero_usuario,false);
                 int numero = Integer.parseInt(numero_usuario);
                 RutaMedicion u = RutaMedicion.obtenerUsuario(daoSession,numero);
+                //Las tareas que hacen peticiones http deben ejecutarse en un hilo diferente
                 new EnBackground().execute(u);
                 return true;
             }
 
             @Override
             public boolean onSuggestionClick(int position) {
-                Toast.makeText(getActivity().getApplicationContext(), "Position: " + position, Toast.LENGTH_SHORT).show();
                 searchView.clearFocus();
-
-                //Las tareas que hacen peticiones http deben ejecutarse en un hilo diferente
                 String numero_usuario = mResults.get(position).replaceAll("\\D","");
+                searchView.setQuery("Usuario N° "+numero_usuario,false);
                 int numero = Integer.parseInt(numero_usuario);
                 RutaMedicion u = RutaMedicion.obtenerUsuario(daoSession,numero);
+                //Las tareas que hacen peticiones http deben ejecutarse en un hilo diferente
                 new EnBackground().execute(u);
                 return false;
             }
@@ -212,6 +214,12 @@ public class VerMapa extends Fragment {
         map.getOverlays().add(mLocationOverlay);
         ScaleBarOverlay scaleBarOverlay = new ScaleBarOverlay(map);
         map.getOverlays().add(scaleBarOverlay);
+        RotationGestureOverlay mRotationGestureOverlay = new RotationGestureOverlay(map);
+        mRotationGestureOverlay.setEnabled(true);
+        map.getOverlays().add(mRotationGestureOverlay);
+        CompassOverlay mCompassOverlay = new CompassOverlay(getActivity().getApplicationContext(), new InternalCompassOrientationProvider(getActivity().getApplicationContext()), map);
+        mCompassOverlay.enableCompass();
+        map.getOverlays().add(mCompassOverlay);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         map.setTilesScaledToDpi(true);
@@ -234,22 +242,14 @@ public class VerMapa extends Fragment {
 
         @Override
         protected Road doInBackground(RutaMedicion... params) {
-            //Usuario y Administrador de Rutas
+            //Usuario
             RutaMedicion u = params[0];
-            RoadManager roadManager = new OSRMRoadManager(getActivity());
 
-            //Elimino la ruta que se había dibujado anteriormente
-            if (roadOverlay != null) {
-                roadNodeMarkers.getItems().clear();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        map.getOverlays().remove(roadOverlay);
-                    }
-                });
-            }
+            //Elimino la ruta y marcadores que se habían dibujado previamente
+            roadNodeMarkers.getItems().clear();
 
             ArrayList<GeoPoint> waypoints = new ArrayList<>();
+            //Obtengo ultima ubicación del tomaestado
             GeoPoint mi_ubicacion = MapsUtilities.getUbicacion(getActivity().getApplicationContext());
             if (mi_ubicacion != null)
                 waypoints.add(mi_ubicacion);
@@ -277,28 +277,21 @@ public class VerMapa extends Fragment {
                 data_medidores = data_medidores+"Medidor N° "+mu.getNro_medidor()+" -- Orden: "+mu.getId()+"<br/>("+mu.obtenerEstadoMedicion()+", "+mu.obtenerEstadoEnvio()+")<br/>";
             }
             marcador.setSnippet(data_medidores+"<br/>Dom. serv.: "+u.getDomicilio());
-            //Agrego el marcador con la data al mapa
-            /*getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() { map.getOverlays().add(marcador);}
-            });*/
+            //Agrego el marcador con la data al respositorio que los mostrara en el mapa
             roadNodeMarkers.add(marcador);
             //Agrego ubicacion del usuario a lista de puntos
             waypoints.add(punto);
             //Obtengo la ruta en base a la lista de puntos
+            RoadManager roadManager = new OSRMRoadManager(getActivity());
             Road road = roadManager.getRoad(waypoints);
             //Dibujo la ruta sólo si pude conectarme y obtenerla
             if (road.mStatus == Road.STATUS_OK)
             {
                 //Seteo el tipo de linea para dibujar la ruta
-                roadOverlay = RoadManager.buildRoadOverlay(road);
+                Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
                 roadOverlay.setWidth(10);
-                //Dibujo la ruta y actualizo el mapa
+                //Dibujo la ruta y la agrego al repositorio que la muestra en el mapa
                 roadNodeMarkers.add(roadOverlay);
-                /*getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() { map.getOverlays().add(roadOverlay); }
-                });*/
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() { map.invalidate(); }
@@ -306,6 +299,7 @@ public class VerMapa extends Fragment {
             }
 
             Drawable nodeIcon = getResources().getDrawable(R.drawable.marker_node);
+            //Por cada maniobra en la ruta existe un nodo, creo un marcador por cada nodo, con data de la maniobra
             for (int i=0; i<road.mNodes.size(); i++){
                 RoadNode node = road.mNodes.get(i);
                 final Marker nodeMarker = new Marker(map);
@@ -318,10 +312,7 @@ public class VerMapa extends Fragment {
                 Drawable icon = getActivity().getApplicationContext().getResources().getDrawable(iconId);
                 nodeMarker.setSubDescription(Road.getLengthDurationText(getActivity().getApplicationContext(),node.mLength,node.mDuration));
                 nodeMarker.setImage(icon);
-                /*getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() { map.getOverlays().add(nodeMarker); }
-                });*/
+                //Agrego los nodos de la ruta al repositorio para que los muestre en el mapa
                 roadNodeMarkers.add(nodeMarker);
             }
 
