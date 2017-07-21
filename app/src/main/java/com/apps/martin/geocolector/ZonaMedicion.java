@@ -2,12 +2,11 @@ package com.apps.martin.geocolector;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.location.Location;
-import android.location.LocationProvider;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,15 +21,14 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
-import org.osmdroid.views.overlay.mylocation.DirectedLocationOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
-import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
@@ -60,6 +58,7 @@ public class ZonaMedicion extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private FolderOverlay roadNodeMarkers;
 
     public ZonaMedicion() {
         // Required empty public constructor
@@ -104,11 +103,13 @@ public class ZonaMedicion extends Fragment {
 
         MapView map = (MapView) rootView.findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
-        IMapController mapController = map.getController();
+        final IMapController mapController = map.getController();
         mapController.setZoom(MapsUtilities.DEFAULT_ZOOM);
         MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getActivity().getApplicationContext()),map);
         mLocationOverlay.enableMyLocation();
         mLocationOverlay.enableFollowLocation();
+        roadNodeMarkers = new FolderOverlay();
+        map.getOverlays().add(roadNodeMarkers);
         GeoPoint mi_ubicacion = MapsUtilities.getUbicacion(getActivity().getApplicationContext());
         if (mi_ubicacion == null){
             GeoPoint centerPoint = new GeoPoint(MapsUtilities.getCentroRawsonMapa());
@@ -132,6 +133,18 @@ public class ZonaMedicion extends Fragment {
 
         //Las tareas que hacen peticiones http deben ejecutarse en un hilo diferente
         new EnBackground().execute(map);
+
+        //Agrego botón para centrar el mapa en la ubicación del usuario
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GeoPoint mi_ubicacion = MapsUtilities.getUbicacion(getActivity().getApplicationContext());
+                if (mi_ubicacion != null){
+                    mapController.animateTo(mi_ubicacion);
+                }
+            }
+        });
 
         return rootView;
     }
@@ -193,12 +206,11 @@ public class ZonaMedicion extends Fragment {
             //Mapa, administrador de Rutas y Database Session
             final MapView map = params[0];
             RoadManager roadManager = new OSRMRoadManager(getActivity());
-            final DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
+            DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
 
             //Obtengo todos los medidores
-            //List<RutaMedicion> medidores = RutaMedicion.obtenerUsuarios(daoSession);
             List<RutaMedicion> medidores = daoSession.getRutaMedicionDao().loadAll();
-            final ArrayList<GeoPoint> waypoints = new ArrayList<>();
+            ArrayList<GeoPoint> waypoints = new ArrayList<>();
             GeoPoint mi_ubicacion = MapsUtilities.getUbicacion(getActivity().getApplicationContext());
             if (mi_ubicacion != null)
                 waypoints.add(mi_ubicacion);
@@ -214,13 +226,10 @@ public class ZonaMedicion extends Fragment {
             if (road.mStatus == Road.STATUS_OK)
             {
                 //Seteo el tipo de linea para dibujar la ruta
-                final Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
+                Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
                 roadOverlay.setWidth(10);
                 //Dibujo la ruta y actualizo el mapa
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() { map.getOverlays().add(roadOverlay); }
-                });
+                roadNodeMarkers.add(roadOverlay);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() { map.invalidate(); }
@@ -228,12 +237,12 @@ public class ZonaMedicion extends Fragment {
             }
 
             List<RutaMedicion> usuarios = daoSession.getRutaMedicionDao().loadAll();
-            //Por cada medidor
+            //Por cada usuario
             for (RutaMedicion u: usuarios) {
-                //Obtengo ubicación del medidor y defino un punto
+                //Obtengo ubicación del usuario y defino un punto
                 GeoPoint punto = new GeoPoint(Double.parseDouble(u.getLatitud()), Double.parseDouble(u.getLongitud()));
                 //Creo un marcador con la ubicacion del medidor
-                final Marker marcador = new Marker(map);
+                Marker marcador = new Marker(map);
                 marcador.setPosition(punto);
                 marcador.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                 if (RutaMedicion.medidosYEnviados(daoSession, u.getUsuario())) //Medido y enviado
@@ -254,10 +263,7 @@ public class ZonaMedicion extends Fragment {
                 }
                 marcador.setSnippet(data_medidores+"<br/>Dom. serv.: "+u.getDomicilio());
                 //Agrego el marcador con la data al mapa
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() { map.getOverlays().add(marcador);}
-                });
+                roadNodeMarkers.add(marcador);
             }
             return road;
         }

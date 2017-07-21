@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.widget.SearchView;
@@ -202,7 +203,7 @@ public class VerMapa extends Fragment {
 
         map = (MapView) rootView.findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
-        IMapController mapController = map.getController();
+        final IMapController mapController = map.getController();
         mapController.setZoom(MapsUtilities.DEFAULT_ZOOM);
         MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getActivity().getApplicationContext()),map);
         mLocationOverlay.enableMyLocation();
@@ -230,6 +231,18 @@ public class VerMapa extends Fragment {
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         map.setTilesScaledToDpi(true);
+
+        //Agrego botón para centrar el mapa en la ubicación del usuario
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GeoPoint mi_ubicacion = MapsUtilities.getUbicacion(getActivity().getApplicationContext());
+                if (mi_ubicacion != null){
+                    mapController.animateTo(mi_ubicacion);
+                }
+            }
+        });
 
         return rootView;
     }
@@ -264,7 +277,7 @@ public class VerMapa extends Fragment {
             //Obtengo ubicación del usuario y defino un punto
             GeoPoint punto = new GeoPoint(Double.parseDouble(u.getLatitud()), Double.parseDouble(u.getLongitud()));
             //Creo un marcador con la ubicacion del usuario
-            final Marker marcador = new Marker(map);
+            Marker marcador = new Marker(map);
             marcador.setPosition(punto);
             marcador.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             if (RutaMedicion.medidosYEnviados(daoSession, u.getUsuario())) //Medido y enviado
@@ -309,7 +322,7 @@ public class VerMapa extends Fragment {
             //Por cada maniobra en la ruta existe un nodo, creo un marcador por cada nodo, con data de la maniobra
             for (int i=0; i<road.mNodes.size(); i++){
                 RoadNode node = road.mNodes.get(i);
-                final Marker nodeMarker = new Marker(map);
+                Marker nodeMarker = new Marker(map);
                 nodeMarker.setPosition(node.mLocation);
                 nodeMarker.setIcon(nodeIcon);
                 nodeMarker.setTitle("Paso "+(i+1));
