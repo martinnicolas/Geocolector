@@ -343,8 +343,15 @@ public class VerMapa extends Fragment {
         protected void onPostExecute(Road road) {
             pDialog.hide();
             //Si no pude conectarme y obtener la ruta
-            if (road.mStatus != Road.STATUS_OK)
-                Toast.makeText(getActivity().getApplicationContext(), "Error en la conexión.\nVerifique su conexión a internet", Toast.LENGTH_SHORT).show();
+            if (road.mStatus != Road.STATUS_OK){
+                //Obtengo ultima ubicación del tomaestado
+                GeoPoint mi_ubicacion = MapsUtilities.getUbicacion(getActivity().getApplicationContext());
+                if (mi_ubicacion != null)
+                    Toast.makeText(getActivity().getApplicationContext(), "Error en la conexión.\nVerifique su conexión a internet", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getActivity().getApplicationContext(), "Debe activar la ubicación por GPS.", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 
