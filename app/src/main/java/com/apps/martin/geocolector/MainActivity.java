@@ -44,15 +44,15 @@ public class MainActivity extends AppCompatActivity
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new MenuPrincipal()).commit();
         }
-
+        //Almaceno base de datos en /Android/data/com.apps.martin.geocolector
+        File path = new File(getExternalFilesDir(null), "Android/data/"+getPackageName()+"/geocolectorDB");
         //Almaceno base de datos en /storage/emulated/0/geocolector
-        File path = new File(Environment.getExternalStorageDirectory(), "geocolector/geocolectorDB");
+        //File path = new File(Environment.getExternalStorageDirectory(), "geocolector/geocolectorDB");
         path.getParentFile().mkdirs();
 
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getApplicationContext(), path.getAbsolutePath());
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
-        //Almaceno base de datos en /storage/emulated/0/geocolector
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

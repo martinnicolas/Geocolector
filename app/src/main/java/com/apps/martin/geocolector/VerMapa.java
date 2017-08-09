@@ -43,6 +43,7 @@ import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -193,6 +194,8 @@ public class VerMapa extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        File path = new File(getActivity().getApplicationContext().getExternalFilesDir(null), "Android/data/"+getContext().getPackageName());
+        Configuration.getInstance().setOsmdroidTileCache(path);
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_ver_mapa, container, false);
         daoSession = ((MainActivity)getActivity()).getDaoSession();
@@ -231,6 +234,7 @@ public class VerMapa extends Fragment {
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         map.setTilesScaledToDpi(true);
+        map.setKeepScreenOn(true);
 
         //Agrego botón para centrar el mapa en la ubicación del usuario
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
