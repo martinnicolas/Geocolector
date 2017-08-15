@@ -115,7 +115,8 @@
                         android:textColor="@android:color/black"
                         android:textStyle="normal|bold"
                         android:textSize="18sp"
-                        android:layout_weight="0.20"/>
+                        android:layout_weight="0.20"
+                        android:gravity="bottom|right" />
 
                     <TextView
                         android:text="@string/txtOrdenMed"
@@ -131,7 +132,13 @@
                         android:textStyle="normal|bold"
                         android:textColor="@android:color/black"
                         android:background="@android:color/background_light"
-                        android:layout_weight="0.30"/>
+                        android:layout_weight="0.30"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="bottom|right" />
 
                 </TableRow>
             </TableLayout>
@@ -208,8 +215,8 @@
                         android:layout_marginRight="5dp"
                         android:layout_marginLeft="5dp"
                         android:layout_weight="0.33"
-                        android:textStyle="normal|bold"
-                        android:textSize="24sp" />
+                        android:textSize="18sp"
+                        android:gravity="bottom|right" />
 
                     <TextView
                         android:text="Est. Ant."
@@ -224,6 +231,7 @@
                         android:background="@android:color/background_light"
                         android:gravity="bottom|right"
                         android:maxLength="8"
+                        android:textSize="18sp"
                         android:layout_weight="0.33" />
 
                     <TextView
@@ -235,7 +243,7 @@
                         android:textColor="@android:color/background_light"
                         android:layout_marginRight="5dp"
                         android:layout_marginTop="5dp"
-                        android:textSize="13sp"
+                        android:textSize="18sp"
                         android:textStyle="normal|bold"
                         android:layout_marginBottom="5dp"
                         android:layout_marginLeft="5dp"

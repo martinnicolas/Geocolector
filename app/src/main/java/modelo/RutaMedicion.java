@@ -573,6 +573,21 @@ public class RutaMedicion {
         return medActual.get(0);
     }
 
+    /**
+     *  Devuelve verdadero si la ruta fue medida completamente, falso caso contrario
+     *
+     * @param daoSession
+     * @return
+     */
+    public static boolean esRutaMedida(DaoSession daoSession ){
+        RutaMedicionDao rutaMedicionDao = daoSession.getRutaMedicionDao();
+        List <RutaMedicion> medActual = rutaMedicionDao.queryBuilder()
+                .where(RutaMedicionDao.Properties.Medido.eq(1))
+                .list();
+
+        //validacion para evitar error en tiempo de ejecucion
+        return medActual.isEmpty();
+    }
 
     /**
      * Devuelve el próximo medidor no medido de la ruta medición, null en caso de que no queden medidores por medir

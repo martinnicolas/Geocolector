@@ -122,15 +122,29 @@ public class TabMedir extends Fragment{
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_tab_medir, container, false);
         DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
-        //this.cargarNovedades(daoSession);
         this.vincularAtributosConPantalla();
+        rutaMedicion = MedirZona.getMedidorActual();
+
+        //validamos que la ruta no esta ni vacía ni llena
+        if (rutaMedicion ==  null){
+            if (rutaMedicion.esRutaMedida(daoSession))
+                mostrarMje("Medición completa","No quedan medidores por medir, la ruta está completa");
+            else
+                mostrarMje("Fallo al inicio","Verifique la ruta de medición");
+
+            return rootView;
+        }
+        this.cargarNovedades2();
+
+        /**
         rutaMedicion = MedirZona.getMedidorActual();
         this.cargarNovedades2();
 
         if (rutaMedicion ==  null){
             mostrarMje("Fallo al inicio","Verifique la ruta de medición");
             return rootView;
-        }
+        }**/
+
 
         setearDatosUsuario();//Muestro los datos del usuario
         setearDatosMedidor();//Muestro los datos del medidor
@@ -210,7 +224,7 @@ public class TabMedir extends Fragment{
 
 
 
-    private void vincularAtributosConPantalla(){
+    private void    vincularAtributosConPantalla(){
         //atributos de los contadores
         MA = (TextView) rootView.findViewById(R.id.txtMANL);
         MAL = (TextView) rootView.findViewById(R.id.txtMAL);
@@ -429,6 +443,7 @@ public class TabMedir extends Fragment{
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(titulo);
         builder.setMessage(mje);
+        builder.setPositiveButton("Aceptar",null);
         builder.create().show();
     }
 
