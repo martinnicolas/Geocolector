@@ -585,7 +585,14 @@ public class RutaMedicion {
                 .where(RutaMedicionDao.Properties.Medido.eq(1))
                 .list();
 
-        //validacion para evitar error en tiempo de ejecucion
+        return medActual.isEmpty();
+    }
+
+    public static boolean NOhayMedCargados(DaoSession daoSession ){
+        RutaMedicionDao rutaMedicionDao = daoSession.getRutaMedicionDao();
+        List <RutaMedicion> medActual = rutaMedicionDao.queryBuilder()
+                .list();
+
         return medActual.isEmpty();
     }
 
@@ -771,27 +778,27 @@ public class RutaMedicion {
         reiniciarContadores();
         //seteamos los medidores
         for(int i = 0;  i < ruta.size() ; i++)
-            incrementarContadores( ruta.get(i).getTipo_medidorId(), ruta.get(i).getMedido() );
+            incrementarContadores( ruta.get(i).getTipo_medidorId(), ruta.get(i).getMedido(),false );
     }
 
     //incrementa los contadores de los medidores que fueron y NO leidos
-    public static void incrementarContadores(Long tipoMedidor, Boolean leido) {
+    public static void incrementarContadores(Long tipoMedidor, Boolean leido,boolean midiendo) {
 
         switch ( tipoMedidor.intValue() )
         {
             case tipoMedEA: // Energía Activa
             {
-                actContME(leido);
+                actContME(leido, midiendo);
                 break;
             }
             case tipoMedER: //Energía Reactiva
             {
-                actContMER(leido);
+                actContMER(leido,midiendo);
                 break;
             }
             case tipoMedAgua: //Agua
             {
-                actContMA(leido);
+                actContMA(leido,midiendo);
                 break;
             }
         }
@@ -802,11 +809,12 @@ public class RutaMedicion {
      * Actualiza los contadores del resuemen de medicion correspondiente a los medidores de ENERGÍA ACTIVA
      * @param leido
      */
-    public static void actContME(boolean leido){
+    public static void actContME(boolean leido, boolean midiendo){
         if (leido)
         {
             contMEALeidos++;
-            contMEANoLeidos--;
+            if(midiendo)
+                contMEANoLeidos--;
         }
         else//aca solo se accede en la carga inicial
             contMEANoLeidos++;
@@ -817,11 +825,12 @@ public class RutaMedicion {
      * Actualiza los contadores del resuemen de medicion correspondiente a los medidores de ENERGÍA REACTIVA
      * @param leido    indica si el medidor fue leído
      */
-    public static void actContMER(boolean leido){
+    public static void actContMER(boolean leido, boolean midiendo){
         if (leido)
         {
             contMERLeidos++;
-            contMERNoLeidos--;
+            if(midiendo)
+                contMERNoLeidos--;
         }
         else
             contMERNoLeidos++;
@@ -831,11 +840,12 @@ public class RutaMedicion {
      * Actualiza los contadores del resuemen de medicion correspondiente a los medidores de AGUA
      * @param leido indica si el medidor fue leído
      */
-    public static void actContMA(boolean leido){
+    public static void actContMA(boolean leido, boolean midiendo){
         if (leido)
         {
             conMALeidos++;
-            conMANoLeidos--;
+            if(midiendo)
+                conMANoLeidos--;
         }
         else
             conMANoLeidos++;

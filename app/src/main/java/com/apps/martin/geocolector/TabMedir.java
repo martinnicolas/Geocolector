@@ -66,6 +66,7 @@ public class TabMedir extends Fragment{
     private boolean respuesta;
     private RutaMedicion rutaMedicion;
     private TextView infoMedidor;
+    private Button btnGuardar;
 
     //atributos para los contadores
     private TextView MA ;
@@ -127,42 +128,35 @@ public class TabMedir extends Fragment{
 
         //validamos que la ruta no esta ni vacía ni llena
         if (rutaMedicion ==  null){
-            if (rutaMedicion.esRutaMedida(daoSession))
-                mostrarMje("Medición completa","No quedan medidores por medir, la ruta está completa");
-            else
-                mostrarMje("Fallo al inicio","Verifique la ruta de medición");
+            if( rutaMedicion.NOhayMedCargados(daoSession))
+                mostrarMje("Ruta vacía","No hay medidores cargados");
+            else {
+                if (rutaMedicion.esRutaMedida(daoSession))
+                    mostrarMje("Medición completa", "No quedan medidores por medir, la ruta está completa");
+
+            }
 
             return rootView;
         }
+
         this.cargarNovedades2();
-
-        /**
-        rutaMedicion = MedirZona.getMedidorActual();
-        this.cargarNovedades2();
-
-        if (rutaMedicion ==  null){
-            mostrarMje("Fallo al inicio","Verifique la ruta de medición");
-            return rootView;
-        }**/
-
 
         setearDatosUsuario();//Muestro los datos del usuario
         setearDatosMedidor();//Muestro los datos del medidor
         setearResumenMedicion(daoSession);//muestro los datos del resumen de la medición
 
-        consumo.setOnFocusChangeListener(new View.OnFocusChangeListener() {//validamos el consumo cuando el componente pierde el foco
+        /*consumo.setOnFocusChangeListener(new View.OnFocusChangeListener() {//validamos el consumo cuando el componente pierde el foco
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     validar_medicion();
                 }
             }
-        });
+        });*/
 
         //Manejo el evento del boton guardar en la medición
-        Button btnGuardar = (Button) rootView.findViewById(R.id.btnGuardar);
         btnGuardar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {guardar();}});
+            public void onClick(View view) {validar_medicion();}});
         return rootView;
     }
 
@@ -245,6 +239,9 @@ public class TabMedir extends Fragment{
         infoMedidor = (TextView) rootView.findViewById(R.id.txtTitMed);
         estado_anterior = (TextView) rootView.findViewById(R.id.txtDescEA);
         medidor = (TextView) rootView.findViewById(R.id.nro_medidor);
+
+        //otros
+        btnGuardar = (Button) rootView.findViewById(R.id.btnGuardar);
     }
 
     /***
@@ -257,17 +254,20 @@ public class TabMedir extends Fragment{
      * Registra la medición de un me
      */
     public void guardar(){
-        if( validar_medicion()){
+        /*if( validar_medicion()){
             registrarOperacion();
             incrementarContadores();
             obtenerMedSgte();
             this.cargarNovedades2();
-        }
+        }*/
+        registrarOperacion();
+        incrementarContadores();
+        obtenerMedSgte();
+        this.cargarNovedades2();
     }
 
     public void registrarOperacion(){
         DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
-        //rutaMedicion.setEstado_actual(Integer.parseInt(estado_actual.getText().toString()));
         rutaMedicion.setMedido(true);
         rutaMedicion.setFecha(new Date());//estampamos la fecha y hora de la medicion
         rutaMedicion.setNovedad((Novedad)spinner.getSelectedItem());
@@ -351,14 +351,9 @@ public class TabMedir extends Fragment{
     /***
      * retorna verdadero si la medicion es correcta, falso en caso contrario
      */
-    public boolean validar_medicion(){
-        if( ! validar_parametros() )
-            return false;
-
-        if( ! validar_consumo() )
-            return false;
-
-        return true;
+    public void validar_medicion(){
+        if( validar_parametros() )
+             validar_consumo() ;
     }
 
 
@@ -397,41 +392,42 @@ public class TabMedir extends Fragment{
      * Retorna verdadero  si la medicion es correcta, falso en caso contrario
      * @return
      */
-    public boolean validar_consumo(){
-        if( rutaMedicion.getEstado_actual() < rutaMedicion.getEstado_anterior())
-            return confirmarConsumo("El estado actual es menor que el anterior.");
+    public void validar_consumo(){
+        if( rutaMedicion.getEstado_actual() < rutaMedicion.getEstado_anterior()) {
+            confirmarConsumo("El estado actual es menor que el anterior.");
+            return;
+        }
 
-        if (rutaMedicion.consumoExcedido()) //Si el consumo se excede se necesita confirmar
-            return confirmarConsumo("Alto consumo.");
+        if (rutaMedicion.consumoExcedido()) { //Si el consumo se excede se necesita confirmar
+            confirmarConsumo("Alto consumo.");
+            return;
+        }
 
-        return true;
+        guardar();
     }
 
 
     /**
      * Retorna verdadero si el usuario acepta el mensaje mostrado, falso caso contario
      * @param mje Mensaje que se mostrará al usuario
-     * @return
      */
-    public boolean confirmarConsumo(String mje){
+    public void confirmarConsumo(String mje){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Atención!");
         builder.setMessage(mje + "\nConsumo: "+rutaMedicion.calcularConsumo()+"\nDesea continuar?");
             builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                respuesta = true;
+                guardar();
                 }
             });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    respuesta = false;
                     dialog.cancel();
                 }
         });
         builder.create().show();
-        return respuesta;
     }
 
     /**
@@ -502,7 +498,6 @@ public class TabMedir extends Fragment{
         consumo = (TextView) rootView.findViewById(R.id.txtConsumo);
         TextView medidor = (TextView) rootView.findViewById(R.id.nro_medidor);
         estado_anterior.setText(String.valueOf(rutaMedicion.getEstado_anterior()));
-        //consumo.setText(String.valueOf(rutaMedicion.calcularConsumo()));
         consumo.setText("");
         medidor.setText(String.valueOf(rutaMedicion.getNro_medidor()));
         ordenMedicion.setText(String.valueOf(rutaMedicion.getId()));
@@ -516,7 +511,7 @@ public class TabMedir extends Fragment{
     }
 
     private void incrementarContadores(){
-        RutaMedicion.incrementarContadores(rutaMedicion.getTipo_medidorId(),rutaMedicion.getMedido());
+        RutaMedicion.incrementarContadores(rutaMedicion.getTipo_medidorId(),rutaMedicion.getMedido(),true);
         this.setearContadores();
     }
 
