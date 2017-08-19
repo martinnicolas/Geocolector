@@ -136,6 +136,8 @@ public class TabMedir extends Fragment{
 
             }
 
+            btnGuardar.setEnabled(false);
+            System.out.println("Se deshabilitó el boton de guardar");
             return rootView;
         }
 

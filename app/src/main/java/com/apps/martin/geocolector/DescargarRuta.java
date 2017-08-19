@@ -243,13 +243,13 @@ public class DescargarRuta extends Fragment {
                 rutaMedicion.setLatitud(m.getString("latitud"));
                 rutaMedicion.setLongitud(m.getString("longitud"));
                 rutaMedicion.setEstado_anterior(m.getInt("estado_anterior"));
-                rutaMedicion.setPromedio(0);
+                rutaMedicion.setPromedio(m.getInt("promedio"));
                 rutaMedicion.setMultiplicador(m.getInt("multiplicador"));
-                rutaMedicion.setEstado_actual(0);//Chequear
-                rutaMedicion.setMedido(false);//Chequear
+                rutaMedicion.setEstado_actual(0);
+                rutaMedicion.setMedido(false);
                 rutaMedicion.setAck(false);
-                rutaMedicion.setFecha(new Date());//Chequear
-                rutaMedicion.setDemanda(0);//Chequear
+                rutaMedicion.setFecha(new Date());
+                rutaMedicion.setDemanda(0);
                 rutaMedicion.setObservacion("");
                 rutaMedicion.setTomaEstado(Session.getSession().getTomaEstado());
                 rutaMedicion.setTipo_medidorId((long)m.getInt("tipo_medidor_id"));

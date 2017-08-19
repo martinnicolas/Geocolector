@@ -585,13 +585,17 @@ public class RutaMedicion {
                 .where(RutaMedicionDao.Properties.Medido.eq(1))
                 .list();
 
-        return medActual.isEmpty();
+        if(medActual.isEmpty())
+            System.out.println("hay medidores pendientes de medicion");
+        else
+            System.out.println("ruta medida por completa");
+
+        return !medActual.isEmpty();
     }
 
     public static boolean NOhayMedCargados(DaoSession daoSession ){
         RutaMedicionDao rutaMedicionDao = daoSession.getRutaMedicionDao();
-        List <RutaMedicion> medActual = rutaMedicionDao.queryBuilder()
-                .list();
+        List <RutaMedicion> medActual = rutaMedicionDao.loadAll();
 
         return medActual.isEmpty();
     }
