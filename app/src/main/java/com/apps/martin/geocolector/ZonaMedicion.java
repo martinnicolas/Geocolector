@@ -273,7 +273,8 @@ public class ZonaMedicion extends Fragment {
 
         @Override
         protected void onPostExecute(Road road) {
-            pDialog.hide();
+            //pDialog.hide();
+            pDialog.dismiss();
             //Si no pude conectarme y obtener la ruta
             if (road.mStatus != Road.STATUS_OK)
                 Toast.makeText(getActivity().getApplicationContext(), "Error en la conexión.\nVerifique su conexión a internet", Toast.LENGTH_SHORT).show();

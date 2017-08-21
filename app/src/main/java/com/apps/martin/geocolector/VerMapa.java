@@ -345,7 +345,8 @@ public class VerMapa extends Fragment {
 
         @Override
         protected void onPostExecute(Road road) {
-            pDialog.hide();
+            //pDialog.hide();
+            pDialog.dismiss();
             //Si no pude conectarme y obtener la ruta
             if (road.mStatus != Road.STATUS_OK){
                 //Obtengo ultima ubicación del tomaestado

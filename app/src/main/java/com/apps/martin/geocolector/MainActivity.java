@@ -26,6 +26,7 @@ import org.greenrobot.greendao.database.Database;
 import java.io.File;
 import modelo.DaoMaster;
 import modelo.DaoSession;
+import utilidades.DatabaseUtilities;
 import utilidades.Session;
 
 public class MainActivity extends AppCompatActivity
@@ -50,7 +51,8 @@ public class MainActivity extends AppCompatActivity
         //File path = new File(Environment.getExternalStorageDirectory(), "geocolector/geocolectorDB");
         path.getParentFile().mkdirs();
 
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getApplicationContext(), path.getAbsolutePath());
+        //DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getApplicationContext(), path.getAbsolutePath());
+        DaoMaster.DevOpenHelper helper = new DatabaseUtilities.DevOpenHelper(getApplicationContext(), path.getAbsolutePath());
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
 
