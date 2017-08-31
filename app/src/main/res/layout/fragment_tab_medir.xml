@@ -219,7 +219,6 @@
                         android:gravity="bottom|right" />
 
                     <TextView
-                        android:text="Est. Ant."
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/txtDescEA"
@@ -235,7 +234,6 @@
                         android:layout_weight="0.33" />
 
                     <TextView
-                        android:text="Consumo"
                         android:layout_height="match_parent"
                         android:id="@+id/txtConsumo"
                         android:gravity="bottom|right"
@@ -318,8 +316,7 @@
                         android:layout_marginTop="5dp" />
 
                     <TextView
-                        android:text="XX-XXX-XX"
-                        android:layout_width="wrap_content"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtNusr"
                         android:background="@android:color/background_light"
@@ -352,8 +349,6 @@
                         android:layout_marginTop="5dp" />
 
                     <TextView
-                        android:text="Av. Siempre Viva 741"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtDetDir"
                         android:background="@android:color/background_light"
@@ -363,7 +358,8 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:layout_marginStart="5dp"
-                        android:layout_marginTop="5dp" />
+                        android:layout_marginTop="5dp"
+                        android:layout_width="200dp" />
                 </TableRow>
             </TableLayout>
         </LinearLayout>
@@ -498,7 +494,6 @@
                         android:layout_marginTop="5dp" />
 
                     <TextView
-                        android:text="0"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMANL"
@@ -513,7 +508,6 @@
                         android:layout_margin="5dp" />
 
                     <TextView
-                        android:text="0"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMERNL"
@@ -528,11 +522,9 @@
                         android:layout_margin="5dp" />
 
                     <TextView
-                        android:text="0"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMEANL"
-                        tools:text="0"
                         android:layout_marginBottom="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginLeft="5dp"
@@ -584,7 +576,6 @@
                         android:textStyle="normal|bold" />
 
                     <TextView
-                        android:text="32"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMAL"
@@ -599,7 +590,6 @@
                         android:layout_margin="5dp" />
 
                     <TextView
-                        android:text="3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMERL"
@@ -614,7 +604,6 @@
                         android:gravity="right" />
 
                     <TextView
-                        android:text="32"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtMEAL"

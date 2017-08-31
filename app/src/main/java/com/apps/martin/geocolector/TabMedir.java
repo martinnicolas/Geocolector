@@ -256,12 +256,6 @@ public class TabMedir extends Fragment{
      * Registra la medición de un me
      */
     public void guardar(){
-        /*if( validar_medicion()){
-            registrarOperacion();
-            incrementarContadores();
-            obtenerMedSgte();
-            this.cargarNovedades2();
-        }*/
         registrarOperacion();
         incrementarContadores();
         obtenerMedSgte();
@@ -273,8 +267,6 @@ public class TabMedir extends Fragment{
         rutaMedicion.setMedido(true);
         rutaMedicion.setFecha(new Date());//estampamos la fecha y hora de la medicion
         rutaMedicion.setNovedad((Novedad)spinner.getSelectedItem());
-        //cargar comentario
-        //cargar foto
         daoSession.getRutaMedicionDao().update(rutaMedicion);
         Toast.makeText(getActivity().getApplicationContext(), "Se ha guardado la medición!", Toast.LENGTH_SHORT).show();
         try {
@@ -451,6 +443,7 @@ public class TabMedir extends Fragment{
 
         if (MedirZona.getMedidorActual() ==  null){
             mostrarMje("Medición finalizada","No quedan medidores sin medir");
+            btnGuardar.setEnabled(false);
             return;
         }
 

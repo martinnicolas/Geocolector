@@ -69,8 +69,6 @@ public class DatabaseUtilities extends DaoMaster{
             db.execSQL("INSERT INTO novedad VALUES (55,55,'Medidor Inexistente',1,'T');");
             db.execSQL("INSERT INTO novedad VALUES (90,90,'ACTIVIDAD NO RESIDENCIAL',0,'T');");
             db.execSQL("INSERT INTO novedad VALUES (92,92,'TERRENO BALDIO',1,'T');");
-            db.execSQL("INSERT INTO novedad VALUES (98,98,'SALIR',0,'T');");
-            db.execSQL("INSERT INTO novedad VALUES (99,99,'PROXIMO MEDIDOR',0,'T');");
             //Inserto tipos de medidores
             db.execSQL("INSERT INTO tipo_medidor VALUES (1,0,'Medidor de agua');");
             db.execSQL("INSERT INTO tipo_medidor VALUES (2,1,'Medidor de energía activa');");
