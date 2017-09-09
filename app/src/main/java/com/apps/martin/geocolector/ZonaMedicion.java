@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.routing.MapQuestRoadManager;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
@@ -208,7 +209,11 @@ public class ZonaMedicion extends Fragment {
         protected Road doInBackground(MapView... params) {
             //Mapa, administrador de Rutas y Database Session
             final MapView map = params[0];
-            RoadManager roadManager = new OSRMRoadManager(getActivity());
+
+            //RoadManager roadManager = new OSRMRoadManager(getActivity());
+            RoadManager roadManager = new MapQuestRoadManager("7yV8Xibduk1IJv1BbhvrROX3Sygncz2Y");
+            roadManager.addRequestOption("routeType=bicycle");
+
             DaoSession daoSession = ((MainActivity)getActivity()).getDaoSession();
 
             //Obtengo todos los medidores

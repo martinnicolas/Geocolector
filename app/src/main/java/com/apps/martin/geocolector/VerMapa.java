@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.routing.MapQuestRoadManager;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
@@ -306,7 +307,10 @@ public class VerMapa extends Fragment {
             //Agrego ubicacion del usuario a lista de puntos
             waypoints.add(punto);
             //Obtengo la ruta en base a la lista de puntos
-            RoadManager roadManager = new OSRMRoadManager(getActivity());
+            //RoadManager roadManager = new OSRMRoadManager(getActivity());
+            RoadManager roadManager = new MapQuestRoadManager("7yV8Xibduk1IJv1BbhvrROX3Sygncz2Y");
+            roadManager.addRequestOption("routeType=bicycle");
+            roadManager.addRequestOption("locale=es");
             Road road = roadManager.getRoad(waypoints);
             //Dibujo la ruta sólo si pude conectarme y obtenerla
             if (road.mStatus == Road.STATUS_OK)
